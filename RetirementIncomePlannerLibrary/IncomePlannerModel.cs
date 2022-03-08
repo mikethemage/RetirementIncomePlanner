@@ -6,12 +6,12 @@ namespace RetirementIncomePlannerLibrary
 
     public class IncomePlannerModel
     {
-        public AgeValue NumberOfYears;
-        public int NumberOfClients;
-        public List<int> ClientList;
-        public PercentageValue Indexation;
-        public PotMethodEnum PotMethod = PotMethodEnum.Combined;
-        public List<int> CombinedPotList;
+        public AgeValue NumberOfYears { get; set; } = new AgeValue();
+        public int NumberOfClients { get; set; }
+        public List<Client> ClientList { get; set; } = new List<Client>();
+        public PercentageValue Indexation { get; set; } = new PercentageValue();
+        public PotMethodEnum PotMethod { get; set; } = PotMethodEnum.Combined;
+        public List<RetirementPot> CombinedPotList { get; set; } = new List<RetirementPot>();
         public int GenerateGraphData()
         {
             return 0;
