@@ -6,6 +6,12 @@
         public string PensionType { get; set; } = string.Empty;
         public AgeValue PensionAge { get; set; } = new AgeValue();
         public AmountValue PensionAmount { get; set; } = new AmountValue();
+
+        public Pension(string pensionType)
+        {
+            PensionType = pensionType;
+            PensionName = PensionType;
+        }
     }
     
 }

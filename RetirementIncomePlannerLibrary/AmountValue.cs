@@ -13,11 +13,24 @@
         {
             get
             {
-                return _itemValue;
+                if (ValuePresent)
+                {
+                    return _itemValue;
+                }
+                else
+                {
+                    return 0.0M;
+                }
             }
             set
             {
-                _itemValue = value;
+                if ( ((value >= ContributionAmountMin && ContributionAmount==true) ||
+                      (value >= AmountMin && ContributionAmount == false))                    
+                    && value <= AmountMax)
+                {
+                    _itemValue = value;
+                    ValuePresent = true;
+                }
             }
         }
 
@@ -29,18 +42,28 @@
             }
             set
             {
-                decimal temp;
-                if (decimal.TryParse(value, out temp))
+                if (value == string.Empty)
                 {
-                    ItemValue = temp;
+                    ValuePresent = false;
                 }
                 else
                 {
-                    ItemValue = 0;
+                    decimal temp;
+                    if (decimal.TryParse(value, out temp))
+                    {
+                        ItemValue = temp;
+                    }
                 }
             }
         }
 
         public bool ValuePresent { get; set; }
+
+        public AmountValue(bool contributionAmount=false)
+        {
+            ItemValue = 0.0M;
+            ValuePresent = false;
+            ContributionAmount = contributionAmount;
+        }
     }
 }

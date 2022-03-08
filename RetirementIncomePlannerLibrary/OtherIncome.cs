@@ -4,6 +4,11 @@
     {
         public string IncomeName { get; set; } = string.Empty;
         public AmountValue IncomeAmount { get; set; } = new AmountValue();
+
+        public OtherIncome(string incomeName)
+        {
+            IncomeName = incomeName;
+        }
     }
     
 }

@@ -6,36 +6,65 @@
         public const int AgeMax = 200;
 
         private int _itemValue;
-        public int ItemValue { get
-            { 
-                return _itemValue;
+        public int ItemValue
+        {
+            get
+            {
+                if (ValuePresent)
+                {
+                    return _itemValue;
+                }
+                else
+                {
+                    return 0;
+                }
             }
-            set 
-            { 
-                _itemValue = value;
-            } 
-        }
+            set
+            {
+                if (value >= AgeMin && value <= AgeMax)
+                {
+                    _itemValue = value;
+                    ValuePresent = true;
+                }                
+            }
+        } 
         
         public string Text
         {
             get
-            { 
-                return ItemValue.ToString();
-            } 
-            set 
             {
-                int temp;
-                if(int.TryParse(value, out temp))
+                if (ValuePresent)
                 {
-                    ItemValue = temp;
+                    return ItemValue.ToString();
                 }
                 else
                 {
-                    ItemValue = 0;
+                    return string.Empty;
+                }
+            } 
+            set 
+            {
+                if (value == string.Empty)
+                {
+                    ValuePresent = false;
+                }
+                else
+                {
+                    int temp;
+                    if (int.TryParse(value, out temp))
+                    {
+                        ItemValue = temp;
+                    }
                 }
             }
         }
-        
-        public bool ValuePresent { get ; set ; }
+
+        public bool ValuePresent { get; set; }
+
+        public AgeValue()
+        {
+            ItemValue=0;
+            ValuePresent = false;
+        }
     }
 }

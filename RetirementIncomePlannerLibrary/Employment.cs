@@ -7,6 +7,11 @@
         public AgeValue PartialRetirementAge { get; set; } = new AgeValue();
         public AmountValue PartialRetirementSalary { get; set; } = new AmountValue();
         public AgeValue RetirementAge { get; set; } = new AgeValue();
+
+        public Employment()
+        {
+
+        }
     }
     
 }

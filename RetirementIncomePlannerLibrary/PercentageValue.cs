@@ -10,11 +10,22 @@
         {
             get
             {
-                return _itemValue;
+                if (ValuePresent)
+                {
+                    return _itemValue;
+                }
+                else
+                {
+                    return 0.0M;
+                }
             }
             set
             {
-                _itemValue = value;
+                if (value >= PercentageMin && value <= PercentageMax)
+                {
+                    _itemValue = value;
+                    ValuePresent = true;
+                }
             }
         }
 
@@ -22,22 +33,38 @@
         {
             get
             {
-                return ItemValue.ToString();
-            }
-            set
-            {
-                decimal temp;
-                if (decimal.TryParse(value, out temp))
+                if (ValuePresent)
                 {
-                    ItemValue = temp;
+                    return ItemValue.ToString();
                 }
                 else
                 {
-                    ItemValue = 0;
+                    return string.Empty;
+                }
+            }
+            set
+            {
+                if (value == string.Empty)
+                {
+                    ValuePresent = false;
+                }
+                else
+                {
+                    decimal temp;
+                    if (decimal.TryParse(value, out temp))
+                    {
+                        ItemValue = temp;
+                    }
                 }
             }
         }
 
         public bool ValuePresent { get; set; }
+
+        public PercentageValue()
+        {
+            ItemValue = 0.0M;
+            ValuePresent = false;
+        }
     }
 }
