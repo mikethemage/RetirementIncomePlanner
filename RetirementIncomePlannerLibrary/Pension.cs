@@ -12,6 +12,25 @@
             PensionType = pensionType;
             PensionName = PensionType;
         }
+
+        public decimal GetPensionForAge(int age)
+        { 
+            if(PensionAge.ValuePresent==false || PensionAmount.ValuePresent==false)
+            {
+                return 0.0M;
+            }
+            else
+            {
+                if(age>=PensionAge.ItemValue)
+                {
+                    return PensionAmount.ItemValue;
+                }
+                else
+                {
+                    return 0.0M;
+                }
+            }
+        }
     }
     
 }

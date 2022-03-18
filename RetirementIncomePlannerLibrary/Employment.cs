@@ -12,6 +12,43 @@
         {
 
         }
+
+        public decimal GetSalaryForAge(int age)
+        {
+            if(Salary.ValuePresent==false || RetirementAge.ValuePresent==false)
+            {
+                return 0.0M;
+            }    
+            else
+            {
+                if(PartialRetirementAge.ValuePresent==true && PartialRetirementSalary.ValuePresent==true)
+                {
+                    if(age < PartialRetirementAge.ItemValue)
+                    {
+                        return Salary.ItemValue;
+                    }
+                    else if(age < RetirementAge.ItemValue)
+                    {
+                        return PartialRetirementSalary.ItemValue;
+                    }
+                    else
+                    {
+                        return 0.0M;
+                    }
+                }
+                else
+                {
+                    if (age < RetirementAge.ItemValue)
+                    {
+                        return Salary.ItemValue;
+                    }
+                    else
+                    {
+                        return 0.0M;
+                    }
+                }
+            }
+        }
     }
     
 }
