@@ -18,8 +18,7 @@ using LiveChartsCore.Measure;
 using LiveChartsCore.Kernel.Sketches;
 
 namespace RetirementIncomePlannerLogic
-{
-    
+{    
     public class ChartModel
     {        
         public string Title { get; set; } = "Retirement Income Planner";
@@ -180,7 +179,6 @@ namespace RetirementIncomePlannerLogic
                     }
                     );
             }
-
 
             IsChartBuilt = true;
         }

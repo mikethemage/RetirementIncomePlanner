@@ -34,6 +34,5 @@ namespace RetirementIncomePlannerDesktopApp
 
         public ChartModel Chart { get; set; } = new ChartModel();       
 
-
     }
 }

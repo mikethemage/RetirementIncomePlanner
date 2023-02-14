@@ -14,7 +14,6 @@ namespace RetirementIncomePlannerDesktopApp
 {
     public class ClientViewModel : ViewModelBase
     {
-
         public ClientViewModel()
         {
             Age.PropertyChanged += ChildPropertyChanged;
@@ -28,7 +27,6 @@ namespace RetirementIncomePlannerDesktopApp
             OtherPensionsAge.PropertyChanged += ChildPropertyChanged;
             OtherIncome.PropertyChanged += ChildPropertyChanged;
             RetirementIncomeLevel.PropertyChanged += ChildPropertyChanged;
-            
         }
 
         private void ChildPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -102,11 +100,15 @@ namespace RetirementIncomePlannerDesktopApp
 
         public ClientInputModel CreateModel()
         {
-            ClientInputModel output = new ClientInputModel();
+            ClientInputModel output = new ClientInputModel
+            {
+                ClientNumber = ClientNumber,
+                Age = Age.AgeValue,
+                RetirementAge = RetirementAge.AgeValue,
+                StatePensionAge = StatePensionAge.AgeValue,
+                StatePensionAmount = StatePensionAmount.CurrencyValue
+            };
 
-            output.ClientNumber = ClientNumber;
-
-            output.Age = Age.AgeValue;
             if (!Salary.IsBlank)
             {
                 output.SalaryDetails = new SalaryInputModel
@@ -123,10 +125,6 @@ namespace RetirementIncomePlannerDesktopApp
                     };
                 }
             }
-
-            output.RetirementAge = RetirementAge.AgeValue;
-            output.StatePensionAge = StatePensionAge.AgeValue;
-            output.StatePensionAmount = StatePensionAmount.CurrencyValue;
 
             if (!OtherPensionsAge.IsBlank && !OtherPensionsAmount.IsBlank)
             {
@@ -151,6 +149,5 @@ namespace RetirementIncomePlannerDesktopApp
 
             return output;
         }
-
     }
 }

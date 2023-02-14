@@ -12,7 +12,6 @@ using System.IO;
 
 namespace RetirementIncomePlannerDesktopApp
 {
-
     public class DataEntryViewModel : ViewModelBase
     {
         public int NumberOfClients
@@ -58,11 +57,9 @@ namespace RetirementIncomePlannerDesktopApp
         }
 
         public int NumberOfYears { get; set; } = 35;
-
         public PercentageFieldViewModel Indexation { get; private set; } = new PercentageFieldViewModel { PercentageValue = 0.02M };
         public CurrencyFieldViewModel RetirementPot { get; private set; } = new CurrencyFieldViewModel();
         public PercentageFieldViewModel InvestmentGrowth { get; private set; } = new PercentageFieldViewModel { PercentageValue = 0.03M };
-
         public ObservableCollection<ClientViewModel> Clients { get; set; } = new ObservableCollection<ClientViewModel>();
 
         public List<int> YearsList { get; set; } = new List<int>();
@@ -94,15 +91,13 @@ namespace RetirementIncomePlannerDesktopApp
             {
                 ExportReportCommand.RaiseCanExecuteChanged();
             }
-
         }
 
         public RelayCommand ExportReportCommand { get; private set; }
         public void ExportReport()
         {
             if (CanExportReport())
-            {
-                
+            {                
                 DataInputModel inputModel = CreateModel();
                 YearRowModel[] outputModel = PensionCalcs.RunPensionCalcs(inputModel);
 
@@ -111,7 +106,6 @@ namespace RetirementIncomePlannerDesktopApp
                     InputData=inputModel,
                     OutputData=outputModel
                 };
-
 
                 //using (StreamWriter outputFile = new(@"C:\Users\Mike\Documents\TestRIOutput.csv", false))
                 //{
@@ -123,12 +117,13 @@ namespace RetirementIncomePlannerDesktopApp
                 //    }
                 //}
 
-                ReportView reportView = new ReportView();
-                reportView.DataContext= report;
-                reportView.Owner = Application.Current.MainWindow;
-                reportView.ShowDialog();
-
-               
+                ReportView reportView = new ReportView
+                {
+                    DataContext= report,
+                    Owner = Application.Current.MainWindow
+                };
+                
+                reportView.ShowDialog();               
             }
             else
             {
@@ -151,17 +146,18 @@ namespace RetirementIncomePlannerDesktopApp
 
         public DataInputModel CreateModel()
         {
-            DataInputModel output = new DataInputModel();
-            output.InvestmentGrowth = InvestmentGrowth.PercentageValue;
-            output.RetirementPot = RetirementPot.CurrencyValue;
-            output.Indexation = Indexation.PercentageValue;
+            DataInputModel output = new DataInputModel
+            {
+                InvestmentGrowth = InvestmentGrowth.PercentageValue,
+                RetirementPot = RetirementPot.CurrencyValue,
+                Indexation = Indexation.PercentageValue
+            };
+            
             foreach (ClientViewModel client in Clients)
             {
                 output.Clients.Add(client.CreateModel());
             }
             return output;
         }
-
-
     }
 }

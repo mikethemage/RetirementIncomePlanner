@@ -6,9 +6,6 @@ namespace RetirementIncomePlannerConsoleSample
     {
         static void Main(string[] args)
         {
-
-           
-
             DataInputModel testViewModel = GetTestData();
             YearRowModel[] testDataList = PensionCalcs.RunPensionCalcs(testViewModel);
             Console.WriteLine("Year,Indexation Multiplier,Client1 Age,Client1 State Pension,Client1 Salary,Client2 Age,Client2 State Pension,Client2 Other Pension,Total Required Drawdown,Fund Before Drawdown,Total Drawdown,Total Fund Value");
@@ -21,22 +18,23 @@ namespace RetirementIncomePlannerConsoleSample
 
         static DataInputModel GetTestData()
         {
-            DataInputModel output = new DataInputModel();
-
-            output.NumberOfYears = 35;
-            output.NumberOfClients = 2;
-            output.Indexation = 0.02M;
-            output.RetirementPot = 196000M;
-            output.InvestmentGrowth = 0.03M;
+            DataInputModel output = new DataInputModel
+            {
+                NumberOfYears = 35,
+                NumberOfClients = 2,
+                Indexation = 0.02M,
+                RetirementPot = 196000M,
+                InvestmentGrowth = 0.03M
+            };
 
             output.Clients[0].Age = 58;
 
             output.Clients[0].SalaryDetails = new SalaryInputModel
             {
-                FullSalaryAmount= 22000M
+                FullSalaryAmount = 22000M
             };
 
-            
+
             output.Clients[0].RetirementAge = 60;
             output.Clients[0].StatePensionAmount = 9360M;
             output.Clients[0].StatePensionAge = 67;
@@ -52,7 +50,7 @@ namespace RetirementIncomePlannerConsoleSample
                 Age = 58,
                 Amount = 8285M
             };
-           
+
             output.Clients[1].RetirementIncomeLevel = 15000;
 
             return output;
