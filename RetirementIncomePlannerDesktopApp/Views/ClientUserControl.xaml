@@ -1,0 +1,91 @@
+﻿<UserControl x:Class="RetirementIncomePlannerDesktopApp.ClientUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:RetirementIncomePlannerDesktopApp" 
+             d:DataContext="{d:DesignInstance Type=local:ClientViewModel}"
+             mc:Ignorable="d" 
+             Width="300"
+             d:DesignHeight="450"             
+             Background="White">
+  
+       
+    
+    <StackPanel Orientation="Vertical" >
+        <TextBlock FontSize="16" FontWeight="Bold" Text="{Binding ClientNumberText}" />
+
+        <Grid Margin="5 10 5 20" >
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+
+            <TextBlock FontWeight="Bold" Grid.Row="0" Grid.Column="0" Margin="0 5">Age:</TextBlock>
+            <TextBox Grid.Row="0" Grid.Column="1" Margin="10 5 0 5" Text="{Binding Age.AgeText}" />
+
+            <TextBlock FontWeight="Bold" Grid.Row="1" Grid.Column="0" Margin="0 5">Salary:</TextBlock>
+            <TextBox Grid.Row="1" Grid.Column="1" Margin="10 5 0 5" Text="{Binding Salary.CurrencyText}"/>
+
+            <TextBlock FontWeight="Bold" Grid.Row="2" Grid.Column="0" Margin="0 5">Partial Retirement Age:</TextBlock>
+            <TextBox Grid.Row="2" Grid.Column="1" Margin="10 5 0 5" Text="{Binding PartialRetirementAge.AgeText}" />
+
+            <TextBlock FontWeight="Bold" Grid.Row="3" Grid.Column="0" Margin="0 5">Partial Retirement Salary:</TextBlock>
+            <TextBox Grid.Row="3" Grid.Column="1" Margin="10 5 0 5"  Text="{Binding PartialRetirementSalary.CurrencyText}" />
+
+            <TextBlock FontWeight="Bold" Grid.Row="4" Grid.Column="0" Margin="0 5">Retirement Age:</TextBlock>
+            <TextBox Grid.Row="4" Grid.Column="1" Margin="10 5 0 5" Text="{Binding RetirementAge.AgeText}" />
+
+            <TextBlock FontWeight="Bold" Grid.Row="5" Grid.Column="0" Margin="0 5">State Pension Amount:</TextBlock>
+            <TextBox Grid.Row="5" Grid.Column="1" Margin="10 5 0 5" Text="{Binding StatePensionAmount.CurrencyText}" />
+
+            <TextBlock FontWeight="Bold" Grid.Row="6" Grid.Column="0" Margin="0 5">State Pension Age:</TextBlock>
+            <TextBox Grid.Row="6" Grid.Column="1" Margin="10 5 0 5" Text="{Binding StatePensionAge.AgeText}" />
+
+            <TextBlock FontWeight="Bold" Grid.Row="7" Grid.Column="0" Margin="0 5">Other Pensions:</TextBlock>
+            <TextBox Grid.Row="7" Grid.Column="1" Margin="10 5 0 5" Text="{Binding OtherPensionsAmount.CurrencyText}" />
+
+            <TextBlock FontWeight="Bold" Grid.Row="8" Grid.Column="0" Margin="0 5">Other Pension Age:</TextBlock>
+            <TextBox Grid.Row="8" Grid.Column="1" Margin="10 5 0 5"  Text="{Binding OtherPensionsAge.AgeText}" />
+
+            <TextBlock FontWeight="Bold" Grid.Row="9" Grid.Column="0" Margin="0 5">Other Income</TextBlock>
+            <TextBox Grid.Row="9" Grid.Column="1" Margin="10 5 0 5" Text="{Binding OtherIncome.CurrencyText}"/>
+
+            <TextBlock FontWeight="Bold" Grid.Row="10" Grid.Column="0" Margin="0 5">Retirement Income Level:</TextBlock>
+            <TextBox Grid.Row="10" Grid.Column="1" Margin="10 5 0 5" Text="{Binding RetirementIncomeLevel.CurrencyText}"/>
+        </Grid>
+
+        <TextBlock FontWeight="Bold">Additional Contributions/Withdrawals: </TextBlock>
+        <!--<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5 10 5 0">
+            <Button Width="100" Margin="5 0">Add</Button>
+            <Button Width="100" Margin="5 0">Remove</Button>
+
+        </StackPanel>-->
+        <DataGrid HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Height="100" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                  
+              ItemsSource="{Binding Mode=Default, Path=AdhocItems}" 
+              AutoGenerateColumns="False">
+            
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Age" Binding="{Binding Age.AgeText}" Width="*" />
+                <DataGridTextColumn Header="Amount" Binding="{Binding Amount.CurrencyText}" Width="2*"/>
+
+            </DataGrid.Columns>
+        </DataGrid>
+
+    </StackPanel>
+</UserControl>

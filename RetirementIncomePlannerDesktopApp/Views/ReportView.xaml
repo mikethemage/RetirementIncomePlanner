@@ -1,0 +1,29 @@
+﻿<Window x:Class="RetirementIncomePlannerDesktopApp.ReportView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RetirementIncomePlannerDesktopApp"
+        xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
+        d:DataContext="{d:DesignInstance Type=local:ReportViewModel}"
+        WindowStartupLocation="CenterOwner"
+        mc:Ignorable="d"
+        Title="ReportView" Height="600" Width="1200">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center">Retirement Income Planner</TextBlock>
+
+        <lvc:CartesianChart Grid.Row="1"
+                            DataContext="{Binding Chart}"
+                            Series="{Binding SeriesCollection}"
+                            YAxes="{Binding YAxisCollection}"
+                            XAxes="{Binding XAxisCollection}"
+                            LegendPosition="{Binding LegendPosition}"
+                            
+                            >
+        </lvc:CartesianChart>
+    </Grid>
+</Window>
