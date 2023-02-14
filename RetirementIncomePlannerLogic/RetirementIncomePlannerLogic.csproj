@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <PackageReference Include="LiveChartsCore.SkiaSharpView" Version="2.0.0-beta.701" />
-    <PackageReference Include="QuestPDF" Version="2022.12.1" />
   </ItemGroup>
 
 </Project>

@@ -14,9 +14,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
-using QuestPDF.Fluent;
-using QuestPDF.Helpers;
-using QuestPDF.Infrastructure;
 using LiveChartsCore.Measure;
 using LiveChartsCore.Kernel.Sketches;
 
