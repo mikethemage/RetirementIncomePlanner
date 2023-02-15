@@ -1,8 +1,10 @@
 ﻿using LiveChartsCore.Drawing;
+using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using LiveChartsCore.SkiaSharpView.SKCharts;
 using LiveChartsCore.SkiaSharpView.VisualElements;
 using SkiaSharp;
+using System.Numerics;
 
 namespace RetirementIncomePlannerLogic
 {
@@ -32,19 +34,15 @@ namespace RetirementIncomePlannerLogic
                 Height = (int)(4.54F * defaulDPI * 3F),
 
                 Series = chartModel.SeriesCollection,
-                Title = new LabelVisual
-                {
-                    Text = "Retirement Income Planner",
-                    TextSize = 30,
-                    Padding = new Padding(15),
-                    Paint = new SolidColorPaint(0xff303030)
-                },
+                
                 LegendPosition = LiveChartsCore.Measure.LegendPosition.Bottom,
 
                 Background = SKColors.White,
                 XAxes = chartModel.XAxisCollection,
                 YAxes = chartModel.YAxisCollection
             };
+
+            
 
             // Create an SKPictureRecorder object
             var recorder = new SKPictureRecorder();
@@ -61,15 +59,31 @@ namespace RetirementIncomePlannerLogic
             // End recording and get the SKPicture object
             var picture = recorder.EndRecording();
 
-            SKMatrix matrix = SKMatrix.CreateScaleTranslation(1F / 3F, 1F / 3F, 1F * defaulDPI, 1F * defaulDPI);
+
+            //Draw the chart:
+
+            SKMatrix matrix = SKMatrix.CreateScaleTranslation(1F / 3F, 1F / 3F, 1F * defaulDPI, (1F * defaulDPI) + 10F);
 
             destCanvas.DrawPicture(picture, ref matrix);
 
 
+            //then draw the title:
+
+            SKPaint chartTitlePaint = new SKPaint
+            {
+                Color = SKColors.Black,
+                Typeface = SKTypeface.FromFamilyName("Arial", SKFontStyleWeight.Bold, SKFontStyleWidth.Normal, SKFontStyleSlant.Upright),
+                TextAlign = SKTextAlign.Center,
+                TextSize = 8.0F
+            };
+
+            destCanvas.DrawText("Retirement Income Planner", width / 2, 1F * defaulDPI, chartTitlePaint);
+
+
             //Write inputModel here:
-            var nextPosition = (4.54F + 1F + 1F) * defaulDPI;
+            var nextPosition = ((4.54F + 1F) * defaulDPI) + 30F;
             var leftTextPos = 1F * defaulDPI;
-            var textLineHeight = 0.3F * defaulDPI;
+            var textLineHeight = 0.12F * defaulDPI;
          
             SKPaint paint = new SKPaint
             {
@@ -77,11 +91,16 @@ namespace RetirementIncomePlannerLogic
                 TextSize = 8.0f
             };
 
+            var boldFont = SKTypeface.FromFamilyName("Arial", SKFontStyleWeight.Bold, SKFontStyleWidth.Normal, SKFontStyleSlant.Upright);
+            var normalFont = SKTypeface.FromFamilyName("Arial", SKFontStyleWeight.Normal, SKFontStyleWidth.Normal, SKFontStyleSlant.Upright);
+
+            paint.Typeface = boldFont;
             destCanvas.DrawText("Client Data Entry", leftTextPos, nextPosition, paint);
-            nextPosition += textLineHeight;
+            nextPosition += textLineHeight*2;
 
             paint.TextSize = 6.0f;
 
+            paint.Typeface = normalFont;
             destCanvas.DrawText("Number of years for projection:", leftTextPos, nextPosition, paint);
             nextPosition += textLineHeight;
 
@@ -97,7 +116,66 @@ namespace RetirementIncomePlannerLogic
             destCanvas.DrawText("Investment Growth:", leftTextPos, nextPosition, paint);
             nextPosition += textLineHeight;
 
+            nextPosition += 0.2F * defaulDPI;
 
+            
+            var clientAreaWidth = (width - (leftTextPos*2)) / inputModel.NumberOfClients;
+
+            var clientAreaTop = nextPosition;
+
+            for (int i = 0; i < inputModel.NumberOfClients; i++)
+            {
+
+                //Todo: draw box around clients
+
+                nextPosition = clientAreaTop;
+
+                var leftClientTextPos = leftTextPos + (clientAreaWidth * i) + 20F;
+                
+                paint.TextSize = 8.0f;
+                paint.Typeface = boldFont;
+                destCanvas.DrawText($"Client {inputModel.Clients[i].ClientNumber}", leftClientTextPos, nextPosition, paint);
+                nextPosition += textLineHeight * 2;
+                paint.TextSize = 6.0f;
+                paint.Typeface = normalFont;
+                destCanvas.DrawText("Age: ", leftClientTextPos, nextPosition, paint);
+                nextPosition += textLineHeight;
+
+                destCanvas.DrawText("Salary: ", leftClientTextPos, nextPosition, paint);
+                nextPosition += textLineHeight;
+
+                destCanvas.DrawText("Partial Retirement Age: ", leftClientTextPos, nextPosition, paint);
+                nextPosition += textLineHeight;
+
+                destCanvas.DrawText("Partial Retirement Salary: ", leftClientTextPos, nextPosition, paint);
+                nextPosition += textLineHeight;
+
+                destCanvas.DrawText("Retirement Age: ", leftClientTextPos, nextPosition, paint);
+                nextPosition += textLineHeight;
+
+                destCanvas.DrawText("State Pension Amount: ", leftClientTextPos, nextPosition, paint);
+                nextPosition += textLineHeight;
+
+                destCanvas.DrawText("State Pension Age: ", leftClientTextPos, nextPosition, paint);
+                nextPosition += textLineHeight;
+
+                destCanvas.DrawText("Other Pensions: ", leftClientTextPos, nextPosition, paint);
+                nextPosition += textLineHeight;
+
+                destCanvas.DrawText("Other Pension Age: ", leftClientTextPos, nextPosition, paint);
+                nextPosition += textLineHeight;
+
+                destCanvas.DrawText("Other Income: ", leftClientTextPos, nextPosition, paint);
+                nextPosition += textLineHeight;
+
+                destCanvas.DrawText("Retirement Income Level: ", leftClientTextPos, nextPosition, paint);
+                nextPosition += textLineHeight * 2;
+
+                destCanvas.DrawText("Ad-hoc Contributions/Withdrawals: ", leftClientTextPos, nextPosition, paint);
+                nextPosition += textLineHeight;
+
+                
+            }
 
             //end of text code
 
