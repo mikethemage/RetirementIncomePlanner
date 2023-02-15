@@ -8,7 +8,6 @@ namespace RetirementIncomePlannerLogic
 {
     public class PensionCalcs
     {
-
         public static void BuildReport(DataInputModel inputModel, ChartModel chartModel)
         {
             // create the document
@@ -51,13 +50,13 @@ namespace RetirementIncomePlannerLogic
             var recorder = new SKPictureRecorder();
 
             // Begin recording
-            var canvas = recorder.BeginRecording(new SKRect(0, 0, (int)((8.27F - 2F) * defaulDPI * 3F),
+            var sourceCanvas = recorder.BeginRecording(new SKRect(0, 0, (int)((8.27F - 2F) * defaulDPI * 3F),
                 (int)(4.54F * defaulDPI * 3F)));
 
             // Draw something on the canvas
-            canvas.Clear(SKColors.White);
+            sourceCanvas.Clear(SKColors.White);
 
-            cartesianChart.SaveImage(canvas);
+            cartesianChart.SaveImage(sourceCanvas);
 
             // End recording and get the SKPicture object
             var picture = recorder.EndRecording();
@@ -66,9 +65,41 @@ namespace RetirementIncomePlannerLogic
 
             destCanvas.DrawPicture(picture, ref matrix);
 
-            var nextPosition = (4.54F + 1F + 1F) * defaulDPI;
-            //Write inputModel here:
 
+            //Write inputModel here:
+            var nextPosition = (4.54F + 1F + 1F) * defaulDPI;
+            var leftTextPos = 1F * defaulDPI;
+            var textLineHeight = 0.3F * defaulDPI;
+         
+            SKPaint paint = new SKPaint
+            {
+                Color = SKColors.Black,
+                TextSize = 8.0f
+            };
+
+            destCanvas.DrawText("Client Data Entry", leftTextPos, nextPosition, paint);
+            nextPosition += textLineHeight;
+
+            paint.TextSize = 6.0f;
+
+            destCanvas.DrawText("Number of years for projection:", leftTextPos, nextPosition, paint);
+            nextPosition += textLineHeight;
+
+            destCanvas.DrawText("Number of clients:", leftTextPos, nextPosition, paint);
+            nextPosition += textLineHeight * 2;
+
+            destCanvas.DrawText("Indexation:", leftTextPos, nextPosition, paint);
+            nextPosition += textLineHeight;
+
+            destCanvas.DrawText("Retirement Pot:", leftTextPos, nextPosition, paint);
+            nextPosition += textLineHeight;
+
+            destCanvas.DrawText("Investment Growth:", leftTextPos, nextPosition, paint);
+            nextPosition += textLineHeight;
+
+
+
+            //end of text code
 
             document.EndPage();
             document.Close();
