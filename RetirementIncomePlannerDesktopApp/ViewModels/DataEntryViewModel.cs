@@ -15,6 +15,8 @@ namespace RetirementIncomePlannerDesktopApp
 {
     public class DataEntryViewModel : ViewModelBase
     {
+        private int numberOfYears = 35;
+
         public int NumberOfClients
         {
             get
@@ -33,6 +35,11 @@ namespace RetirementIncomePlannerDesktopApp
                 {
                     RemoveClient();
                 }
+
+                OnPropertyChanged(nameof(NumberOfClients));
+
+                ExportReportCommand.RaiseCanExecuteChanged();
+                PreviewChartCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -57,8 +64,20 @@ namespace RetirementIncomePlannerDesktopApp
             }
         }
 
-        public int NumberOfYears { get; set; } = 35;
-        public PercentageFieldViewModel Indexation { get; private set; } = new PercentageFieldViewModel { PercentageValue = 0.02M, IsRequired=true };
+        public int NumberOfYears
+        {
+            get
+            {
+                return numberOfYears;
+            }
+            set
+            {
+                numberOfYears = value;
+                OnPropertyChanged(nameof(NumberOfYears));
+
+            }
+        }
+        public PercentageFieldViewModel Indexation { get; private set; } = new PercentageFieldViewModel { PercentageValue = 0.02M, IsRequired = true };
         public CurrencyFieldViewModel RetirementPot { get; private set; } = new CurrencyFieldViewModel { IsRequired = true };
         public PercentageFieldViewModel InvestmentGrowth { get; private set; } = new PercentageFieldViewModel { PercentageValue = 0.03M, IsRequired = true };
         public ObservableCollection<ClientViewModel> Clients { get; set; } = new ObservableCollection<ClientViewModel>();
@@ -123,7 +142,7 @@ namespace RetirementIncomePlannerDesktopApp
                     {
                         MessageBox.Show($"Error writing to file: {saveFileDialog1.FileName}.\n\nEnsure the file is not currently open and you have read/write permissions to the folder.");
                     }
-                }                
+                }
             }
             else
             {
