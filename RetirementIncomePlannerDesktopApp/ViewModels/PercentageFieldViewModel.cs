@@ -14,6 +14,22 @@ namespace RetirementIncomePlannerDesktopApp
         private readonly CultureInfo culture = CultureInfo.CreateSpecificCulture("en-GB");
         private readonly NumberStyles numberStyle = NumberStyles.Number;
 
+        private bool isRequired=false;
+
+        public bool IsRequired
+        {
+            get
+            {
+                return isRequired;
+            }
+            set
+            {
+                isRequired = value;
+                OnPropertyChanged(nameof(IsRequired));
+            }
+        }
+
+
         private decimal percentageValue = 0M;
 
         public decimal PercentageValue
@@ -54,7 +70,7 @@ namespace RetirementIncomePlannerDesktopApp
                 }
                 else
                 {
-                    IsValid = decimal.TryParse(value.Replace(culture.NumberFormat.PercentSymbol,""), numberStyle, culture, out percentageValue);
+                    IsValid = decimal.TryParse(value.Replace(culture.NumberFormat.PercentSymbol, ""), numberStyle, culture, out percentageValue);
                     if (IsValid)
                     {
                         percentageValue /= 100;
@@ -63,7 +79,7 @@ namespace RetirementIncomePlannerDesktopApp
                     }
                     else
                     {
-                        IsBlank= true;
+                        IsBlank = true;
                     }
                 }
             }
@@ -91,6 +107,6 @@ namespace RetirementIncomePlannerDesktopApp
                 isBlank = value;
                 OnPropertyChanged(nameof(IsBlank));
             }
-        }       
+        }
     }
 }

@@ -10,6 +10,21 @@ namespace RetirementIncomePlannerDesktopApp
 {
     public class AgeFieldViewModel : ViewModelBase
     {
+        private bool isRequired=false;
+
+        public bool IsRequired
+        {
+            get
+            {
+                return isRequired;
+            }
+            set
+            {
+                isRequired = value;
+                OnPropertyChanged(nameof(IsRequired));
+            }
+        }
+
         private int ageValue = 0;
 
         public int AgeValue

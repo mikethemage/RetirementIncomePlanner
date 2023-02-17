@@ -15,7 +15,20 @@ namespace RetirementIncomePlannerDesktopApp
         private readonly NumberStyles numberStyle = NumberStyles.Number | NumberStyles.AllowCurrencySymbol;
 
         private decimal currencyValue = 0M;
+        private bool isRequired=false;
 
+        public bool IsRequired
+        {
+            get
+            {
+                return isRequired;
+            }
+            set
+            {
+                isRequired = value;
+                OnPropertyChanged(nameof(IsRequired));
+            }
+        }
         public decimal CurrencyValue
         {
             get

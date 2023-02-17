@@ -6,8 +6,8 @@
              xmlns:local="clr-namespace:RetirementIncomePlannerDesktopApp" 
              d:DataContext="{d:DesignInstance Type=local:ClientViewModel}"
              mc:Ignorable="d" 
-             Width="300"
-             d:DesignHeight="450"             
+             Width="330"
+             d:DesignHeight="550"             
              Background="White">
   
        
@@ -28,53 +28,75 @@
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
+                <RowDefinition/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="56"/>
             </Grid.ColumnDefinitions>
 
+            <TextBlock Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2" Margin="5 0 0 0" VerticalAlignment="Bottom" FontSize="9">(Required Fields)</TextBlock>
+            
+            <TextBlock FontWeight="Bold" Grid.Row="1" Grid.Column="0" Margin="0 5">Age:</TextBlock>
+            <TextBox Grid.Row="1" Grid.Column="1" Margin="10,5,0,5" Text="{Binding Age.AgeText}" />
+            <TextBlock Grid.Row="1" Grid.Column="2" Margin="5 5 5 5" Foreground="Red" Visibility="{Binding Age.IsRequired, Converter={StaticResource BoolToVis}, FallbackValue=Hidden}">*</TextBlock>
 
-            <TextBlock FontWeight="Bold" Grid.Row="0" Grid.Column="0" Margin="0 5">Age:</TextBlock>
-            <TextBox Grid.Row="0" Grid.Column="1" Margin="10 5 0 5" Text="{Binding Age.AgeText}" />
+            <TextBlock FontWeight="Bold" Grid.Row="2" Grid.Column="0" Margin="0 5">Salary:</TextBlock>
+            <TextBox Grid.Row="2" Grid.Column="1" Margin="10 5 0 5" Text="{Binding Salary.CurrencyText}"/>
+            <TextBlock Grid.Row="2" Grid.Column="2" Margin="5 5 5 5" Foreground="Red" Visibility="{Binding Salary.IsRequired, Converter={StaticResource BoolToVis}, FallbackValue=Hidden}">*</TextBlock>
 
-            <TextBlock FontWeight="Bold" Grid.Row="1" Grid.Column="0" Margin="0 5">Salary:</TextBlock>
-            <TextBox Grid.Row="1" Grid.Column="1" Margin="10 5 0 5" Text="{Binding Salary.CurrencyText}"/>
 
-            <TextBlock FontWeight="Bold" Grid.Row="2" Grid.Column="0" Margin="0 5">Partial Retirement Age:</TextBlock>
-            <TextBox Grid.Row="2" Grid.Column="1" Margin="10 5 0 5" Text="{Binding PartialRetirementAge.AgeText}" />
+            <TextBlock FontWeight="Bold" Grid.Row="3" Grid.Column="0" Margin="0 5">Partial Retirement Age:</TextBlock>
+            <TextBox Grid.Row="3" Grid.Column="1" Margin="10 5 0 5" Text="{Binding PartialRetirementAge.AgeText}" />
+            <TextBlock Grid.Row="3" Grid.Column="2" Margin="5 5 5 5" Foreground="Red" Visibility="{Binding PartialRetirementAge.IsRequired, Converter={StaticResource BoolToVis}, FallbackValue=Hidden}">*</TextBlock>
 
-            <TextBlock FontWeight="Bold" Grid.Row="3" Grid.Column="0" Margin="0 5">Partial Retirement Salary:</TextBlock>
-            <TextBox Grid.Row="3" Grid.Column="1" Margin="10 5 0 5"  Text="{Binding PartialRetirementSalary.CurrencyText}" />
 
-            <TextBlock FontWeight="Bold" Grid.Row="4" Grid.Column="0" Margin="0 5">Retirement Age:</TextBlock>
-            <TextBox Grid.Row="4" Grid.Column="1" Margin="10 5 0 5" Text="{Binding RetirementAge.AgeText}" />
+            <TextBlock FontWeight="Bold" Grid.Row="4" Grid.Column="0" Margin="0 5">Partial Retirement Salary:</TextBlock>
+            <TextBox Grid.Row="4" Grid.Column="1" Margin="10 5 0 5"  Text="{Binding PartialRetirementSalary.CurrencyText}" />
+            <TextBlock Grid.Row="4" Grid.Column="2" Margin="5 5 5 5" Foreground="Red" Visibility="{Binding PartialRetirementSalary.IsRequired, Converter={StaticResource BoolToVis}, FallbackValue=Hidden}">*</TextBlock>
 
-            <TextBlock FontWeight="Bold" Grid.Row="5" Grid.Column="0" Margin="0 5">State Pension Amount:</TextBlock>
-            <TextBox Grid.Row="5" Grid.Column="1" Margin="10 5 0 5" Text="{Binding StatePensionAmount.CurrencyText}" />
 
-            <TextBlock FontWeight="Bold" Grid.Row="6" Grid.Column="0" Margin="0 5">State Pension Age:</TextBlock>
-            <TextBox Grid.Row="6" Grid.Column="1" Margin="10 5 0 5" Text="{Binding StatePensionAge.AgeText}" />
+            <TextBlock FontWeight="Bold" Grid.Row="5" Grid.Column="0" Margin="0 5">Retirement Age:</TextBlock>
+            <TextBox Grid.Row="5" Grid.Column="1" Margin="10 5 0 5" Text="{Binding RetirementAge.AgeText}" />
+            <TextBlock Grid.Row="5" Grid.Column="2" Margin="5 5 5 5" Foreground="Red" Visibility="{Binding RetirementAge.IsRequired, Converter={StaticResource BoolToVis}, FallbackValue=Hidden}">*</TextBlock>
 
-            <TextBlock FontWeight="Bold" Grid.Row="7" Grid.Column="0" Margin="0 5">Other Pensions:</TextBlock>
-            <TextBox Grid.Row="7" Grid.Column="1" Margin="10 5 0 5" Text="{Binding OtherPensionsAmount.CurrencyText}" />
 
-            <TextBlock FontWeight="Bold" Grid.Row="8" Grid.Column="0" Margin="0 5">Other Pension Age:</TextBlock>
-            <TextBox Grid.Row="8" Grid.Column="1" Margin="10 5 0 5"  Text="{Binding OtherPensionsAge.AgeText}" />
+            <TextBlock FontWeight="Bold" Grid.Row="6" Grid.Column="0" Margin="0 5">State Pension Amount:</TextBlock>
+            <TextBox Grid.Row="6" Grid.Column="1" Margin="10 5 0 5" Text="{Binding StatePensionAmount.CurrencyText}" />
+            <TextBlock Grid.Row="6" Grid.Column="2" Margin="5 5 5 5" Foreground="Red" Visibility="{Binding StatePensionAmount.IsRequired, Converter={StaticResource BoolToVis}, FallbackValue=Hidden}">*</TextBlock>
 
-            <TextBlock FontWeight="Bold" Grid.Row="9" Grid.Column="0" Margin="0 5">Other Income</TextBlock>
-            <TextBox Grid.Row="9" Grid.Column="1" Margin="10 5 0 5" Text="{Binding OtherIncome.CurrencyText}"/>
 
-            <TextBlock FontWeight="Bold" Grid.Row="10" Grid.Column="0" Margin="0 5">Retirement Income Level:</TextBlock>
-            <TextBox Grid.Row="10" Grid.Column="1" Margin="10 5 0 5" Text="{Binding RetirementIncomeLevel.CurrencyText}"/>
+            <TextBlock FontWeight="Bold" Grid.Row="7" Grid.Column="0" Margin="0 5">State Pension Age:</TextBlock>
+            <TextBox Grid.Row="7" Grid.Column="1" Margin="10 5 0 5" Text="{Binding StatePensionAge.AgeText}" />
+            <TextBlock Grid.Row="7" Grid.Column="2" Margin="5 5 5 5" Foreground="Red" Visibility="{Binding StatePensionAge.IsRequired, Converter={StaticResource BoolToVis}, FallbackValue=Hidden}">*</TextBlock>
+
+
+            <TextBlock FontWeight="Bold" Grid.Row="8" Grid.Column="0" Margin="0 5">Other Pensions:</TextBlock>
+            <TextBox Grid.Row="8" Grid.Column="1" Margin="10 5 0 5" Text="{Binding OtherPensionsAmount.CurrencyText}" />
+            <TextBlock Grid.Row="8" Grid.Column="2" Margin="5 5 5 5" Foreground="Red" Visibility="{Binding OtherPensionsAmount.IsRequired, Converter={StaticResource BoolToVis}, FallbackValue=Hidden}">*</TextBlock>
+
+
+            <TextBlock FontWeight="Bold" Grid.Row="9" Grid.Column="0" Margin="0 5">Other Pension Age:</TextBlock>
+            <TextBox Grid.Row="9" Grid.Column="1" Margin="10 5 0 5"  Text="{Binding OtherPensionsAge.AgeText}" />
+            <TextBlock Grid.Row="9" Grid.Column="2" Margin="5 5 5 5" Foreground="Red" Visibility="{Binding OtherPensionsAge.IsRequired, Converter={StaticResource BoolToVis}, FallbackValue=Hidden}">*</TextBlock>
+
+
+            <TextBlock FontWeight="Bold" Grid.Row="10" Grid.Column="0" Margin="0 5">Other Income</TextBlock>
+            <TextBox Grid.Row="10" Grid.Column="1" Margin="10 5 0 5" Text="{Binding OtherIncome.CurrencyText}"/>
+            <TextBlock Grid.Row="10" Grid.Column="2" Margin="5 5 5 5" Foreground="Red" Visibility="{Binding OtherIncome.IsRequired, Converter={StaticResource BoolToVis}, FallbackValue=Hidden}">*</TextBlock>
+
+
+            <TextBlock FontWeight="Bold" Grid.Row="11" Grid.Column="0" Margin="0 5">Retirement Income Level:</TextBlock>
+            <TextBox Grid.Row="11" Grid.Column="1" Margin="10 5 0 5" Text="{Binding RetirementIncomeLevel.CurrencyText}"/>
+            <TextBlock Grid.Row="11" Grid.Column="2" Margin="5 5 5 5" Foreground="Red" Visibility="{Binding RetirementIncomeLevel.IsRequired, Converter={StaticResource BoolToVis}, FallbackValue=Hidden}">*</TextBlock>
+
         </Grid>
 
         <TextBlock FontWeight="Bold">Additional Contributions/Withdrawals: </TextBlock>
-        <!--<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5 10 5 0">
-            <Button Width="100" Margin="5 0">Add</Button>
-            <Button Width="100" Margin="5 0">Remove</Button>
-
-        </StackPanel>-->
+        
+        
         <DataGrid HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Height="100" ScrollViewer.VerticalScrollBarVisibility="Auto"
                   
               ItemsSource="{Binding Mode=Default, Path=AdhocItems}" 

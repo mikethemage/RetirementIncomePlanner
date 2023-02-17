@@ -34,7 +34,39 @@ namespace RetirementIncomePlannerDesktopApp
             if (e.PropertyName != null)
             {
                 OnPropertyChanged(e.PropertyName);
+                if (e.PropertyName != "IsRequired")
+                {
+                    CheckLinkedRequiredFields();
+                }
             }
+        }
+
+        private void CheckLinkedRequiredFields()
+        {
+            if (!PartialRetirementAge.IsBlank || !PartialRetirementSalary.IsBlank)
+            {
+                Salary.IsRequired = true;
+                PartialRetirementAge.IsRequired = true;
+                PartialRetirementSalary.IsRequired = true;
+            }
+            else
+            {
+                Salary.IsRequired = false;
+                PartialRetirementAge.IsRequired = false;
+                PartialRetirementSalary.IsRequired = false;
+            }
+
+            if (!OtherPensionsAge.IsBlank || !OtherPensionsAmount.IsBlank)
+            {
+                OtherPensionsAge.IsRequired = true;
+                OtherPensionsAmount.IsRequired = true;
+            }
+            else
+            {
+                OtherPensionsAge.IsRequired = false;
+                OtherPensionsAmount.IsRequired = false;
+            }
+
         }
 
         //private readonly CultureInfo culture = CultureInfo.CreateSpecificCulture("en-GB");
@@ -58,7 +90,7 @@ namespace RetirementIncomePlannerDesktopApp
 
         public string ClientNumberText { get { return "Client " + ClientNumber.ToString(); } }
 
-        public AgeFieldViewModel Age { get; private set; } = new AgeFieldViewModel();
+        public AgeFieldViewModel Age { get; private set; } = new AgeFieldViewModel { IsRequired = true };
 
         public CurrencyFieldViewModel Salary { get; private set; } = new CurrencyFieldViewModel();
 
@@ -66,11 +98,11 @@ namespace RetirementIncomePlannerDesktopApp
 
         public CurrencyFieldViewModel PartialRetirementSalary { get; private set; } = new CurrencyFieldViewModel();
 
-        public AgeFieldViewModel RetirementAge { get; private set; } = new AgeFieldViewModel();
+        public AgeFieldViewModel RetirementAge { get; private set; } = new AgeFieldViewModel { IsRequired = true };
 
-        public CurrencyFieldViewModel StatePensionAmount { get; private set; } = new CurrencyFieldViewModel();
+        public CurrencyFieldViewModel StatePensionAmount { get; private set; } = new CurrencyFieldViewModel { IsRequired = true };
 
-        public AgeFieldViewModel StatePensionAge { get; private set; } = new AgeFieldViewModel();
+        public AgeFieldViewModel StatePensionAge { get; private set; } = new AgeFieldViewModel { IsRequired = true };
 
         public CurrencyFieldViewModel OtherPensionsAmount { get; private set; } = new CurrencyFieldViewModel();
 
@@ -78,7 +110,7 @@ namespace RetirementIncomePlannerDesktopApp
 
         public CurrencyFieldViewModel OtherIncome { get; private set; } = new CurrencyFieldViewModel();
 
-        public CurrencyFieldViewModel RetirementIncomeLevel { get; private set; } = new CurrencyFieldViewModel();
+        public CurrencyFieldViewModel RetirementIncomeLevel { get; private set; } = new CurrencyFieldViewModel { IsRequired = true };
 
         public ObservableCollection<AdhocItemViewModel> AdhocItems { get; set; } = new ObservableCollection<AdhocItemViewModel>();
 

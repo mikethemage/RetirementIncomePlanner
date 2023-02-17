@@ -58,9 +58,9 @@ namespace RetirementIncomePlannerDesktopApp
         }
 
         public int NumberOfYears { get; set; } = 35;
-        public PercentageFieldViewModel Indexation { get; private set; } = new PercentageFieldViewModel { PercentageValue = 0.02M };
-        public CurrencyFieldViewModel RetirementPot { get; private set; } = new CurrencyFieldViewModel();
-        public PercentageFieldViewModel InvestmentGrowth { get; private set; } = new PercentageFieldViewModel { PercentageValue = 0.03M };
+        public PercentageFieldViewModel Indexation { get; private set; } = new PercentageFieldViewModel { PercentageValue = 0.02M, IsRequired=true };
+        public CurrencyFieldViewModel RetirementPot { get; private set; } = new CurrencyFieldViewModel { IsRequired = true };
+        public PercentageFieldViewModel InvestmentGrowth { get; private set; } = new PercentageFieldViewModel { PercentageValue = 0.03M, IsRequired = true };
         public ObservableCollection<ClientViewModel> Clients { get; set; } = new ObservableCollection<ClientViewModel>();
 
         public List<int> YearsList { get; set; } = new List<int>();
