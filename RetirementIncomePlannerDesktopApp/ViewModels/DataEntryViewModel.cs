@@ -121,7 +121,7 @@ namespace RetirementIncomePlannerDesktopApp
                     }
                     catch
                     {
-                        MessageBox.Show($"Error opening file: {saveFileDialog1.FileName}.\n\nEnsure the file is not currently open and you have read/write permissions to the folder.");
+                        MessageBox.Show($"Error writing to file: {saveFileDialog1.FileName}.\n\nEnsure the file is not currently open and you have read/write permissions to the folder.");
                     }
                 }                
             }
