@@ -25,10 +25,7 @@ namespace RetirementIncomePlannerDesktopApp
             set
             {
                 outputData = value;
-                Chart.BuildChart(outputData);
-
-                PensionCalcs.BuildReport(InputData, Chart);
-                                
+                Chart.BuildChart(outputData);                                             
             }
         }
 

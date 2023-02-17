@@ -11,10 +11,16 @@ namespace RetirementIncomePlannerLogic
 {
     public class PensionCalcs
     {
-        public static void BuildReport(DataInputModel inputModel, ChartModel chartModel)
+        public static void BuildReport(DataInputModel inputModel, ChartModel chartModel, string FileName)
         {
             // create the document
-            using var stream = SKFileWStream.OpenStream(@"C:\Users\Mike\Documents\TestRIOutputDocument.pdf");
+            using var stream = SKFileWStream.OpenStream(FileName);
+
+            if(stream==null)
+            {
+                throw new IOException($"Error saving to file: {FileName}");
+            }
+
             var defaulDPI = 72F;
 
             var width = 8.27F * defaulDPI; // A4 width in inches

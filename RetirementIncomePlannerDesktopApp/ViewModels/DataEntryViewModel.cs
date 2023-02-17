@@ -9,6 +9,7 @@ using Microsoft.Windows.Input;
 using System.Windows;
 using System.ComponentModel;
 using System.IO;
+using Microsoft.Win32;
 
 namespace RetirementIncomePlannerDesktopApp
 {
@@ -51,7 +52,7 @@ namespace RetirementIncomePlannerDesktopApp
         {
             if (Clients.Count > 1)
             {
-                Clients[^1].PropertyChanged-= ChildPropertyChanged;
+                Clients[^1].PropertyChanged -= ChildPropertyChanged;
                 Clients.Remove(Clients[^1]);
             }
         }
@@ -80,50 +81,76 @@ namespace RetirementIncomePlannerDesktopApp
             Clients[0].PropertyChanged += ChildPropertyChanged;
 
             ExportReportCommand = new RelayCommand(ExportReport, CanExportReport);
+            PreviewChartCommand = new RelayCommand(ViewChart, CanViewChart);
         }
 
         private void ChildPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(AgeFieldViewModel.AgeText) ||
                 e.PropertyName == nameof(CurrencyFieldViewModel.CurrencyText) ||
-                e.PropertyName == nameof(PercentageFieldViewModel.PercentageText)                 
+                e.PropertyName == nameof(PercentageFieldViewModel.PercentageText)
                 )
             {
                 ExportReportCommand.RaiseCanExecuteChanged();
+                PreviewChartCommand.RaiseCanExecuteChanged();
             }
         }
 
+        public RelayCommand PreviewChartCommand { get; private set; }
         public RelayCommand ExportReportCommand { get; private set; }
         public void ExportReport()
         {
             if (CanExportReport())
-            {                
+            {
+                SaveFileDialog saveFileDialog1 = new SaveFileDialog
+                {
+                    RestoreDirectory = false,
+                    Filter = "PDF Files (*.pdf)|*.pdf|All Files (*.*)|*.*",
+                    FilterIndex = 1
+                };
+
+                if (saveFileDialog1.ShowDialog() == true)
+                {
+                    DataInputModel inputModel = CreateModel();
+                    YearRowModel[] outputModel = PensionCalcs.RunPensionCalcs(inputModel);
+                    ChartModel chart = new ChartModel();
+                    chart.BuildChart(outputModel);
+                    try
+                    {
+                        PensionCalcs.BuildReport(inputModel, chart, saveFileDialog1.FileName);
+                    }
+                    catch
+                    {
+                        MessageBox.Show($"Error opening file: {saveFileDialog1.FileName}.\n\nEnsure the file is not currently open and you have read/write permissions to the folder.");
+                    }
+                }                
+            }
+            else
+            {
+                MessageBox.Show("Validation Error!");
+            }
+        }
+
+        public void ViewChart()
+        {
+            if (CanExportReport())
+            {
                 DataInputModel inputModel = CreateModel();
                 YearRowModel[] outputModel = PensionCalcs.RunPensionCalcs(inputModel);
 
                 ReportViewModel report = new ReportViewModel
                 {
-                    InputData=inputModel,
-                    OutputData=outputModel
+                    InputData = inputModel,
+                    OutputData = outputModel
                 };
-
-                //using (StreamWriter outputFile = new(@"C:\Users\Mike\Documents\TestRIOutput.csv", false))
-                //{
-                //    outputFile.WriteLine("Year,Indexation Multiplier,Client1 Age,Client1 State Pension,Client1 Salary,Client2 Age,Client2 State Pension,Client2 Other Pension,Total Required Drawdown,Fund Before Drawdown,Total Drawdown,Total Fund Value");
-
-                //    foreach (YearRowModel row in outputModel)
-                //    {
-                //        outputFile.WriteLine($"{row.Year},{row.IndexationMultiplier},{row.Clients[0].Age},{row.Clients[0].StatePension},{row.Clients[0].Salary},{row.Clients[1].Age},{row.Clients[1].StatePension},{row.Clients[1].OtherPension},{row.TotalRequiredDrawdown},{row.FundBeforeDrawdown},{row.TotalDrawdown},{row.TotalFundValue}");
-                //    }
-                //}
 
                 ReportView reportView = new ReportView
                 {
-                    DataContext= report,
+                    DataContext = report,
                     Owner = Application.Current.MainWindow
                 };
-                
-                reportView.ShowDialog();               
+
+                reportView.ShowDialog();
             }
             else
             {
@@ -132,6 +159,11 @@ namespace RetirementIncomePlannerDesktopApp
         }
 
         public bool CanExportReport()
+        {
+            return CanCreateModel();
+        }
+
+        public bool CanViewChart()
         {
             return CanCreateModel();
         }
@@ -152,7 +184,7 @@ namespace RetirementIncomePlannerDesktopApp
                 RetirementPot = RetirementPot.CurrencyValue,
                 Indexation = Indexation.PercentageValue
             };
-            
+
             foreach (ClientViewModel client in Clients)
             {
                 output.Clients.Add(client.CreateModel());
