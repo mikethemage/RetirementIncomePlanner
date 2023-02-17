@@ -1,4 +1,5 @@
 ﻿using LiveChartsCore.Drawing;
+using CustomChartLegendSample;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using LiveChartsCore.SkiaSharpView.SKCharts;
@@ -31,17 +32,18 @@ namespace RetirementIncomePlannerLogic
             var cartesianChart = new SKCartesianChart
             {
                 Width = (int)((8.27F - 2F) * defaulDPI * 3F),
-                Height = (int)(4.54F * defaulDPI * 3F),
+                Height = (int)(4.54F * defaulDPI * 3F) - 100,
 
                 Series = chartModel.SeriesCollection,
 
-                LegendPosition = LiveChartsCore.Measure.LegendPosition.Bottom,
+                LegendPosition = LiveChartsCore.Measure.LegendPosition.Hidden,
 
                 Background = SKColors.White,
                 XAxes = chartModel.XAxisCollection,
                 YAxes = chartModel.YAxisCollection
             };
 
+          
 
 
             // Create an SKPictureRecorder object
@@ -55,6 +57,7 @@ namespace RetirementIncomePlannerLogic
             sourceCanvas.Clear(SKColors.White);
 
             cartesianChart.SaveImage(sourceCanvas);
+            CustomChartLegend.DrawLegend(sourceCanvas, cartesianChart);
 
             // End recording and get the SKPicture object
             var picture = recorder.EndRecording();
@@ -212,8 +215,26 @@ namespace RetirementIncomePlannerLogic
                 destCanvas.DrawText($"{inputModel.Clients[i].RetirementIncomeLevel:C}", leftClientTextPos + intputDataDisplayWidth, nextPosition, paint);
                 nextPosition += textLineHeight * 2;
 
-                destCanvas.DrawText("Ad-hoc Contributions/Withdrawals: ", leftClientTextPos, nextPosition, paint);
-                nextPosition += textLineHeight;
+
+                if (inputModel.Clients[i].AdhocTransactions.Count > 0)
+                {
+                    destCanvas.DrawText("Ad-hoc Contributions/Withdrawals: ", leftClientTextPos, nextPosition, paint);
+
+                    var leftAdhocTextPos = leftClientTextPos + 100F;
+
+                    destCanvas.DrawText("Age", leftAdhocTextPos, nextPosition, paint);
+                    destCanvas.DrawText("Amount", leftAdhocTextPos+25F, nextPosition, paint);
+                    nextPosition += textLineHeight;
+
+                    foreach (AgeAmountInputModel adhocItem in inputModel.Clients[i].AdhocTransactions)
+                    {
+                        destCanvas.DrawText($"{adhocItem.Age}", leftAdhocTextPos, nextPosition, paint);
+
+                        destCanvas.DrawText($"{adhocItem.Amount:C2}", leftAdhocTextPos+25F, nextPosition, paint);
+                        nextPosition += textLineHeight;
+                    }
+                }
+                
 
 
             }
