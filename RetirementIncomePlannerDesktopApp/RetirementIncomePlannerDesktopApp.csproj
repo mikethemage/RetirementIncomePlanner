@@ -7,6 +7,7 @@
     <UseWPF>true</UseWPF>
     <ApplicationIcon>RetirementIncomePlanner.ico</ApplicationIcon>
     <Platforms>AnyCPU;x64</Platforms>
+    <Title>Retirement Income Planner</Title>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -26,7 +27,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="RetirementIncomePlanner.ico" />
+    <Content Include="RetirementIncomePlanner.ico">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -35,6 +38,21 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RetirementIncomePlannerLogic\RetirementIncomePlannerLogic.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
 
 </Project>
