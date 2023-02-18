@@ -3,18 +3,18 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:RetirementIncomePlannerDesktopApp"
+        xmlns:local="clr-namespace:RetirementIncomePlannerDesktopApp"        
         mc:Ignorable="d"
         Title="Retirement Income Planner" Height="860" Width="800" MinHeight="350" MinWidth="310" MaxWidth="760"
-        WindowStartupLocation="CenterScreen"
+        WindowStartupLocation="CenterScreen"        
         >
     <Window.DataContext>
         <local:DataEntryViewModel/>
     </Window.DataContext>
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-
-
-        <StackPanel Orientation="Vertical" Margin="10 0 10 10">
+        
+        
+        <StackPanel Orientation="Vertical" Margin="10 0 10 10">            
             <TextBlock FontSize="24" FontWeight="Bold">Retirement Income Planner</TextBlock>
             <!--Plain Savings - -->
             <TextBlock FontSize="16" FontWeight="Bold" Margin="5 2 5 10">Client Data Entry</TextBlock>
