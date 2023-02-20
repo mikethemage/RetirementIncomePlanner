@@ -199,6 +199,7 @@ namespace RetirementIncomePlannerDesktopApp
         {
             DataInputModel output = new DataInputModel
             {
+                NumberOfYears= NumberOfYears,
                 InvestmentGrowth = InvestmentGrowth.PercentageValue,
                 RetirementPot = RetirementPot.CurrencyValue,
                 Indexation = Indexation.PercentageValue
