@@ -107,7 +107,9 @@ namespace RetirementIncomePlannerDesktopApp
         {
             if (e.PropertyName == nameof(AgeFieldViewModel.AgeText) ||
                 e.PropertyName == nameof(CurrencyFieldViewModel.CurrencyText) ||
-                e.PropertyName == nameof(PercentageFieldViewModel.PercentageText)
+                e.PropertyName == nameof(PercentageFieldViewModel.PercentageText) ||
+                e.PropertyName == "IsBlank" ||
+                e.PropertyName == "IsValid"
                 )
             {
                 ExportReportCommand.RaiseCanExecuteChanged();

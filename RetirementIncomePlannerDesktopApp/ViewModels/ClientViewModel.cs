@@ -119,7 +119,7 @@ namespace RetirementIncomePlannerDesktopApp
             return !Age.IsBlank && Age.IsValid &&
                 Salary.IsValid &&
                 PartialRetirementAge.IsValid && PartialRetirementSalary.IsValid &&
-                ((PartialRetirementAge.IsBlank && PartialRetirementSalary.IsBlank) || (!PartialRetirementAge.IsBlank && !PartialRetirementSalary.IsBlank)) &&
+                ((PartialRetirementAge.IsBlank && PartialRetirementSalary.IsBlank) || (!PartialRetirementAge.IsBlank && !PartialRetirementSalary.IsBlank && !Salary.IsBlank)) &&
                 RetirementAge.IsValid && !RetirementAge.IsBlank &&
                 !StatePensionAge.IsBlank && StatePensionAge.IsValid &&
                 !StatePensionAmount.IsBlank && StatePensionAmount.IsValid &&
