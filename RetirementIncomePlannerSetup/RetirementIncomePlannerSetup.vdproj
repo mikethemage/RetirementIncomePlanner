@@ -15,13 +15,13 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_7F1AD41D175E4427AAD7243588F4CD9D"
+        "MsmKey" = "8:_201E22A1C62346269B8F93C387372DF3"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_D9D34FF438E84A7991CF2F3EB5CDEDDD"
+        "MsmKey" = "8:_7F1AD41D175E4427AAD7243588F4CD9D"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -43,6 +43,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
         "Release"
         {
@@ -182,15 +190,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Retirement Income Planner"
-        "ProductCode" = "8:{0B3E214E-80A8-4C3A-9F01-A2B532D07206}"
-        "PackageCode" = "8:{4F9BD931-FB55-4655-A5C3-1DB5D170BF53}"
+        "ProductCode" = "8:{9096BB72-8566-42A3-A55E-76616DE628A2}"
+        "PackageCode" = "8:{09B93E53-429C-4EDE-97DE-BBF780CF9F65}"
         "UpgradeCode" = "8:{2A8587CD-4547-48FC-AF62-D57A216B0DF5}"
         "AspNetVersion" = "8:"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:1.0.0"
+        "ProductVersion" = "8:1.0.1"
         "Manufacturer" = "8:Mike the Mage"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -303,7 +311,7 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_8E78969F254644BC9C241B8F0576D69D"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_7FBF3E3924A648AA8254A99F53E5787B"
             {
             "Name" = "8:Retirement Income Planner"
             "Arguments" = "8:"
@@ -311,7 +319,7 @@
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_D9D34FF438E84A7991CF2F3EB5CDEDDD"
+            "Target" = "8:_201E22A1C62346269B8F93C387372DF3"
             "Folder" = "8:_D7F318E7906746FA92179EDEFC328907"
             "WorkingFolder" = "8:_636975A7835E452E8B2E1B266DC8F7BC"
             "Icon" = "8:_7F1AD41D175E4427AAD7243588F4CD9D"
@@ -716,9 +724,9 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_D9D34FF438E84A7991CF2F3EB5CDEDDD"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_201E22A1C62346269B8F93C387372DF3"
             {
-            "SourcePath" = "8:..\\RetirementIncomePlannerDesktopApp\\obj\\x64\\Release\\net7.0-windows\\win-x64\\apphost.exe"
+            "SourcePath" = "8:..\\RetirementIncomePlannerDesktopApp\\obj\\x64\\Release\\net7.0-windows\\apphost.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_636975A7835E452E8B2E1B266DC8F7BC"
