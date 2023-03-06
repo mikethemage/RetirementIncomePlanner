@@ -8,8 +8,8 @@
     <ApplicationIcon>RetirementIncomePlanner.ico</ApplicationIcon>
     <Platforms>AnyCPU;x64</Platforms>
     <Title>Retirement Income Planner</Title>
-    <AssemblyVersion>1.0.2.0</AssemblyVersion>
-    <FileVersion>1.0.2.0</FileVersion>
+    <AssemblyVersion>1.0.3.0</AssemblyVersion>
+    <FileVersion>1.0.3.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

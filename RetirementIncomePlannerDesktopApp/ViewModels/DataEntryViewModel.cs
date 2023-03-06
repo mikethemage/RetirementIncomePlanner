@@ -10,11 +10,22 @@ using System.Windows;
 using System.ComponentModel;
 using System.IO;
 using Microsoft.Win32;
+using System.Reflection;
 
 namespace RetirementIncomePlannerDesktopApp
 {
+    
     public class DataEntryViewModel : ViewModelBase
     {
+        public string getRunningVersion
+        {
+            get
+            {
+                return $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
+            }
+
+        }
+
         private int numberOfYears = 35;
 
         public int NumberOfClients

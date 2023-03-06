@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RetirementIncomePlannerDesktopApp"        
         mc:Ignorable="d"
-        Title="Retirement Income Planner" Height="860" Width="800" MinHeight="350" MinWidth="310" MaxWidth="760"
+        Title="Retirement Income Planner" Height="880" Width="800" MinHeight="350" MinWidth="310" MaxWidth="760"
         WindowStartupLocation="CenterScreen"        
         >
     <Window.DataContext>
@@ -14,7 +14,7 @@
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
         
         
-        <StackPanel Orientation="Vertical" Margin="10 0 10 10">            
+        <StackPanel Orientation="Vertical" Margin="10 0 10 0">            
             <TextBlock FontSize="24" FontWeight="Bold">Retirement Income Planner</TextBlock>
             <!--Plain Savings - -->
             <TextBlock FontSize="16" FontWeight="Bold" Margin="5 2 5 10">Client Data Entry</TextBlock>
@@ -86,8 +86,9 @@
 
                 <Button Margin="30 0" Width="280" Padding="0 10" Command="{Binding ExportReportCommand}">Export Report</Button>
             </StackPanel>
-            
 
+            <TextBlock Margin="10 10 10 5" Foreground="SlateGray" TextAlignment="Right" Text="{Binding getRunningVersion}"/>
+            
         </StackPanel>
     </ScrollViewer>
 </Window>
