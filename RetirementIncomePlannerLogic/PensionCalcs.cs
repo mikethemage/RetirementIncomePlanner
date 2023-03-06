@@ -6,11 +6,23 @@ using LiveChartsCore.SkiaSharpView.SKCharts;
 using LiveChartsCore.SkiaSharpView.VisualElements;
 using SkiaSharp;
 using System.Numerics;
+using System.Reflection;
 
 namespace RetirementIncomePlannerLogic
 {
     public class PensionCalcs
     {
+
+        public static SKTypeface GetTypeface(string fullFontName)
+        {
+            SKTypeface result;
+            var assembly = Assembly.GetExecutingAssembly();
+            var stream = assembly.GetManifestResourceStream("RetirementIncomePlannerLogic.Fonts." + fullFontName + ".ttf");
+            result = SKTypeface.FromStream(stream);
+            return result;
+        }
+
+
         public static void BuildReport(DataInputModel inputModel, ChartModel chartModel, string FileName)
         {
             // create the document
@@ -34,6 +46,14 @@ namespace RetirementIncomePlannerLogic
             // begin a new page with the specified dimensions
             var destCanvas = document.BeginPage(width, height);
 
+            var boldFont = GetTypeface("OpenSans-Bold"); // SKTypeface.FromFamilyName("Arial", SKFontStyleWeight.Bold, SKFontStyleWidth.Normal, SKFontStyleSlant.Upright);
+            var normalFont = GetTypeface("OpenSans-Regular");// SKTypeface.FromFamilyName("Arial", SKFontStyleWeight.Normal, SKFontStyleWidth.Normal, SKFontStyleSlant.Upright);
+
+
+            chartModel.XAxisCollection[0].LabelsPaint = new SolidColorPaint { Color = SKColors.Black, SKTypeface = normalFont };
+            chartModel.YAxisCollection[0].LabelsPaint = new SolidColorPaint { Color = SKColors.Black, SKTypeface = normalFont };
+            chartModel.YAxisCollection[1].LabelsPaint = new SolidColorPaint { Color = SKColors.Black, SKTypeface = normalFont };
+
             // draw on the canvas ...           
             var cartesianChart = new SKCartesianChart
             {
@@ -49,7 +69,7 @@ namespace RetirementIncomePlannerLogic
                 YAxes = chartModel.YAxisCollection
             };
 
-          
+            
 
 
             // Create an SKPictureRecorder object
@@ -75,13 +95,14 @@ namespace RetirementIncomePlannerLogic
 
             destCanvas.DrawPicture(picture, ref matrix);
 
+           
 
             //then draw the title:
 
             SKPaint chartTitlePaint = new SKPaint
             {
                 Color = SKColors.Black,
-                Typeface = SKTypeface.FromFamilyName("Arial", SKFontStyleWeight.Bold, SKFontStyleWidth.Normal, SKFontStyleSlant.Upright),
+                Typeface = boldFont,  //GetTypeface("OpenSans-Bold"), //SKTypeface.FromFamilyName("Arial", SKFontStyleWeight.Bold, SKFontStyleWidth.Normal, SKFontStyleSlant.Upright),
                 TextAlign = SKTextAlign.Center,
                 TextSize = 8.0F
             };
@@ -100,9 +121,7 @@ namespace RetirementIncomePlannerLogic
                 TextSize = 8.0f
             };
 
-            var boldFont = SKTypeface.FromFamilyName("Arial", SKFontStyleWeight.Bold, SKFontStyleWidth.Normal, SKFontStyleSlant.Upright);
-            var normalFont = SKTypeface.FromFamilyName("Arial", SKFontStyleWeight.Normal, SKFontStyleWidth.Normal, SKFontStyleSlant.Upright);
-
+           
             paint.Typeface = boldFont;
             destCanvas.DrawText("Client Data Entry", leftTextPos, nextPosition, paint);
             nextPosition += textLineHeight * 2;

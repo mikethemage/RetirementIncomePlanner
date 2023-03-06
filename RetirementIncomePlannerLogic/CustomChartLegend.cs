@@ -5,6 +5,7 @@ using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Drawing;
 using LiveChartsCore.SkiaSharpView.Painting;
 using LiveChartsCore.SkiaSharpView.SKCharts;
+using RetirementIncomePlannerLogic;
 using SkiaSharp;
 
 namespace CustomChartLegendSample
@@ -17,7 +18,9 @@ namespace CustomChartLegendSample
             {
                 TextSize = 18,
                 IsAntialias = true,
-                TextAlign = SKTextAlign.Left
+                TextAlign = SKTextAlign.Left,
+                Typeface=PensionCalcs.GetTypeface("OpenSans-Regular")
+                
             };
 
             const int legendPadding = 10;

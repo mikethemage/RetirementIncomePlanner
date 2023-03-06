@@ -1,4 +1,4 @@
-*Retirement Income Planner*
+**Retirement Income Planner**
 
 Tool to calculate retirement income.
 
