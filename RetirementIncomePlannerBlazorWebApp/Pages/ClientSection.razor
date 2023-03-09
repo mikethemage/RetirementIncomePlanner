@@ -1,0 +1,80 @@
+﻿<div class="border">
+
+    <h3>
+        Client @Client.ClientNumber
+    </h3>
+
+    <div>
+        Age:
+
+        <input @bind="Client.Age.AgeText" />
+
+    </div>
+
+    <div>
+        Salary:
+        <input @bind="Client.Salary.CurrencyText" />
+    </div>
+    <div>
+        Partial Retirement Age:
+        <input @bind="Client.PartialRetirementAge.AgeText" />
+    </div>
+    <div>
+        Partial Retirement Salary:
+        <input @bind="Client.PartialRetirementSalary.CurrencyText" />
+    </div>
+    <div>
+        Retirement Age:
+        <input @bind="Client.RetirementAge.AgeText" />
+    </div>
+    <div>
+        State Pension Amount:
+        <input @bind="Client.StatePensionAmount.CurrencyText" />
+    </div>
+    <div>
+        State Pension Age:
+        <input @bind="Client.StatePensionAge.AgeText" />
+    </div>
+    <div>
+        Other Pensions:
+        <input @bind="Client.OtherPensionsAmount.CurrencyText" />
+    </div>
+    <div>
+        Other Pensions Age:
+        <input @bind="Client.OtherPensionsAge.AgeText" />
+    </div>
+
+    <div>
+        Other Income:
+        <input @bind="Client.OtherIncome.CurrencyText" />
+    </div>
+
+    <div>
+        Retirement Income Level:
+        <input @bind="Client.RetirementIncomeLevel.CurrencyText" />
+    </div>
+
+    <div>
+        Additional Contributions/Withdrawals:
+        <table class="table table-bordered">
+            <thead>
+                <tr><td>Age</td><td>Amount</td></tr>
+            </thead>
+            @foreach (AdhocItemViewModel adhoc in Client.AdhocItems)
+            {
+                <tr>
+                    <td><input @bind="adhoc.Age.AgeText" /></td>
+                    <td><input @bind="adhoc.Amount.CurrencyText" /></td>
+                </tr>
+            }
+        </table>
+    </div>
+
+</div>
+
+
+
+@code {
+    [Parameter]
+    public ClientViewModel Client { get; set; }
+}

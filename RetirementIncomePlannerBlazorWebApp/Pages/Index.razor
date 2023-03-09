@@ -1,0 +1,80 @@
+﻿@page "/"
+@using System.ComponentModel;
+
+@inject DataEntryViewModel InputModel
+
+<PageTitle>Retirement Income Planner</PageTitle>
+
+<h1>Retirement Income Planner</h1>
+
+<div class="container-fluid">
+
+<div>
+    Number of Years:
+    <select @bind="InputModel.NumberOfYears">
+        @for (int i = 1; i <= 35; i++)
+        {
+            <option value="@i">@i</option>
+        }
+    </select>
+</div>
+
+<div>
+    Number of Clients:
+    <select @bind="InputModel.NumberOfClients">
+        @for (int i = 1; i <= 2; i++)
+        {
+            <option value="@i">@i</option>
+        }
+    </select>
+</div>
+
+<div>
+    Indexation:
+    <input @bind="InputModel.Indexation.PercentageText" />
+</div>
+
+<div>
+    Retirement Pot:
+    <input @bind="InputModel.RetirementPot.CurrencyText" />
+</div>
+
+<div>
+    Investment Growth:
+    <input @bind="InputModel.InvestmentGrowth.PercentageText" />
+</div>
+
+<div class="d-flex p-2">
+    @foreach (ClientViewModel client in InputModel.Clients)
+    {
+        <ClientSection Client="@client" />
+    }
+</div>
+
+<div>
+    <button disabled="@InputModel.CannotViewChart">Preview Chart</button>
+    <button disabled="@InputModel.CannotExportReport">Export Report</button>
+</div>
+
+
+</div>
+
+
+@code
+{
+    protected override void OnInitialized()
+    {
+        InputModel.PropertyChanged += PropertyChanged;
+    }
+
+    public void Dispose()
+    {
+        InputModel.PropertyChanged -= PropertyChanged;
+    }
+
+    private void PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
+}
