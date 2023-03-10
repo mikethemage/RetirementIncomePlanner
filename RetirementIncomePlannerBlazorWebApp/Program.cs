@@ -14,7 +14,7 @@ namespace RetirementIncomePlannerBlazorWebApp
             builder.Services.AddRazorPages();
             builder.Services.AddServerSideBlazor();
             //builder.Services.AddSingleton<WeatherForecastService>();
-            builder.Services.AddSingleton<DataEntryViewModel>();
+            builder.Services.AddTransient<DataEntryViewModel>();
 
             var app = builder.Build();
 
