@@ -1,57 +1,84 @@
-﻿<div class="border">
+﻿<div>
 
     <h3>
         Client @Client.ClientNumber
     </h3>
 
-    <div>
-        Age:
-
-        <input @bind="Client.Age.AgeText" />
-
+    <div class="form-group row">
+        <label for="Age" class="col-sm-4 col-form-label">Age:</label>
+        <div class="col-sm-8">
+            <input @bind="Client.Age.AgeText" id="Age" class="form-text" />
+        </div>
     </div>
 
-    <div>
-        Salary:
-        <input @bind="Client.Salary.CurrencyText" />
-    </div>
-    <div>
-        Partial Retirement Age:
-        <input @bind="Client.PartialRetirementAge.AgeText" />
-    </div>
-    <div>
-        Partial Retirement Salary:
-        <input @bind="Client.PartialRetirementSalary.CurrencyText" />
-    </div>
-    <div>
-        Retirement Age:
-        <input @bind="Client.RetirementAge.AgeText" />
-    </div>
-    <div>
-        State Pension Amount:
-        <input @bind="Client.StatePensionAmount.CurrencyText" />
-    </div>
-    <div>
-        State Pension Age:
-        <input @bind="Client.StatePensionAge.AgeText" />
-    </div>
-    <div>
-        Other Pensions:
-        <input @bind="Client.OtherPensionsAmount.CurrencyText" />
-    </div>
-    <div>
-        Other Pensions Age:
-        <input @bind="Client.OtherPensionsAge.AgeText" />
+    <div class="form-group row">
+        <label for="Salary" class="col-sm-4 col-form-label">Salary:</label>
+        <div class="col-sm-8">
+            <input @bind="Client.Salary.CurrencyText" id="Salary" class="form-text" />
+        </div>
     </div>
 
-    <div>
-        Other Income:
-        <input @bind="Client.OtherIncome.CurrencyText" />
+    <div class="form-group row">
+        <label for="PartialRetirementAge" class="col-sm-4 col-form-label">Partial Retirement Age:</label>
+        <div class="col-sm-8">
+            <input @bind="Client.PartialRetirementAge.AgeText" id="PartialRetirementAge" class="form-text" />
+        </div>
     </div>
 
-    <div>
-        Retirement Income Level:
-        <input @bind="Client.RetirementIncomeLevel.CurrencyText" />
+    <div class="form-group row">
+        <label for="PartialRetirementSalary" class="col-sm-4 col-form-label">Partial Retirement Salary:</label>
+        <div class="col-sm-8">
+            <input @bind="Client.PartialRetirementSalary.CurrencyText" id="PartialRetirementSalary" class="form-text" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="RetirementAge" class="col-sm-4 col-form-label">Retirement Age:</label>
+        <div class="col-sm-8">
+            <input @bind="Client.RetirementAge.AgeText" id="RetirementAge" class="form-text" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="StatePensionAmount" class="col-sm-4 col-form-label">State Pension Amount:</label>
+        <div class="col-sm-8">
+            <input @bind="Client.StatePensionAmount.CurrencyText" id="StatePensionAmount" class="form-text" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="StatePensionAge" class="col-sm-4 col-form-label">State Pension Age:</label>
+        <div class="col-sm-8">
+            <input @bind="Client.StatePensionAge.AgeText" id="StatePensionAge" class="form-text" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="OtherPensions" class="col-sm-4 col-form-label">Other Pensions:</label>
+        <div class="col-sm-8">
+            <input @bind="Client.OtherPensionsAmount.CurrencyText" id="OtherPensions" class="form-text" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="OtherPensionsAge" class="col-sm-4 col-form-label">Other Pensions Age:</label>
+        <div class="col-sm-8">
+            <input @bind="Client.OtherPensionsAge.AgeText" id="OtherPensionsAge" class="form-text" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="OtherIncome" class="col-sm-4 col-form-label">Other Income:</label>
+        <div class="col-sm-8">
+            <input @bind="Client.OtherIncome.CurrencyText" id="OtherIncome" class="form-text" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="RetirementIncomeLevel" class="col-sm-4 col-form-label">Retirement Income Level:</label>
+        <div class="col-sm-8">
+            <input @bind="Client.RetirementIncomeLevel.CurrencyText" id="RetirementIncomeLevel" class="form-text" />
+        </div>
     </div>
 
     <div>

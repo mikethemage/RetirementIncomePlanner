@@ -14,4 +14,8 @@
     <Folder Include="Data\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\scripts.js" />
+  </ItemGroup>
+
 </Project>

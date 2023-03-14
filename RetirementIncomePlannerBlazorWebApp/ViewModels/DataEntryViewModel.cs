@@ -15,6 +15,7 @@ namespace RetirementIncomePlannerBlazorWebApp
 {
     public class DataEntryViewModel : ViewModelBase
     {
+        public bool ImageGenerated { get; set; } = false;
         public string getRunningVersion
         {
             get

@@ -7,6 +7,8 @@ using LiveChartsCore.SkiaSharpView.VisualElements;
 using SkiaSharp;
 using System.Numerics;
 using System.Reflection;
+using System.Text;
+using LiveChartsCore;
 
 namespace RetirementIncomePlannerLogic
 {
@@ -28,11 +30,70 @@ namespace RetirementIncomePlannerLogic
             // create the document
             using var stream = SKFileWStream.OpenStream(FileName);
 
-            if(stream==null)
+            if (stream == null)
             {
                 throw new IOException($"Error saving to file: {FileName}");
             }
+            BuildReportFromStream(inputModel, chartModel, stream);
+            stream.Dispose(); //probably not needed due to using statement
+        }
 
+        public static MemoryStream BuildReportAndReturnStream(DataInputModel inputModel, ChartModel chartModel)
+        {
+            var stream = new MemoryStream();
+            using var wstream = new SKManagedWStream(stream);
+            if (stream == null || wstream==null)
+            {
+                throw new IOException($"Error creating memory stream");
+            }
+            BuildReportFromStream(inputModel, chartModel, wstream);
+            wstream.Flush();
+            stream.Position = 0;
+            return stream;
+        }
+
+        public static Stream ChartImageToStream(ChartModel chartModel)
+        {
+            var defaulDPI = 72F;
+
+            // Create an SKPictureRecorder object
+            var recorder = new SKPictureRecorder();
+            var sourceCanvas = recorder.BeginRecording(new SKRect(0, 0, (int)((8.27F - 2F) * defaulDPI * 3F),
+                (int)(4.54F * defaulDPI * 3F)));
+            // Draw something on the canvas
+            sourceCanvas.Clear(SKColors.White);
+
+            // draw on the canvas ...           
+            var cartesianChart = new SKCartesianChart
+            {
+                Width = (int)((8.27F - 2F) * defaulDPI * 3F),
+                Height = (int)(4.54F * defaulDPI * 3F),
+
+                Series = chartModel.SeriesCollection,
+
+                LegendPosition = LiveChartsCore.Measure.LegendPosition.Bottom,
+
+                Background = SKColors.White,
+                XAxes = chartModel.XAxisCollection,
+                YAxes = chartModel.YAxisCollection
+            };
+            cartesianChart.SaveImage(sourceCanvas);
+            // End recording and get the SKPicture object
+            var picture = recorder.EndRecording();
+
+            var image = SKImage.FromPicture(picture, new SKSizeI { 
+                Width= (int)((8.27F - 2F) * defaulDPI *3F), 
+                Height = (int)(4.54F * defaulDPI *3F )});
+
+            var data = image.Encode(SKEncodedImageFormat.Png, 100);
+            
+
+            return data.AsStream(true);
+
+        }
+
+        public static void BuildReportFromStream(DataInputModel inputModel, ChartModel chartModel, SKWStream stream)
+        {
             var defaulDPI = 72F;
 
             var width = 8.27F * defaulDPI; // A4 width in inches
@@ -268,7 +329,7 @@ namespace RetirementIncomePlannerLogic
 
             document.EndPage();
             document.Close();
-            stream.Dispose();
+            
         }
 
 

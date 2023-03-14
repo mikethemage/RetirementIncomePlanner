@@ -1,60 +1,95 @@
 ﻿@page "/"
 @using System.ComponentModel;
+@using RetirementIncomePlannerLogic;
 
 @inject DataEntryViewModel InputModel
+@inject IJSRuntime JS
+@inject NavigationManager Navigation
+@inject ReportViewModel Report
+
+
 
 <PageTitle>Retirement Income Planner</PageTitle>
+<div class="h-100 d-flex align-items-center justify-content-center">
 
-<h1>Retirement Income Planner</h1>
 
-<div class="container-fluid">
 
-<div>
-    Number of Years:
-    <select @bind="InputModel.NumberOfYears">
-        @for (int i = 1; i <= 35; i++)
+
+    <div>
+        <h1>Retirement Income Planner</h1>
+        <div class="container-fluid">
+
+
+            <div class="form-group row">
+                <label for="NumberOfYears" class="col-sm-2 col-form-label">Number of Years:</label>
+                <div class="col-sm-9">
+                    <select @bind="InputModel.NumberOfYears" id="NumberOfYears" class="form-select-sm">
+                        @for (int i = 1; i <= 35; i++)
+                        {
+                            <option value="@i">@i</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="NumberOfClients" class="col-sm-2 col-form-label">Number of Clients:</label>
+                <div class="col-sm-9">
+                    <select @bind="InputModel.NumberOfClients" id="NumberOfClients" class="form-select-sm">
+                        @for (int i = 1; i <= 2; i++)
+                        {
+                            <option value="@i">@i</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="NumberOfClients" class="col-sm-2 col-form-label">Indexation:</label>
+                <div class="col-sm-9">
+                    <input @bind="InputModel.Indexation.PercentageText" id="Indexation" class="form-text" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="RetirementPot" class="col-sm-2 col-form-label">Retirement Pot:</label>
+                <div class="col-sm-9">
+                    <input @bind="InputModel.RetirementPot.CurrencyText" id="RetirementPot" class="form-text" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="InvestmentGrowth" class="col-sm-2 col-form-label">Investment Growth:</label>
+                <div class="col-sm-9">
+                    <input @bind="InputModel.InvestmentGrowth.PercentageText" id="InvestmentGrowth" class="form-text" />
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex flex-wrap">
+            @foreach (ClientViewModel client in InputModel.Clients)
+            {
+                <div class="p-2 border">
+                    <ClientSection Client="@client" />
+                </div>
+            }
+        </div>
+
+        <div class="container-fluid align-items-center justify-content-center">
+            <button disabled="@InputModel.CannotViewChart" @onclick="PreviewChart">Preview Chart</button>
+            <button disabled="@InputModel.CannotExportReport" @onclick="DownloadFileFromStream">Export Report</button>
+        </div>
+
+        @if (InputModel.ImageGenerated)
         {
-            <option value="@i">@i</option>
+            <p>
+                <img id="chartImage"
+                     Width="@(6.27F * 72F*2F)"
+                     Height="@(4.54F * 72F*2F)" />
+            </p>
         }
-    </select>
-</div>
 
-<div>
-    Number of Clients:
-    <select @bind="InputModel.NumberOfClients">
-        @for (int i = 1; i <= 2; i++)
-        {
-            <option value="@i">@i</option>
-        }
-    </select>
-</div>
-
-<div>
-    Indexation:
-    <input @bind="InputModel.Indexation.PercentageText" />
-</div>
-
-<div>
-    Retirement Pot:
-    <input @bind="InputModel.RetirementPot.CurrencyText" />
-</div>
-
-<div>
-    Investment Growth:
-    <input @bind="InputModel.InvestmentGrowth.PercentageText" />
-</div>
-
-<div class="d-flex p-2">
-    @foreach (ClientViewModel client in InputModel.Clients)
-    {
-        <ClientSection Client="@client" />
-    }
-</div>
-
-<div>
-    <button disabled="@InputModel.CannotViewChart">Preview Chart</button>
-    <button disabled="@InputModel.CannotExportReport">Export Report</button>
-</div>
+    </div>
 
 
 </div>
@@ -62,6 +97,36 @@
 
 @code
 {
+    private async Task PreviewChart()
+    {
+        Report.InputData = InputModel.CreateModel();
+        Report.OutputData = PensionCalcs.RunPensionCalcs(Report.InputData);
+
+        //Navigation.NavigateTo("/chart");
+
+        //await JS.InvokeVoidAsync("open", "/chart", "_blank");
+
+        InputModel.ImageGenerated = true;
+
+        await SetImageAsync();
+    }
+
+    private async Task SetImageAsync()
+    {
+        var imageStream = PensionCalcs.ChartImageToStream(Report.Chart);
+        var dotnetImageStream = new DotNetStreamReference(imageStream);
+        await JS.InvokeVoidAsync("setImage", "chartImage", dotnetImageStream);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+
+        var module = await JS.InvokeAsync<IJSObjectReference>(
+    "import", "./scripts.js");
+
+        base.OnAfterRenderAsync(firstRender);
+    }
+
     protected override void OnInitialized()
     {
         InputModel.PropertyChanged += PropertyChanged;
@@ -75,6 +140,25 @@
     private void PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         InvokeAsync(StateHasChanged);
+    }
+
+    private async Task DownloadFileFromStream()
+    {
+
+        var dataInputModel = InputModel.CreateModel();
+        var outputModel = PensionCalcs.RunPensionCalcs(dataInputModel);
+        var chart = new ChartModel();
+        chart.BuildChart(outputModel);
+
+        using var fileStream = PensionCalcs.BuildReportAndReturnStream(dataInputModel, chart);
+
+
+        var fileName = "Retirement Income Report.pdf";
+
+        using var streamRef = new DotNetStreamReference(stream: fileStream);
+
+
+        await JS.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
     }
 
 }
