@@ -2,4 +2,4 @@
 
 Tool to calculate retirement income.
 
-Currently built using WPF (Windows only).
+Currently built using WPF (Windows only) + Blazor Server (Windows & Linux).
