@@ -1,3 +1,4 @@
+using LiveChartsCore;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 
@@ -12,8 +13,8 @@ namespace RetirementIncomePlannerBlazorWebApp
 
             // Add services to the container.
             builder.Services.AddRazorPages();
-            builder.Services.AddServerSideBlazor();
-           
+            builder.Services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
+
             builder.Services.AddTransient<DataEntryViewModel>();
             builder.Services.AddTransient<ReportViewModel>();
 

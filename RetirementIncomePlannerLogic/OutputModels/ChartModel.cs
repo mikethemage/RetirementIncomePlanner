@@ -16,11 +16,18 @@ using System.Threading.Tasks;
 using System.Reflection;
 using LiveChartsCore.Measure;
 using LiveChartsCore.Kernel.Sketches;
+using System.Globalization;
 
 namespace RetirementIncomePlannerLogic
 {    
     public class ChartModel
-    {        
+    {
+        private static readonly CultureInfo culture = CultureInfo.CreateSpecificCulture("en-GB");
+        private static readonly NumberStyles numberStyle = NumberStyles.Number | NumberStyles.AllowCurrencySymbol;
+
+        private static Func<double, string> LabellerGBPCurrency => (double value) => string.Create(culture, $"{value:C2}");
+
+
         public string Title { get; set; } = "Retirement Income Planner";
         public bool IsChartBuilt { get; set; } = false;
         public string LegendPosition { get; } = "Bottom";
@@ -34,9 +41,11 @@ namespace RetirementIncomePlannerLogic
 
         public List<Axis> YAxisCollection { get; set; } =
             new List<Axis> {
-                new Axis { Position=LiveChartsCore.Measure.AxisPosition.Start, Labeler=Labelers.Currency, MinLimit=-0.75 },
-                new Axis { Position=LiveChartsCore.Measure.AxisPosition.End, ShowSeparatorLines=false, Labeler = Labelers.Currency, MinLimit=-0.75 }
+                new Axis { Position=LiveChartsCore.Measure.AxisPosition.Start, Labeler=LabellerGBPCurrency, MinLimit=-0.75 },
+                new Axis { Position=LiveChartsCore.Measure.AxisPosition.End, ShowSeparatorLines=false, Labeler = LabellerGBPCurrency, MinLimit=-0.75 }
             };
+
+        
 
         public void BuildChart(YearRowModel[] dataForChart)
         {
@@ -53,7 +62,7 @@ namespace RetirementIncomePlannerLogic
                         ScalesYAt = 0,
                         Name = "Total Drawdown",
                         Fill = new SolidColorPaint { Color = new SKColor(48, 93, 122) },
-                        TooltipLabelFormatter = x => $"{x.Context.Series.Name}: {x.PrimaryValue:C2}"
+                        TooltipLabelFormatter = x => string.Create(culture,$"{x.Context.Series.Name}: {x.PrimaryValue:C2})")
                     }
                     );
             }
@@ -79,7 +88,7 @@ namespace RetirementIncomePlannerLogic
                         ScalesYAt = 0,
                         Name = $"Client {dataForChart[0].Clients[i].ClientNumber} State Pension",
                         Fill = FillColor,
-                        TooltipLabelFormatter = x => $"{x.Context.Series.Name}: {x.PrimaryValue:C2}"
+                        TooltipLabelFormatter = x => string.Create(culture,$"{x.Context.Series.Name}: {x.PrimaryValue:C2}")
                     }
                     );
                 }
@@ -103,7 +112,7 @@ namespace RetirementIncomePlannerLogic
                         ScalesYAt = 0,
                         Name = $"Client {dataForChart[0].Clients[i].ClientNumber} Other Pensions",
                         Fill = FillColor,
-                        TooltipLabelFormatter = x => $"{x.Context.Series.Name}: {x.PrimaryValue:C2}"
+                        TooltipLabelFormatter = x => string.Create(culture, $"{x.Context.Series.Name}: {x.PrimaryValue:C2}")
                     }
                     );
                 }
@@ -127,7 +136,7 @@ namespace RetirementIncomePlannerLogic
                         ScalesYAt = 0,
                         Name = $"Client {dataForChart[0].Clients[i].ClientNumber} Salary",
                         Fill = FillColor,
-                        TooltipLabelFormatter = x => $"{x.Context.Series.Name}: {x.PrimaryValue:C2}"
+                        TooltipLabelFormatter = x => string.Create(culture,$"{x.Context.Series.Name}: {x.PrimaryValue:C2}")
                     }
                     );
                 }
@@ -150,7 +159,7 @@ namespace RetirementIncomePlannerLogic
                         ScalesYAt = 0,
                         Name = $"Client {dataForChart[0].Clients[i].ClientNumber} Other Income",
                         Fill = FillColor,
-                        TooltipLabelFormatter = x => $"{x.Context.Series.Name}: {x.PrimaryValue:C2}"
+                        TooltipLabelFormatter = x => string.Create(culture, $"{x.Context.Series.Name}: {x.PrimaryValue:C2}")
                     }
                     );
                 }
@@ -174,7 +183,7 @@ namespace RetirementIncomePlannerLogic
                         GeometryStroke = new SolidColorPaint { Color = SKColors.Black, StrokeThickness = 0.0F },
 
                         LineSmoothness = 0.0,
-                        TooltipLabelFormatter = x => $"{x.Context.Series.Name}: {x.PrimaryValue:C2}"
+                        TooltipLabelFormatter = x => string.Create(culture,$"{x.Context.Series.Name}: {x.PrimaryValue:C2}")
 
                     }
                     );
