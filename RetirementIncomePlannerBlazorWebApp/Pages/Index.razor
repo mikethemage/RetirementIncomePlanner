@@ -7,23 +7,21 @@
 @inject NavigationManager Navigation
 @inject ReportViewModel Report
 
+<link href="css/retirementincomeplanner.css" rel="stylesheet" />
 
 
 <PageTitle>Retirement Income Planner</PageTitle>
-<div class="h-100 d-flex align-items-center justify-content-center">
+<div class="container-all">
 
 
-
-
-    <div>
+    <div class="retirement-income-planner-content">
         <h1>Retirement Income Planner</h1>
-        <div class="container-fluid">
+        <div class="general-data-input">
 
-
-            <div class="form-group row">
-                <label for="NumberOfYears" class="col-sm-2 col-form-label">Number of Years:</label>
-                <div class="col-sm-9">
-                    <select @bind="InputModel.NumberOfYears" id="NumberOfYears" class="form-select-sm">
+            <div class="data-input-row">
+                <label for="NumberOfYears" class="data-input-label">Number of Years:</label>
+                <div class="data-input-dropdown">
+                    <select @bind="InputModel.NumberOfYears" id="NumberOfYears" class="form-select-sm dropdown-width">
                         @for (int i = 1; i <= 35; i++)
                         {
                             <option value="@i">@i</option>
@@ -32,10 +30,10 @@
                 </div>
             </div>
 
-            <div class="form-group row">
-                <label for="NumberOfClients" class="col-sm-2 col-form-label">Number of Clients:</label>
-                <div class="col-sm-9">
-                    <select @bind="InputModel.NumberOfClients" id="NumberOfClients" class="form-select-sm">
+            <div class="data-input-row">
+                <label for="NumberOfClients" class="data-input-label">Number of Clients:</label>
+                <div class="data-input-dropdown">
+                    <select @bind="InputModel.NumberOfClients" id="NumberOfClients" class="form-select-sm dropdown-width">
                         @for (int i = 1; i <= 2; i++)
                         {
                             <option value="@i">@i</option>
@@ -44,56 +42,78 @@
                 </div>
             </div>
 
-            <div class="form-group row">
-                <label for="NumberOfClients" class="col-sm-2 col-form-label">Indexation:</label>
-                <div class="col-sm-9">
+            <div class="data-input-row">
+                <label for="Indexation" class="data-input-label">Indexation:</label>
+                <div class="data-input-text">
                     <input @bind="InputModel.Indexation.PercentageText" id="Indexation" class="form-text" />
                 </div>
-            </div>
-
-            <div class="form-group row">
-                <label for="RetirementPot" class="col-sm-2 col-form-label">Retirement Pot:</label>
-                <div class="col-sm-9">
-                    <input @bind="InputModel.RetirementPot.CurrencyText" id="RetirementPot" class="form-text" />
+                <div class="required-field">
+                    @if (InputModel.Indexation.IsRequired)
+                    {
+                        <div>*</div>
+                    }
                 </div>
             </div>
 
-            <div class="form-group row">
-                <label for="InvestmentGrowth" class="col-sm-2 col-form-label">Investment Growth:</label>
-                <div class="col-sm-9">
+            <div class="data-input-row">
+                <label for="RetirementPot" class="data-input-label">Retirement Pot:</label>
+                <div class="data-input-text">
+                    <input @bind="InputModel.RetirementPot.CurrencyText" id="RetirementPot" class="form-text" />
+                </div>
+                <div class="required-field">
+                    @if (InputModel.RetirementPot.IsRequired)
+                    {
+                        <div>*</div>
+                    }
+                </div>
+            </div>
+
+            <div class="data-input-row">
+                <label for="InvestmentGrowth" class="data-input-label">Investment Growth:</label>
+                <div class="data-input-text">
                     <input @bind="InputModel.InvestmentGrowth.PercentageText" id="InvestmentGrowth" class="form-text" />
+                </div>
+                <div class="required-field">
+                    @if (InputModel.InvestmentGrowth.IsRequired)
+                    {
+                        <div>*</div>
+                    }
                 </div>
             </div>
         </div>
 
-        <div class="d-flex flex-wrap">
+        <div class="client-input-container">
             @foreach (ClientViewModel client in InputModel.Clients)
             {
-                <div class="p-2 border">
+                <div class="client-input-border">
                     <ClientSection Client="@client" />
                 </div>
             }
         </div>
 
-        <div class="container-fluid align-items-center justify-content-center">
-            <button disabled="@InputModel.CannotViewChart" @onclick="PreviewChart">Preview Chart</button>
-            <button disabled="@InputModel.CannotExportReport" @onclick="DownloadFileFromStream">Export Report</button>
+       
+
+
+
+    </div>
+
+    @if (InputModel.ImageGenerated)
+    {
+        <div class="chart-container">
+            <img class="chart-image" id="chartImage" />
         </div>
 
-        @if (InputModel.ImageGenerated)
-        {
-            <p>
-                <img id="chartImage"
-                     Width="@(6.27F * 72F*2F)"
-                     Height="@(4.54F * 72F*2F)" />
-            </p>
-        }
+        
 
+    }
+
+    <div class="button-content">
+        <button class="action-button" disabled="@InputModel.CannotViewChart" @onclick="PreviewChart">Preview Chart</button>
+        <button class="action-button" disabled="@InputModel.CannotExportReport" @onclick="DownloadFileFromStream">Export Report</button>
     </div>
 
 
 </div>
-
 
 @code
 {
@@ -124,7 +144,7 @@
         var module = await JS.InvokeAsync<IJSObjectReference>(
     "import", "./scripts.js");
 
-        base.OnAfterRenderAsync(firstRender);
+        await base.OnAfterRenderAsync(firstRender);
     }
 
     protected override void OnInitialized()

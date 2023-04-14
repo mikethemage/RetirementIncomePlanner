@@ -1,0 +1,111 @@
+.container-all {
+    width:100%;
+    justify-content: center;
+}
+.retirement-income-planner-content {
+    margin: auto;
+    width: fit-content;
+}
+
+.general-data-input
+{    
+    width:fit-content;
+}
+
+.data-input-row
+{
+    margin:0.5rem;
+}
+
+.data-input-label {
+    display: inline-block;
+    width: 12rem;
+}
+
+.data-input-dropdown {
+    display: inline-block;
+    width:5rem;
+}
+
+.data-input-text {
+    display: inline-block;   
+}
+
+.client-input-container 
+{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;    
+    width:fit-content;
+}
+
+.client-input-border
+{
+    width:fit-content;
+    margin:0.5rem;    
+    border: 0.1rem solid darkgrey;
+
+}
+
+.client-input-content {
+    margin: 0.5rem;
+    
+}
+
+.required-field {
+    display: inline-block;
+    width:1rem;
+    color:red;
+}
+
+.adhoc-content 
+{
+    margin: 1.8rem 0.2rem 0 0.2rem;
+}
+
+.adhoc-table
+{
+    border-spacing:1rem;
+    width:100%;
+}
+
+
+.adhoc-text-age
+{
+    width:8rem;
+}
+
+.adhoc-text-currency 
+{
+    width: 12rem;
+}
+
+.button-content
+{
+    margin: 0.5rem auto 0.5rem auto;
+    justify-content:center;
+    width:fit-content;
+}
+
+.action-button
+{
+
+}
+
+.dropdown-width
+{
+    width:5rem;
+}
+
+.chart-image {
+    width:100%; 
+    max-width:902px;
+    max-height:652px;
+}
+
+.chart-container{
+    width:fit-content;
+    margin: 0 auto 1.0rem auto;
+    justify-content:center;
+}
+

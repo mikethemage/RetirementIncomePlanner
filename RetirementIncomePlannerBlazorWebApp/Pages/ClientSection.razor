@@ -1,97 +1,163 @@
-﻿<div>
+﻿<div class="client-input-content">
 
     <h3>
         Client @Client.ClientNumber
     </h3>
 
-    <div class="form-group row">
-        <label for="Age" class="col-sm-4 col-form-label">Age:</label>
-        <div class="col-sm-8">
+    <div class="data-input-row">
+        <label for="Age" class="data-input-label">Age:</label>
+        <div class="data-input-text">
             <input @bind="Client.Age.AgeText" id="Age" class="form-text" />
         </div>
+        <div class="required-field">
+            @if (Client.Age.IsRequired)
+            {
+                <div>*</div>
+            }
+        </div>
     </div>
 
-    <div class="form-group row">
-        <label for="Salary" class="col-sm-4 col-form-label">Salary:</label>
-        <div class="col-sm-8">
+    <div class="data-input-row">
+        <label for="Salary" class="data-input-label">Salary:</label>
+        <div class="data-input-text">
             <input @bind="Client.Salary.CurrencyText" id="Salary" class="form-text" />
         </div>
+        <div class="required-field">
+            @if (Client.Salary.IsRequired)
+            {
+                <div>*</div>
+            }
+        </div>
     </div>
 
-    <div class="form-group row">
-        <label for="PartialRetirementAge" class="col-sm-4 col-form-label">Partial Retirement Age:</label>
-        <div class="col-sm-8">
+    <div class="data-input-row">
+        <label for="PartialRetirementAge" class="data-input-label">Partial Retirement Age:</label>
+        <div class="data-input-text">
             <input @bind="Client.PartialRetirementAge.AgeText" id="PartialRetirementAge" class="form-text" />
         </div>
+        <div class="required-field">
+            @if (Client.PartialRetirementAge.IsRequired)
+            {
+                <div>*</div>
+            }
+        </div>
     </div>
 
-    <div class="form-group row">
-        <label for="PartialRetirementSalary" class="col-sm-4 col-form-label">Partial Retirement Salary:</label>
-        <div class="col-sm-8">
+    <div class="data-input-row">
+        <label for="PartialRetirementSalary" class="data-input-label">Partial Retirement Salary:</label>
+        <div class="data-input-text">
             <input @bind="Client.PartialRetirementSalary.CurrencyText" id="PartialRetirementSalary" class="form-text" />
         </div>
+        <div class="required-field">
+            @if (Client.PartialRetirementSalary.IsRequired)
+            {
+                <div>*</div>
+            }
+        </div>
     </div>
 
-    <div class="form-group row">
-        <label for="RetirementAge" class="col-sm-4 col-form-label">Retirement Age:</label>
-        <div class="col-sm-8">
+    <div class="data-input-row">
+        <label for="RetirementAge" class="data-input-label">Retirement Age:</label>
+        <div class="data-input-text">
             <input @bind="Client.RetirementAge.AgeText" id="RetirementAge" class="form-text" />
         </div>
+        <div class="required-field">
+            @if (Client.RetirementAge.IsRequired)
+            {
+                <div>*</div>
+            }
+        </div>
     </div>
 
-    <div class="form-group row">
-        <label for="StatePensionAmount" class="col-sm-4 col-form-label">State Pension Amount:</label>
-        <div class="col-sm-8">
+    <div class="data-input-row">
+        <label for="StatePensionAmount" class="data-input-label">State Pension Amount:</label>
+        <div class="data-input-text">
             <input @bind="Client.StatePensionAmount.CurrencyText" id="StatePensionAmount" class="form-text" />
         </div>
+        <div class="required-field">
+            @if (Client.StatePensionAmount.IsRequired)
+            {
+                <div>*</div>
+            }
+        </div>
     </div>
 
-    <div class="form-group row">
-        <label for="StatePensionAge" class="col-sm-4 col-form-label">State Pension Age:</label>
-        <div class="col-sm-8">
+    <div class="data-input-row">
+        <label for="StatePensionAge" class="data-input-label">State Pension Age:</label>
+        <div class="data-input-text">
             <input @bind="Client.StatePensionAge.AgeText" id="StatePensionAge" class="form-text" />
         </div>
+        <div class="required-field">
+            @if (Client.StatePensionAge.IsRequired)
+            {
+                <div>*</div>
+            }
+        </div>
     </div>
 
-    <div class="form-group row">
-        <label for="OtherPensions" class="col-sm-4 col-form-label">Other Pensions:</label>
-        <div class="col-sm-8">
+    <div class="data-input-row">
+        <label for="OtherPensions" class="data-input-label">Other Pensions:</label>
+        <div class="data-input-text">
             <input @bind="Client.OtherPensionsAmount.CurrencyText" id="OtherPensions" class="form-text" />
         </div>
+        <div class="required-field">
+            @if (Client.OtherPensionsAmount.IsRequired)
+            {
+                <div>*</div>
+            }
+        </div>
     </div>
 
-    <div class="form-group row">
-        <label for="OtherPensionsAge" class="col-sm-4 col-form-label">Other Pensions Age:</label>
-        <div class="col-sm-8">
+    <div class="data-input-row">
+        <label for="OtherPensionsAge" class="data-input-label">Other Pensions Age:</label>
+        <div class="data-input-text">
             <input @bind="Client.OtherPensionsAge.AgeText" id="OtherPensionsAge" class="form-text" />
         </div>
+        <div class="required-field">
+            @if (Client.OtherPensionsAge.IsRequired)
+            {
+                <div>*</div>
+            }
+        </div>
     </div>
 
-    <div class="form-group row">
-        <label for="OtherIncome" class="col-sm-4 col-form-label">Other Income:</label>
-        <div class="col-sm-8">
+    <div class="data-input-row">
+        <label for="OtherIncome" class="data-input-label">Other Income:</label>
+        <div class="data-input-text">
             <input @bind="Client.OtherIncome.CurrencyText" id="OtherIncome" class="form-text" />
         </div>
-    </div>
-
-    <div class="form-group row">
-        <label for="RetirementIncomeLevel" class="col-sm-4 col-form-label">Retirement Income Level:</label>
-        <div class="col-sm-8">
-            <input @bind="Client.RetirementIncomeLevel.CurrencyText" id="RetirementIncomeLevel" class="form-text" />
+        <div class="required-field">
+            @if (Client.OtherIncome.IsRequired)
+            {
+                <div>*</div>
+            }
         </div>
     </div>
 
-    <div>
-        Additional Contributions/Withdrawals:
-        <table class="table table-bordered">
+    <div class="data-input-row">
+        <label for="RetirementIncomeLevel" class="data-input-label">Retirement Income Level:</label>
+        <div class="data-input-text">
+            <input @bind="Client.RetirementIncomeLevel.CurrencyText" id="RetirementIncomeLevel" class="form-text" />
+        </div>
+        <div class="required-field">
+            @if (Client.RetirementIncomeLevel.IsRequired)
+            {
+                <div>*</div>
+            }
+        </div>
+    </div>
+
+    <div class="adhoc-content">
+        <h4>Additional Contributions/Withdrawals:</h4>
+        <table class="adhoc-table">
             <thead>
                 <tr><td>Age</td><td>Amount</td></tr>
             </thead>
             @foreach (AdhocItemViewModel adhoc in Client.AdhocItems)
             {
                 <tr>
-                    <td><input @bind="adhoc.Age.AgeText" /></td>
-                    <td><input @bind="adhoc.Amount.CurrencyText" /></td>
+                    <td><input class="adhoc-text-age form-text"  @bind="adhoc.Age.AgeText" /></td>
+                    <td><input class="adhoc-text-currency form-text" @bind="adhoc.Amount.CurrencyText" /></td>
                 </tr>
             }
         </table>
