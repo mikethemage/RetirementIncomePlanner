@@ -24,6 +24,7 @@ namespace TestApi.Controllers
 
         [HttpGet("{operand1}/{operand2}", Name = "QueryStringParameters")]
         [ProducesResponseType(200, Type = typeof(AdditionResult))]
+        [ProducesResponseType(400)]
         public IActionResult GetFromQueryString(int operand1, int operand2)
         {
             return Ok(new AdditionResult

@@ -157,7 +157,8 @@ namespace RetirementIncomePlannerBlazorWebApp
                 Age = Age.AgeValue,
                 RetirementAge = RetirementAge.AgeValue,
                 StatePensionAge = StatePensionAge.AgeValue,
-                StatePensionAmount = StatePensionAmount.CurrencyValue
+                StatePensionAmount = StatePensionAmount.CurrencyValue,
+                RetirementIncomeLevel=0.0M
             };
 
             if (!Salary.IsBlank)

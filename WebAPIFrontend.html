@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Form Submission</title>
+</head>
+
+<body>
+    <form id="myForm">
+        <label for="numberOfYears">Number of Years:</label>
+        <input type="number" id="numberOfYears" name="numberOfYears" required><br><br>
+
+        <label for="indexation">Indexation:</label>
+        <input type="number" id="indexation" name="indexation" required><br><br>
+
+        <label for="retirementPot">Retirement Pot:</label>
+        <input type="number" id="retirementPot" name="retirementPot" required><br><br>
+
+        <label for="investmentGrowth">Investment Growth:</label>
+        <input type="number" id="investmentGrowth" name="investmentGrowth" required><br><br>
+
+        <div id="clientsContainer">
+            <div class="clientSection">
+                <h2>Client 1</h2>
+                <label for="age">Age:</label>
+                <input type="number" id="age" name="clients[0].age" required><br><br>
+
+                <label for="salaryAmount">Salary Amount:</label>
+                <input type="number" id="salaryAmount" name="clients[0].salaryDetails.fullSalaryAmount"
+                    ><br><br>
+
+                <label for="partialRetirementAge">Partial Retirement Age:</label>
+                <input type="number" id="partialRetirementAge"
+                    name="clients[0].salaryDetails.partialRetirementDetails.age" ><br><br>
+
+                <label for="partialRetirementAmount">Partial Retirement Amount:</label>
+                <input type="number" id="partialRetirementAmount"
+                    name="clients[0].salaryDetails.partialRetirementDetails.amount" ><br><br>
+
+                <label for="statePensionAmount">State Pension Amount:</label>
+                <input type="number" id="statePensionAmount" name="clients[0].statePensionAmount" required><br><br>
+
+                <label for="otherPensionAge">Other Pension Age:</label>
+                <input type="number" id="otherPensionAge" name="clients[0].otherPensionDetails.age" ><br><br>
+
+                <label for="otherPensionAmount">Other Pension Amount:</label>
+                <input type="number" id="otherPensionAmount" name="clients[0].otherPensionDetails.amount"
+                    ><br><br>
+
+                <label for="otherIncome">Other Income:</label>
+                <input type="number" id="otherIncome" name="clients[0].otherIncome" ><br><br>
+
+                <label for="retirementAge">Retirement Age:</label>
+                <input type="number" id="retirementAge" name="clients[0].retirementAge" required><br><br>
+
+                <label for="statePensionAge">State Pension Age:</label>
+                <input type="number" id="statePensionAge" name="clients[0].statePensionAge" required><br><br>
+
+                <label for="retirementIncomeLevel">Retirement Income Level:</label>
+
+
+
+
+
+                <input type="number" id="retirementIncomeLevel" name="clients[0].retirementIncomeLevel"
+                    required><br><br>
+            </div>
+        </div>
+
+        <button type="button" id="addClientButton">Add Client</button><br><br>
+
+        <input type="button" id="getChartButton" value="Preview Chart">
+        <input type="button" id="getReportButton" value="Generate Report">
+
+    </form>
+
+    <img id="resultImage" />
+
+    <script>
+
+        var clientCount = 1;
+        var clientsContainer = document.getElementById("clientsContainer");
+        var addClientButton = document.getElementById("addClientButton");
+
+        addClientButton.addEventListener("click", function () {
+            var clientSection = document.createElement("div");
+            clientSection.className = "clientSection";
+            clientSection.innerHTML = `<h2>Client ${clientCount + 1}</h2>
+          <label for="age">Age:</label>
+          <input type="number" id="age" name="clients[${clientCount}].age" required><br><br>
+
+          <label for="salaryAmount">Salary Amount:</label>
+          <input type="number" id="salaryAmount" name="clients[${clientCount}].salaryDetails.fullSalaryAmount" required><br><br>
+
+          <label for="partialRetirementAge">Partial Retirement Age:</label>
+          <input type="number" id="partialRetirementAge" name="clients[${clientCount}].salaryDetails.partialRetirementDetails.age" ><br><br>
+
+          <label for="partialRetirementAmount">Partial Retirement Amount:</label>
+          <input type="number" id="partialRetirementAmount" name="clients[${clientCount}].salaryDetails.partialRetirementDetails.amount" ><br><br>
+
+          <label for="statePensionAmount">State Pension Amount:</label>
+          <input type="number" id="statePensionAmount" name="clients[${clientCount}].statePensionAmount" required><br><br>
+
+          <label for="otherPensionAge">Other Pension Age:</label>
+          <input type="number" id="otherPensionAge" name="clients[${clientCount}].otherPensionDetails.age" ><br><br>
+
+          <label for="otherPensionAmount">Other Pension Amount:</label>
+          <input type="number" id="otherPensionAmount" name="clients[${clientCount}].otherPensionDetails.amount" ><br><br>
+
+          <label for="otherIncome">Other Income:</label>
+          <input type="number" id="otherIncome" name="clients[${clientCount}].otherIncome" ><br><br>
+
+          <label for="retirementAge">Retirement Age:</label>
+          <input type="number" id="retirementAge" name="clients[${clientCount}].retirementAge" required><br><br>
+
+          <label for="statePensionAge">State Pension Age:</label>
+          <input type="number" id="statePensionAge" name="clients[${clientCount}].statePensionAge" required><br><br>
+
+          <label for="retirementIncomeLevel">Retirement Income Level:</label>
+          <input type="number" id="retirementIncomeLevel" name="clients[${clientCount}].retirementIncomeLevel" required><br><br>`;
+
+            clientsContainer.appendChild(clientSection);
+            clientCount++;
+        });
+
+        const form = document.getElementById('myForm');
+
+        const submitButton1 = document.getElementById('getChartButton');
+        const submitButton2 = document.getElementById('getReportButton');
+
+        //form.addEventListener('submit', async (event) => {
+        submitButton1.addEventListener('click', async (event) => {
+            event.preventDefault();
+
+            const json = prepareFormData(form);
+
+            try {
+                const response = await fetch('https://localhost:5002/api/RetirementIncomePlanner/RequestChartImage', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: json
+                });
+
+                if (response.ok) {
+                    // Process the result as needed
+                    const blob = await response.blob();
+
+                    const imageUrl = URL.createObjectURL(blob);
+
+                    // Update the <img> element with the image URL
+                    const imageElement = document.getElementById('resultImage');
+                    imageElement.src = imageUrl;
+
+                } else {
+                    console.log('Error:', response.status);
+                    console.log('Error:', await response.json());
+                    // Handle the error
+                }
+            } catch (error) {
+                console.log('Error:', error.message);
+                // Handle the error
+            }
+        });
+
+        submitButton2.addEventListener('click', async (event) => {
+            event.preventDefault();
+
+            const json = prepareFormData(form);
+
+            try {
+                const response = await fetch('https://localhost:5002/api/RetirementIncomePlanner/RequestReportPDF', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: json
+                });
+
+                if (response.ok) {
+                    const blob = await response.blob();
+
+                    // Create a temporary <a> element
+                    const downloadLink = document.createElement('a');
+                    downloadLink.href = URL.createObjectURL(blob);
+                    downloadLink.download = 'Retirement Income Report.pdf'; // Set the desired file name
+
+                    // Trigger the download
+                    downloadLink.click();
+
+                    // Clean up the temporary <a> element
+                    URL.revokeObjectURL(downloadLink.href);
+
+                } else {
+                    console.log('Error:', response.status);
+                    console.log('Error:', await response.json());
+                    // Handle the error
+                }
+            } catch (error) {
+                console.log('Error:', error.message);
+                // Handle the error
+            }
+        });
+
+
+        function prepareFormData(form) {
+            const formData = new FormData(form);
+            const formObject = {};
+            const clients = [];
+
+            // Iterate through the form data entries
+            for (const entry of formData.entries()) {
+                const [name, value] = entry;
+                if (name.startsWith("clients")) {
+                    // Parse the name and extract the client index
+                    const regex = /^clients\[(\d+)\]\.(.+)$/;
+                    const match = name.match(regex);
+
+                    if (match && match.length === 3) {
+                        const index = parseInt(match[1]);
+                        const fieldName = match[2];
+
+                        // Create a client object if it doesn't exist
+                        if (!clients[index]) {
+                            clients[index] = {};
+                        }
+
+                        // Assign the value to the corresponding client field
+                        clients[index][fieldName] = value;
+                    }
+                } else {
+                    // Assign non-client fields directly
+                    formObject[name] = value;
+                }
+            }
+
+            // Assign the clients array to the formObject
+            formObject.clients = clients;
+
+            const json = getPrettyJSON(formObject);
+            console.log(json);
+
+            return json;
+        }
+
+        function isEmpty(value) {
+            if (value === null || value === undefined || value === "") {
+                return true;
+            }
+
+            if (Array.isArray(value)) {
+                return value.every(isEmpty);
+            }
+            else if (typeof (value) === 'object') {
+                return Object.values(value).every(isEmpty);
+            }
+
+            return false;
+        }
+
+
+        function replacer(key, value) {
+            return isEmpty(value)
+                ? undefined
+                : value;
+        }
+
+        function getPrettyJSON(obj) {
+            return JSON.stringify(obj, replacer, 2);
+        }
+        
+        
+    </script>
+</body>
+
+</html>

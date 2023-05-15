@@ -24,7 +24,8 @@ namespace RetirementIncomePlannerConsoleSample
                 NumberOfClients = 2,
                 Indexation = 0.02M,
                 RetirementPot = 196000M,
-                InvestmentGrowth = 0.03M
+                InvestmentGrowth = 0.03M,
+                Clients = new List<ClientInputModel>()
             };
 
             output.Clients[0].Age = 58;

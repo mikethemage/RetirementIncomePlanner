@@ -14,13 +14,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 		reshot-icon-report-XLAYMQVHNZ.png = reshot-icon-report-XLAYMQVHNZ.png
 		reshot-icon-report-XLAYMQVHNZ.svg = reshot-icon-report-XLAYMQVHNZ.svg
+		WebAPIFrontend.html = WebAPIFrontend.html
 	EndProjectSection
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "RetirementIncomePlannerSetup", "RetirementIncomePlannerSetup\RetirementIncomePlannerSetup.vdproj", "{4043180C-C066-45B6-B777-E0E0F840082B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RetirementIncomePlannerBlazorWebApp", "RetirementIncomePlannerBlazorWebApp\RetirementIncomePlannerBlazorWebApp.csproj", "{669C5C3E-FD70-4463-A730-F090638E024B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApi", "TestApi\TestApi.csproj", "{3C8B2818-38E4-438C-8A80-296A2B3816D3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestApi", "TestApi\TestApi.csproj", "{3C8B2818-38E4-438C-8A80-296A2B3816D3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RetirementIncomePlannerWebApi", "RetirementIncomePlannerWebApi\RetirementIncomePlannerWebApi.csproj", "{E4E0406D-2F70-45C5-B9A8-AF2E3C7C4835}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -212,6 +215,36 @@ Global
 		{3C8B2818-38E4-438C-8A80-296A2B3816D3}.Release|x64.Build.0 = Release|Any CPU
 		{3C8B2818-38E4-438C-8A80-296A2B3816D3}.Release|x86.ActiveCfg = Release|Any CPU
 		{3C8B2818-38E4-438C-8A80-296A2B3816D3}.Release|x86.Build.0 = Release|Any CPU
+		{E4E0406D-2F70-45C5-B9A8-AF2E3C7C4835}.All|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4E0406D-2F70-45C5-B9A8-AF2E3C7C4835}.All|Any CPU.Build.0 = Debug|Any CPU
+		{E4E0406D-2F70-45C5-B9A8-AF2E3C7C4835}.All|ARM.ActiveCfg = Debug|Any CPU
+		{E4E0406D-2F70-45C5-B9A8-AF2E3C7C4835}.All|ARM.Build.0 = Debug|Any CPU
+		{E4E0406D-2F70-45C5-B9A8-AF2E3C7C4835}.All|ARM64.ActiveCfg = Debug|Any CPU
+		{E4E0406D-2F70-45C5-B9A8-AF2E3C7C4835}.All|ARM64.Build.0 = Debug|Any CPU
+		{E4E0406D-2F70-45C5-B9A8-AF2E3C7C4835}.All|x64.ActiveCfg = Debug|Any CPU
+		{E4E0406D-2F70-45C5-B9A8-AF2E3C7C4835}.All|x64.Build.0 = Debug|Any CPU
+		{E4E0406D-2F70-45C5-B9A8-AF2E3C7C4835}.All|x86.ActiveCfg = Debug|Any CPU
+		{E4E0406D-2F70-45C5-B9A8-AF2E3C7C4835}.All|x86.Build.0 = Debug|Any CPU
+		{E4E0406D-2F70-45C5-B9A8-AF2E3C7C4835}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4E0406D-2F70-45C5-B9A8-AF2E3C7C4835}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4E0406D-2F70-45C5-B9A8-AF2E3C7C4835}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{E4E0406D-2F70-45C5-B9A8-AF2E3C7C4835}.Debug|ARM.Build.0 = Debug|Any CPU
+		{E4E0406D-2F70-45C5-B9A8-AF2E3C7C4835}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{E4E0406D-2F70-45C5-B9A8-AF2E3C7C4835}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{E4E0406D-2F70-45C5-B9A8-AF2E3C7C4835}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E4E0406D-2F70-45C5-B9A8-AF2E3C7C4835}.Debug|x64.Build.0 = Debug|Any CPU
+		{E4E0406D-2F70-45C5-B9A8-AF2E3C7C4835}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E4E0406D-2F70-45C5-B9A8-AF2E3C7C4835}.Debug|x86.Build.0 = Debug|Any CPU
+		{E4E0406D-2F70-45C5-B9A8-AF2E3C7C4835}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4E0406D-2F70-45C5-B9A8-AF2E3C7C4835}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4E0406D-2F70-45C5-B9A8-AF2E3C7C4835}.Release|ARM.ActiveCfg = Release|Any CPU
+		{E4E0406D-2F70-45C5-B9A8-AF2E3C7C4835}.Release|ARM.Build.0 = Release|Any CPU
+		{E4E0406D-2F70-45C5-B9A8-AF2E3C7C4835}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{E4E0406D-2F70-45C5-B9A8-AF2E3C7C4835}.Release|ARM64.Build.0 = Release|Any CPU
+		{E4E0406D-2F70-45C5-B9A8-AF2E3C7C4835}.Release|x64.ActiveCfg = Release|Any CPU
+		{E4E0406D-2F70-45C5-B9A8-AF2E3C7C4835}.Release|x64.Build.0 = Release|Any CPU
+		{E4E0406D-2F70-45C5-B9A8-AF2E3C7C4835}.Release|x86.ActiveCfg = Release|Any CPU
+		{E4E0406D-2F70-45C5-B9A8-AF2E3C7C4835}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -215,7 +215,8 @@ namespace RetirementIncomePlannerDesktopApp
                 NumberOfYears= NumberOfYears,
                 InvestmentGrowth = InvestmentGrowth.PercentageValue,
                 RetirementPot = RetirementPot.CurrencyValue,
-                Indexation = Indexation.PercentageValue
+                Indexation = Indexation.PercentageValue,
+                Clients=new List<ClientInputModel>()
             };
 
             foreach (ClientViewModel client in Clients)
