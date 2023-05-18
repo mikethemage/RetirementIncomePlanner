@@ -26,10 +26,6 @@ public class Program
                        .AllowAnyMethod();
             });
         });
-
-        
-
-
         //***
 
         var app = builder.Build();

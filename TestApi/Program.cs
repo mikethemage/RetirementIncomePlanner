@@ -14,13 +14,29 @@ namespace TestApi
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            //Temp section to override CORS for javascript frontend during testing:
+            // Add CORS services in ConfigureServices method
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyHeader()
+                           .AllowAnyMethod();
+                });
+            });
+            //***
+
             var app = builder.Build();
+
+            // Add CORS middleware in Configure method
+            app.UseCors();
 
             // Configure the HTTP request pipeline.
             //Allow swagger in "production" for testing purposes:
             //if (app.Environment.IsDevelopment())
             //{
-                app.UseSwagger();
+            app.UseSwagger();
                 app.UseSwaggerUI();
             //}
 
