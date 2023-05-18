@@ -1,8 +1,14 @@
-﻿namespace RetirementIncomePlannerLogic
+﻿using System.ComponentModel;
+using System.Text.Json.Serialization;
+
+namespace RetirementIncomePlannerLogic
 {
     public class DataInputModel
     {
+        [DefaultValue(35)]
         public required int NumberOfYears { get; set; } = 35;
+
+        [JsonIgnore]
         public int NumberOfClients
         {
             get
@@ -24,9 +30,12 @@
             }
         }
 
+        [DefaultValue(0.02)]
         public required decimal Indexation { get; set; } = 0.02M;
 
         public required decimal RetirementPot { get; set; } = 0M;
+
+        [DefaultValue(0.03)]
         public required decimal InvestmentGrowth { get; set; } = 0.03M;
 
         public required List<ClientInputModel> Clients { get; set; } = new List<ClientInputModel>();

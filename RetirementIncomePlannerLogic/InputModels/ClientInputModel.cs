@@ -1,8 +1,12 @@
-﻿namespace RetirementIncomePlannerLogic
+﻿using System.ComponentModel;
+
+namespace RetirementIncomePlannerLogic
 {
     public class ClientInputModel
     {
+        [DefaultValue(1)]
         public int ClientNumber { get; set; } = 1;
+
         public required int Age { get; set; }
 
         public SalaryInputModel? SalaryDetails { get; set; } = null;

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RetirementIncomePlannerLogic;
+using RetirementIncomePlannerLogic.InputModels;
 using System.IO;
 using System.Net;
 using System.Net.Http.Headers;
@@ -15,6 +16,14 @@ public class RetirementIncomePlannerController : ControllerBase
     public RetirementIncomePlannerController(ILogger<RetirementIncomePlannerController> logger)
     {
         _logger = logger;
+    }
+
+    [Route(nameof(GetDefaultColorScheme))]
+    [HttpGet]
+    [ProducesResponseType(typeof(PensionChartColorModel), 200, "application/json")]
+    public IActionResult GetDefaultColorScheme()
+    {
+        return Ok(new PensionChartColorModel());
     }
 
     [Route(nameof(RequestOutputData))]
@@ -36,17 +45,30 @@ public class RetirementIncomePlannerController : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(FileContentResult), 200, "image/png")]
     [ProducesResponseType(400)]
-    public IActionResult RequestChartImage([FromBody] DataInputModel? inputModel)
+    public IActionResult RequestChartImage([FromBody] RequestWithInputConfigModel requestModel)
     {
-        string? errorCheck = CheckInputForErrorsAndFixClientNumbers(inputModel);
+        string? errorCheck = CheckInputForErrorsAndFixClientNumbers(requestModel.DataInputModel);
         if (errorCheck != null)
         {
             return BadRequest(errorCheck);
         }
 
-        YearRowModel[] outputModel = PensionCalcs.RunPensionCalcs(inputModel!);
+        PensionChartColorModel pensionChartColorModel = requestModel.PensionChartColorModel!;
+        if (pensionChartColorModel == null)
+        {
+            pensionChartColorModel = new PensionChartColorModel();
+        }
+        else
+        {
+            if(!pensionChartColorModel.ValidateColors())
+            {
+                return BadRequest("Invalid color selection, colors must be in hex format i.e.: #FFFFFF.");
+            }
+        }
+
+        YearRowModel[] outputModel = PensionCalcs.RunPensionCalcs(requestModel.DataInputModel!);
         ChartModel chartModel= new ChartModel();
-        chartModel.BuildChart(outputModel);
+        chartModel.BuildChart(outputModel, pensionChartColorModel);
         var stream = PensionCalcs.ChartImageToStream(chartModel);
 
         //The framework will dispose of the stream used in this case when the response is completed. If a using statement is used, the stream will be disposed before the response has been sent and result in an exception or corrupt response.
@@ -58,19 +80,32 @@ public class RetirementIncomePlannerController : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(FileContentResult),200, "application/pdf")]
     [ProducesResponseType(400)]
-    public IActionResult RequestReportPDF([FromBody] DataInputModel? inputModel)
+    public IActionResult RequestReportPDF([FromBody] RequestWithInputConfigModel requestModel)
     {
-        string? errorCheck = CheckInputForErrorsAndFixClientNumbers(inputModel);
+        string? errorCheck = CheckInputForErrorsAndFixClientNumbers(requestModel.DataInputModel);
         if (errorCheck != null)
         {
             return BadRequest(errorCheck);
         }
 
-        YearRowModel[] outputModel = PensionCalcs.RunPensionCalcs(inputModel!);
-        ChartModel chartModel = new ChartModel();
-        chartModel.BuildChart(outputModel);        
+        PensionChartColorModel pensionChartColorModel = requestModel.PensionChartColorModel!;
+        if (pensionChartColorModel == null)
+        {
+            pensionChartColorModel = new PensionChartColorModel();
+        }
+        else
+        {
+            if (!pensionChartColorModel.ValidateColors())
+            {
+                return BadRequest("Invalid color selection, colors must be in hex format i.e.: #FFFFFF.");
+            }
+        }
 
-        var stream = PensionCalcs.BuildReportAndReturnStream(inputModel!, chartModel);
+        YearRowModel[] outputModel = PensionCalcs.RunPensionCalcs(requestModel.DataInputModel!);
+        ChartModel chartModel = new ChartModel();
+        chartModel.BuildChart(outputModel, pensionChartColorModel);        
+
+        var stream = PensionCalcs.BuildReportAndReturnStream(requestModel.DataInputModel!, chartModel);
 
 
         //The framework will dispose of the stream used in this case when the response is completed. If a using statement is used, the stream will be disposed before the response has been sent and result in an exception or corrupt response.
