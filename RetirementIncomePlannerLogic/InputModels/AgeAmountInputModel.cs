@@ -2,8 +2,8 @@
 {
     public class AgeAmountInputModel
     {
-        public int Age { get; set;}
-        public decimal Amount { get; set; }
+        public required int Age { get; set;}
+        public required decimal Amount { get; set; }
     }
 
 }

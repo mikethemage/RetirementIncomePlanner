@@ -52,7 +52,7 @@ namespace CustomChartLegendSample
                 var labelY = legendY + legendPadding * 2;// + i * legendPadding * 2;
 
                 SKColor sKColor;
-                if (chart.Series.Where(x => x.Name == _labels[i]).First() is StackedColumnSeries<decimal> lineSeries)
+                if (chart.Series.Where(x => x.Name == _labels[i]).First() is StackedColumnSeries<decimal> lineSeries && lineSeries.Fill != null)
                 {
                     SolidColorPaint temp = (SolidColorPaint)(lineSeries.Fill);
                     if (temp != null)

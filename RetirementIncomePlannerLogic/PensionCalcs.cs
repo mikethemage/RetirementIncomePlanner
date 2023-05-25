@@ -18,9 +18,7 @@ namespace RetirementIncomePlannerLogic
     public class PensionCalcs
     {
         private static readonly CultureInfo culture = CultureInfo.CreateSpecificCulture("en-GB");
-        private static readonly NumberStyles numberStyle = NumberStyles.Number | NumberStyles.AllowCurrencySymbol;
-
-        
+        //private static readonly NumberStyles numberStyle = NumberStyles.Number | NumberStyles.AllowCurrencySymbol;        
 
         public static SKTypeface GetTypeface(string fullFontName)
         {
@@ -30,7 +28,6 @@ namespace RetirementIncomePlannerLogic
             result = SKTypeface.FromStream(stream);
             return result;
         }
-
 
         public static void BuildReport(DataInputModel inputModel, ChartModel chartModel, string FileName)
         {
@@ -92,11 +89,9 @@ namespace RetirementIncomePlannerLogic
                 Width= (int)((8.27F - 2F) * defaulDPI *3F), 
                 Height = (int)(4.54F * defaulDPI *3F )});
 
-            var data = image.Encode(SKEncodedImageFormat.Png, 100);
-            
+            var data = image.Encode(SKEncodedImageFormat.Png, 100);            
 
             return data.AsStream(true);
-
         }
 
         public static void BuildReportFromStream(DataInputModel inputModel, ChartModel chartModel, SKWStream stream)
@@ -117,7 +112,6 @@ namespace RetirementIncomePlannerLogic
             var boldFont = GetTypeface("OpenSans-Bold"); // SKTypeface.FromFamilyName("Arial", SKFontStyleWeight.Bold, SKFontStyleWidth.Normal, SKFontStyleSlant.Upright);
             var normalFont = GetTypeface("OpenSans-Regular");// SKTypeface.FromFamilyName("Arial", SKFontStyleWeight.Normal, SKFontStyleWidth.Normal, SKFontStyleSlant.Upright);
 
-
             chartModel.XAxisCollection[0].LabelsPaint = new SolidColorPaint { Color = SKColors.Black, SKTypeface = normalFont };
             chartModel.YAxisCollection[0].LabelsPaint = new SolidColorPaint { Color = SKColors.Black, SKTypeface = normalFont };
             chartModel.YAxisCollection[1].LabelsPaint = new SolidColorPaint { Color = SKColors.Black, SKTypeface = normalFont };
@@ -135,10 +129,7 @@ namespace RetirementIncomePlannerLogic
                 Background = SKColors.White,
                 XAxes = chartModel.XAxisCollection,
                 YAxes = chartModel.YAxisCollection
-            };
-
-            
-
+            };         
 
             // Create an SKPictureRecorder object
             var recorder = new SKPictureRecorder();
@@ -156,17 +147,13 @@ namespace RetirementIncomePlannerLogic
             // End recording and get the SKPicture object
             var picture = recorder.EndRecording();
 
-
             //Draw the chart:
 
             SKMatrix matrix = SKMatrix.CreateScaleTranslation(1F / 3F, 1F / 3F, 1F * defaulDPI, (1F * defaulDPI) + 10F);
 
-            destCanvas.DrawPicture(picture, ref matrix);
-
-           
+            destCanvas.DrawPicture(picture, ref matrix);           
 
             //then draw the title:
-
             SKPaint chartTitlePaint = new SKPaint
             {
                 Color = SKColors.Black,
@@ -176,7 +163,6 @@ namespace RetirementIncomePlannerLogic
             };
 
             destCanvas.DrawText("Retirement Income Planner", width / 2, 1F * defaulDPI, chartTitlePaint);
-
 
             //Write inputModel here:
             var nextPosition = ((4.54F + 1F) * defaulDPI) + 30F;
@@ -188,14 +174,12 @@ namespace RetirementIncomePlannerLogic
                 Color = SKColors.Black,
                 TextSize = 8.0f
             };
-
            
             paint.Typeface = boldFont;
             destCanvas.DrawText("Client Data Entry", leftTextPos, nextPosition, paint);
             nextPosition += textLineHeight * 2;
 
             paint.TextSize = 6.0f;
-
 
             var intputDataDisplayWidth = 100F;
 
@@ -231,16 +215,13 @@ namespace RetirementIncomePlannerLogic
 
             nextPosition += 0.2F * defaulDPI;
 
-
             var clientAreaWidth = (width - (leftTextPos * 2)) / inputModel.NumberOfClients;
 
             var clientAreaTop = nextPosition;
 
             for (int i = 0; i < inputModel.NumberOfClients; i++)
             {
-
                 //Todo: draw box around clients
-
                 nextPosition = clientAreaTop;
 
                 var leftClientTextPos = leftTextPos + (clientAreaWidth * i) + 20F;
@@ -326,19 +307,13 @@ namespace RetirementIncomePlannerLogic
                         destCanvas.DrawText(string.Create(culture, $"{adhocItem.Amount:C2}"), leftAdhocTextPos+25F, nextPosition, paint);
                         nextPosition += textLineHeight;
                     }
-                }
-                
-
-
+                }               
             }
 
             //end of text code
-
             document.EndPage();
-            document.Close();
-            
+            document.Close();            
         }
-
 
         public static YearRowModel[] RunPensionCalcs(DataInputModel inputViewModel)
         {
@@ -425,7 +400,6 @@ namespace RetirementIncomePlannerLogic
                         }
                     }
 
-
                     output[i].Clients.Add(clientRowToAdd);
 
                 }
@@ -442,18 +416,14 @@ namespace RetirementIncomePlannerLogic
 
                         requiredDrawdownForClient = (clientViewModel.RetirementIncomeLevel * output[i].IndexationMultiplier)
                             -
-                            (client.StatePension + client.OtherPension + client.Salary + client.OtherIncome)
-                            ;
-
+                            (client.StatePension + client.OtherPension + client.Salary + client.OtherIncome);
 
                         totalRequiredDrawdown += requiredDrawdownForClient;
-
                         totalClientContributions += client.Contribution;
                     }
                 }
 
                 totalRequiredDrawdown = Math.Max(totalRequiredDrawdown, 0);
-
                 output[i].TotalRequiredDrawdown = totalRequiredDrawdown;
 
                 if (i == 0)
@@ -474,7 +444,6 @@ namespace RetirementIncomePlannerLogic
                 output[i].TotalDrawdown = Math.Min(output[i].TotalRequiredDrawdown, output[i].FundBeforeDrawdown);
 
                 output[i].TotalFundValue = Math.Max(output[i].FundBeforeDrawdown - output[i].TotalDrawdown, 0M);
-
             }
 
             return output;

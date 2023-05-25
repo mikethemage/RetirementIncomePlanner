@@ -23,7 +23,7 @@ namespace RetirementIncomePlannerLogic
     public class ChartModel
     {
         private static readonly CultureInfo culture = CultureInfo.CreateSpecificCulture("en-GB");
-        private static readonly NumberStyles numberStyle = NumberStyles.Number | NumberStyles.AllowCurrencySymbol;
+        //private static readonly NumberStyles numberStyle = NumberStyles.Number | NumberStyles.AllowCurrencySymbol;
 
         private static Func<double, string> LabellerGBPCurrency => (double value) => string.Create(culture, $"{value:C2}");
 
@@ -46,9 +46,16 @@ namespace RetirementIncomePlannerLogic
             };
 
         
-
         public void BuildChart(YearRowModel[] dataForChart)
         {
+            PensionChartColorModel colorModel = new PensionChartColorModel();            
+            BuildChart(dataForChart, colorModel);
+        }
+
+        public void BuildChart(YearRowModel[] dataForChart, PensionChartColorModel colorModel)
+        {
+            PensionChartSKColorValues pensionChartColors = new PensionChartSKColorValues(colorModel);
+            
             SeriesCollection.Clear();
 
             XAxisCollection[0].MaxLimit = (double)dataForChart.Max(x => x.Year) + 0.75;
@@ -61,7 +68,7 @@ namespace RetirementIncomePlannerLogic
                         Values = dataForChart.Select(x => x.TotalDrawdown).ToArray(),
                         ScalesYAt = 0,
                         Name = "Total Drawdown",
-                        Fill = new SolidColorPaint { Color = new SKColor(48, 93, 122) },
+                        Fill = new SolidColorPaint { Color = pensionChartColors.TotalDrawdownColor },
                         TooltipLabelFormatter = x => string.Create(culture,$"{x.Context.Series.Name}: {x.PrimaryValue:C2})")
                     }
                     );
@@ -74,11 +81,11 @@ namespace RetirementIncomePlannerLogic
                     SolidColorPaint FillColor;
                     if (dataForChart[0].Clients[i].ClientNumber == 2)
                     {
-                        FillColor = new SolidColorPaint { Color = new SKColor(201, 192, 231) };
+                        FillColor = new SolidColorPaint { Color = pensionChartColors.StatePensionSecondaryColor };
                     }
                     else
                     {
-                        FillColor = new SolidColorPaint { Color = new SKColor(116, 106, 163) };
+                        FillColor = new SolidColorPaint { Color = pensionChartColors.StatePensionPrimaryColor };
                     }
 
                     SeriesCollection.Add(
@@ -98,11 +105,11 @@ namespace RetirementIncomePlannerLogic
                     SolidColorPaint FillColor;
                     if (dataForChart[0].Clients[i].ClientNumber == 2)
                     {
-                        FillColor = new SolidColorPaint { Color = new SKColor(242, 187, 218) };
+                        FillColor = new SolidColorPaint { Color = pensionChartColors.OtherPensionSecondaryColor };
                     }
                     else
                     {
-                        FillColor = new SolidColorPaint { Color = new SKColor(202, 108, 162) };
+                        FillColor = new SolidColorPaint { Color = pensionChartColors.OtherPensionPrimaryColor };
                     }
 
                     SeriesCollection.Add(
@@ -122,11 +129,11 @@ namespace RetirementIncomePlannerLogic
                     SolidColorPaint FillColor;
                     if (dataForChart[0].Clients[i].ClientNumber == 2)
                     {
-                        FillColor = new SolidColorPaint { Color = new SKColor(255, 193, 185) };
+                        FillColor = new SolidColorPaint { Color = pensionChartColors.SalarySecondaryColor };
                     }
                     else
                     {
-                        FillColor = new SolidColorPaint { Color = new SKColor(255, 125, 118) };
+                        FillColor = new SolidColorPaint { Color = pensionChartColors.SalaryPrimaryColor };
                     }
 
                     SeriesCollection.Add(
@@ -146,11 +153,11 @@ namespace RetirementIncomePlannerLogic
                     SolidColorPaint FillColor;
                     if (dataForChart[0].Clients[i].ClientNumber == 2)
                     {
-                        FillColor = new SolidColorPaint { Color = new SKColor(255, 210, 159) };
+                        FillColor = new SolidColorPaint { Color = pensionChartColors.OtherIncomeSecondaryColor };
                     }
                     else
                     {
-                        FillColor = new SolidColorPaint { Color = new SKColor(255, 177, 62) };
+                        FillColor = new SolidColorPaint { Color = pensionChartColors.OtherIncomePrimaryColor };
                     }
                     SeriesCollection.Add(
                     new StackedColumnSeries<decimal>
@@ -167,7 +174,7 @@ namespace RetirementIncomePlannerLogic
 
             if (!dataForChart.All(x => x.TotalFundValue == 0))
             {
-                SolidColorPaint FillColor = new SolidColorPaint { Color = SKColors.Black };
+                SolidColorPaint FillColor = new SolidColorPaint { Color = pensionChartColors.TotalFundValueColor };
 
                 SeriesCollection.Add(
                     new LineSeries<decimal>
@@ -179,8 +186,8 @@ namespace RetirementIncomePlannerLogic
 
                         GeometrySize = 0.0,
                         GeometryFill = FillColor,
-                        Stroke = new SolidColorPaint { Color = SKColors.Black, StrokeThickness = 4.0F },
-                        GeometryStroke = new SolidColorPaint { Color = SKColors.Black, StrokeThickness = 0.0F },
+                        Stroke = new SolidColorPaint { Color = pensionChartColors.TotalFundValueColor, StrokeThickness = 4.0F },
+                        GeometryStroke = new SolidColorPaint { Color = pensionChartColors.TotalFundValueColor, StrokeThickness = 0.0F },
 
                         LineSmoothness = 0.0,
                         TooltipLabelFormatter = x => string.Create(culture,$"{x.Context.Series.Name}: {x.PrimaryValue:C2}")
