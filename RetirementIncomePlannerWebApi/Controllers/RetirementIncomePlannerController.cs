@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RetirementIncomePlannerLogic;
 using RetirementIncomePlannerLogic.InputModels;
+using RetirementIncomePlannerWebApi.Models;
 using System.IO;
 using System.Net;
 using System.Net.Http.Headers;
@@ -30,30 +31,36 @@ public class RetirementIncomePlannerController : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(YearRowModel[]), 200, "application/json")]
     [ProducesResponseType(400)]
-    public IActionResult RequestOutputData([FromBody] DataInputModel? inputModel)
+    public IActionResult RequestOutputData([FromBody] RequestModel requestModel)
     {
-        string? errorCheck = CheckInputForErrorsAndFixClientNumbers(inputModel);
+        string? errorCheck = CheckInputForErrorsAndFixClientNumbers(requestModel.PensionInputData);
         if (errorCheck != null)
         {
             return BadRequest(errorCheck);
         }       
 
-        return Ok(PensionCalcs.RunPensionCalcs(inputModel!));
+        return Ok(PensionCalcs.RunPensionCalcs(requestModel.PensionInputData!));
     }
 
     [Route(nameof(RequestChartImage))]
     [HttpPost]
     [ProducesResponseType(typeof(FileContentResult), 200, "image/png")]
     [ProducesResponseType(400)]
-    public IActionResult RequestChartImage([FromBody] RequestWithInputConfigModel requestModel)
+    public IActionResult RequestChartImage([FromBody] RequestWithSizeInputConfigModel requestModel)
     {
-        string? errorCheck = CheckInputForErrorsAndFixClientNumbers(requestModel.DataInputModel);
+        string? errorCheck = CheckInputForErrorsAndFixClientNumbers(requestModel.PensionInputData);
         if (errorCheck != null)
         {
             return BadRequest(errorCheck);
         }
 
-        PensionChartColorModel pensionChartColorModel = requestModel.PensionChartColorModel!;
+        ImageSizeModel imageSizeModel = requestModel.ImageSize!;
+        if (imageSizeModel == null)
+        {
+            imageSizeModel = new ImageSizeModel { Height = 0, Width = 0 };
+        }
+
+        PensionChartColorModel pensionChartColorModel = requestModel.PensionChartColors!;
         if (pensionChartColorModel == null)
         {
             pensionChartColorModel = new PensionChartColorModel();
@@ -66,7 +73,7 @@ public class RetirementIncomePlannerController : ControllerBase
             }
         }
 
-        YearRowModel[] outputModel = PensionCalcs.RunPensionCalcs(requestModel.DataInputModel!);
+        YearRowModel[] outputModel = PensionCalcs.RunPensionCalcs(requestModel.PensionInputData!);
         ChartModel chartModel= new ChartModel();
         chartModel.BuildChart(outputModel, pensionChartColorModel);
         var stream = PensionCalcs.ChartImageToStream(chartModel);
@@ -82,13 +89,13 @@ public class RetirementIncomePlannerController : ControllerBase
     [ProducesResponseType(400)]
     public IActionResult RequestReportPDF([FromBody] RequestWithInputConfigModel requestModel)
     {
-        string? errorCheck = CheckInputForErrorsAndFixClientNumbers(requestModel.DataInputModel);
+        string? errorCheck = CheckInputForErrorsAndFixClientNumbers(requestModel.PensionInputData);
         if (errorCheck != null)
         {
             return BadRequest(errorCheck);
         }
 
-        PensionChartColorModel pensionChartColorModel = requestModel.PensionChartColorModel!;
+        PensionChartColorModel pensionChartColorModel = requestModel.PensionChartColors!;
         if (pensionChartColorModel == null)
         {
             pensionChartColorModel = new PensionChartColorModel();
@@ -101,11 +108,11 @@ public class RetirementIncomePlannerController : ControllerBase
             }
         }
 
-        YearRowModel[] outputModel = PensionCalcs.RunPensionCalcs(requestModel.DataInputModel!);
+        YearRowModel[] outputModel = PensionCalcs.RunPensionCalcs(requestModel.PensionInputData!);
         ChartModel chartModel = new ChartModel();
         chartModel.BuildChart(outputModel, pensionChartColorModel);        
 
-        var stream = PensionCalcs.BuildReportAndReturnStream(requestModel.DataInputModel!, chartModel);
+        var stream = PensionCalcs.BuildReportAndReturnStream(requestModel.PensionInputData!, chartModel);
 
 
         //The framework will dispose of the stream used in this case when the response is completed. If a using statement is used, the stream will be disposed before the response has been sent and result in an exception or corrupt response.

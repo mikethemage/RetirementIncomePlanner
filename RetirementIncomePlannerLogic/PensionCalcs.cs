@@ -10,11 +10,10 @@ using System.Reflection;
 using System.Text;
 using LiveChartsCore;
 using System.Globalization;
+using RetirementIncomePlannerLogic.InputModels;
 
 namespace RetirementIncomePlannerLogic
 {
-    
-
     public class PensionCalcs
     {
         private static readonly CultureInfo culture = CultureInfo.CreateSpecificCulture("en-GB");
@@ -58,20 +57,24 @@ namespace RetirementIncomePlannerLogic
 
         public static Stream ChartImageToStream(ChartModel chartModel)
         {
-            var defaulDPI = 72F;
+            ImageSizeModel imageSizeModel = new ImageSizeModel();
+            return ChartImageToStream(chartModel, imageSizeModel);
+        }
 
+        public static Stream ChartImageToStream(ChartModel chartModel, ImageSizeModel imageSizeModel)
+        {            
             // Create an SKPictureRecorder object
             var recorder = new SKPictureRecorder();
-            var sourceCanvas = recorder.BeginRecording(new SKRect(0, 0, (int)((8.27F - 2F) * defaulDPI * 3F),
-                (int)(4.54F * defaulDPI * 3F)));
+            var sourceCanvas = recorder.BeginRecording(new SKRect(0, 0, imageSizeModel.Width,
+                imageSizeModel.Height));
             // Draw something on the canvas
             sourceCanvas.Clear(SKColors.White);
 
             // draw on the canvas ...           
             var cartesianChart = new SKCartesianChart
             {
-                Width = (int)((8.27F - 2F) * defaulDPI * 3F),
-                Height = (int)(4.54F * defaulDPI * 3F),
+                Width = imageSizeModel.Width,
+                Height = imageSizeModel.Height,
 
                 Series = chartModel.SeriesCollection,
 
@@ -86,8 +89,8 @@ namespace RetirementIncomePlannerLogic
             var picture = recorder.EndRecording();
 
             var image = SKImage.FromPicture(picture, new SKSizeI { 
-                Width= (int)((8.27F - 2F) * defaulDPI *3F), 
-                Height = (int)(4.54F * defaulDPI *3F )});
+                Width = imageSizeModel.Width, 
+                Height = imageSizeModel.Height});
 
             var data = image.Encode(SKEncodedImageFormat.Png, 100);            
 
@@ -96,10 +99,10 @@ namespace RetirementIncomePlannerLogic
 
         public static void BuildReportFromStream(DataInputModel inputModel, ChartModel chartModel, SKWStream stream)
         {
-            var defaulDPI = 72F;
+            const float defaulDPI = 72F;
 
-            var width = 8.27F * defaulDPI; // A4 width in inches
-            var height = 11.69F * defaulDPI; // A4 height in inches
+            const float width = 8.27F * defaulDPI; // A4 width in inches
+            const float height = 11.69F * defaulDPI; // A4 height in inches
 
             var metadata = new SKDocumentPdfMetadata { RasterDpi = defaulDPI }; // change the DPI to 96
 
@@ -240,17 +243,17 @@ namespace RetirementIncomePlannerLogic
                 if (inputModel.Clients[i].SalaryDetails != null)
                 {
                     destCanvas.DrawText("Salary: ", leftClientTextPos, nextPosition, paint);
-                    destCanvas.DrawText(string.Create(culture, $"{inputModel.Clients[i].SalaryDetails.FullSalaryAmount:C}"), leftClientTextPos + intputDataDisplayWidth, nextPosition, paint);
+                    destCanvas.DrawText(string.Create(culture, $"{inputModel.Clients[i].SalaryDetails!.FullSalaryAmount:C}"), leftClientTextPos + intputDataDisplayWidth, nextPosition, paint);
                     nextPosition += textLineHeight;
 
-                    if (inputModel.Clients[i].SalaryDetails.PartialRetirementDetails != null)
+                    if (inputModel.Clients[i].SalaryDetails!.PartialRetirementDetails != null)
                     {
                         destCanvas.DrawText("Partial Retirement Age: ", leftClientTextPos, nextPosition, paint);
-                        destCanvas.DrawText($"{inputModel.Clients[i].SalaryDetails.PartialRetirementDetails.Age}", leftClientTextPos + intputDataDisplayWidth, nextPosition, paint);
+                        destCanvas.DrawText($"{inputModel.Clients[i].SalaryDetails!.PartialRetirementDetails!.Age}", leftClientTextPos + intputDataDisplayWidth, nextPosition, paint);
                         nextPosition += textLineHeight;
 
                         destCanvas.DrawText("Partial Retirement Salary: ", leftClientTextPos, nextPosition, paint);
-                        destCanvas.DrawText(string.Create(culture, $"{inputModel.Clients[i].SalaryDetails.PartialRetirementDetails.Amount:C}"), leftClientTextPos + intputDataDisplayWidth, nextPosition, paint);
+                        destCanvas.DrawText(string.Create(culture, $"{inputModel.Clients[i].SalaryDetails!.PartialRetirementDetails!.Amount:C}"), leftClientTextPos + intputDataDisplayWidth, nextPosition, paint);
                         nextPosition += textLineHeight;
                     }
                 }                
@@ -270,11 +273,11 @@ namespace RetirementIncomePlannerLogic
                 if(inputModel.Clients[i].OtherPensionDetails!=null)
                 {
                     destCanvas.DrawText("Other Pensions: ", leftClientTextPos, nextPosition, paint);
-                    destCanvas.DrawText(string.Create(culture, $"{inputModel.Clients[i].OtherPensionDetails.Amount:C}"), leftClientTextPos + intputDataDisplayWidth, nextPosition, paint);
+                    destCanvas.DrawText(string.Create(culture, $"{inputModel.Clients[i].OtherPensionDetails!.Amount:C}"), leftClientTextPos + intputDataDisplayWidth, nextPosition, paint);
                     nextPosition += textLineHeight;
 
                     destCanvas.DrawText("Other Pension Age: ", leftClientTextPos, nextPosition, paint);
-                    destCanvas.DrawText($"{inputModel.Clients[i].OtherPensionDetails.Age}", leftClientTextPos + intputDataDisplayWidth, nextPosition, paint);
+                    destCanvas.DrawText($"{inputModel.Clients[i].OtherPensionDetails!.Age}", leftClientTextPos + intputDataDisplayWidth, nextPosition, paint);
                     nextPosition += textLineHeight;
                 }
 
