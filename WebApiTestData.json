@@ -1,0 +1,49 @@
+{
+  "pensionInputData": {
+    "numberOfYears": 35,
+    "indexation": 0.02,
+    "retirementPot": 196000,
+    "investmentGrowth": 0.03,
+    "clients": [
+      {
+        "clientNumber": 1,
+        "age": 58,
+        "salaryDetails": {
+          "fullSalaryAmount": 22000
+        },
+        "retirementAge": 60,
+        "statePensionAmount": 9360,
+        "statePensionAge": 67,
+        "retirementIncomeLevel": 15000
+      },
+      {
+        "clientNumber": 2,
+        "age": 58,
+        "retirementAge": 58,
+        "statePensionAmount": 9360,
+        "statePensionAge": 67,
+        "otherPensionDetails": {
+          "age": 58,
+          "amount": 8285
+        },
+        "retirementIncomeLevel": 15000
+      }
+    ]
+  },
+  "pensionChartColors": {
+    "totalDrawdownColor": "#305d7a",
+    "statePensionPrimaryColor": "#746aa3",
+    "statePensionSecondaryColor": "#c9c0e7",
+    "otherPensionPrimaryColor": "#ca6ca2",
+    "otherPensionSecondaryColor": "#f2bbda",
+    "salaryPrimaryColor": "#ff7d76",
+    "salarySecondaryColor": "#ffc1b9",
+    "otherIncomePrimaryColor": "#ffb13e",
+    "otherIncomeSecondaryColor": "#ffd29f",
+    "totalFundValueColor": "#000000"
+  },
+  "imageSize": {
+    "width": 800,
+    "height": 600
+  }
+}
