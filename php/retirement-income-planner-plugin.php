@@ -2,7 +2,7 @@
 /*
 Plugin Name: Retirement Income Planner Plugin
 Description: Plugin for sending data to Retirement Income Planner API
-Version: 1.8
+Version: 1.9
 Author: Mike Dunn & Richard Scott
 */
 

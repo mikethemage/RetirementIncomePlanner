@@ -126,21 +126,25 @@ jQuery(document).ready(function ($) {
 
       // Prepare the data for the API request
       var data = {
-        numberOfYears: numberOfYears,
-        indexation: indexation,
-        retirementPot: retirementPot,
-        investmentGrowth: investmentGrowth,
-        clients: [client1, client2]
+        pensionInputData: {  // Enclosing the existing code in another object          
+          numberOfYears: numberOfYears,
+          indexation: indexation,
+          retirementPot: retirementPot,
+          investmentGrowth: investmentGrowth,
+          clients: [client1, client2]
+        }
       };
     }
     else {
       // Prepare the data for the API request
       var data = {
-        numberOfYears: numberOfYears,
-        indexation: indexation,
-        retirementPot: retirementPot,
-        investmentGrowth: investmentGrowth,
-        clients: [client1]
+        pensionInputData: {  // Enclosing the existing code in another object          
+          numberOfYears: numberOfYears,
+          indexation: indexation,
+          retirementPot: retirementPot,
+          investmentGrowth: investmentGrowth,
+          clients: [client1]
+        }
       };
     }
 
