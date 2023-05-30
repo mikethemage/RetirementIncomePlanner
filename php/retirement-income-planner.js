@@ -13,7 +13,6 @@ clientToggle.addEventListener("change", function () {
 });
 
 
-
 jQuery(document).ready(function ($) {
   $('#retirement-income-planner-form').submit(function (e) {
     e.preventDefault(); // Prevent form submission
@@ -74,7 +73,6 @@ jQuery(document).ready(function ($) {
         }
       ];
     }
-
 
     if (clientToggle.value == 2) {
       var client2 = {
@@ -157,9 +155,18 @@ jQuery(document).ready(function ($) {
         action: 'retirement_income_planner_proxy_request',
         data: JSON.stringify(data)
       },
-      success: function (response) {
-        console.log(response); // For debugging purposes
+      success: function (response, textStatus, xhr) {        
+        console.log(response); // For debugging purposes        
+    
         var responseData = JSON.parse(response);
+
+        if (responseData.status && responseData.status === 400) {
+          //var errorMessage = response.errors ? Object.values(response.errors).join('\n') : 'An error occurred.';
+          displayErrorMessage(responseData);
+        } else {  
+
+          var errorContainer = document.getElementById('error-container');
+          errorContainer.innerHTML="";
 
         // Create the table header
         var table = '<table>';
@@ -236,10 +243,43 @@ jQuery(document).ready(function ($) {
 
         // Display the table
         $('#retirement-income-planner-result').html(table);
+        }
       },
-      error: function (xhr, status, error) {
+      /*error: function (xhr, status, error) {
         console.log(xhr.responseText); // For debugging purposes
         $('#retirement-income-planner-result').text('Error: ' + error);
+      }*/
+      error: function (xhr, status, error) {
+        console.log(xhr);       
+        console.log(status);        
+        console.log(error);      
+
+        // Handle error response
+        var errorResponse = xhr.responseJSON;
+
+        if (errorResponse && errorResponse.errors) {
+          // Display validation errors to the user
+          var errorMessages = errorResponse.errors;
+
+          // Clear previous error messages
+          $('#error-container').empty();
+
+          // Iterate over the error messages and display them
+          Object.keys(errorMessages).forEach(function (fieldName) {
+            var errorMessage = errorMessages[fieldName];
+
+            // Create an error message element
+            var $errorMessage = $('<span class="error-message">' + errorMessage + '</span>');
+
+            // Insert the error message into the error container
+            $('#error-container').append($errorMessage);
+          });
+
+        } else {
+          // Handle other types of errors
+          console.log(xhr.responseText); // For debugging purposes
+          $('#error-container').text('Error: ' + error);
+        }
       }
     });
   });
@@ -256,4 +296,69 @@ function getClientDataHtml(client) {
   html += '<td>' + client.contribution.toFixed(2) + '</td>';
   return html;
 }
+
+function displayErrorMessage(response) {
+  try {
+    if (response.errors) {   
+      // Display the error message on the page
+      var errorContainer = document.getElementById('error-container');
+      errorContainer.innerHTML = 'Error: '; 
+      // Scroll to the error message for better visibility
+      errorContainer.scrollIntoView({ behavior: 'smooth' });
+
+      // Process client field errors
+      Object.keys(response.errors).forEach(function (field) {
+        //var fieldErrors = response.errors[field];
+        var fieldName = getFieldDisplayName(field);
+
+        if (fieldName) {
+          var errorMessage = 'Invalid ' + fieldName; + "<br>" // + ': ' + fieldErrors.join('<br>');          
+          errorContainer.innerHTML += errorMessage;
+        }
+      });
+    } else {
+      // If parsing fails or no error details are available, display a generic error message
+      var errorContainer = document.getElementById('error-container');
+      errorContainer.innerHTML = 'An error occurred.';
+      // Scroll to the error message for better visibility
+      errorContainer.scrollIntoView({ behavior: 'smooth' });
+    }
+  } catch (error) {
+    // If parsing the response JSON fails, display a generic error message
+    var errorContainer = document.getElementById('error-container');
+    errorContainer.innerHTML = 'An error occurred.';
+    // Scroll to the error message for better visibility
+    errorContainer.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
+function getFieldDisplayName(field) {
+  var fieldNames = {
+    'numberOfYears': 'Number of Years',
+    'indexation': 'Indexation Percentage',
+    'retirementPot': 'Retirement Pot',
+    'investmentGrowth': 'Investment Growth Percentage',
+    'age': 'Age',
+    'retirementAge': 'Retirement Age',
+    'statePensionAmount': 'State Pension Amount',
+    'statePensionAge': 'State Pension Age',
+    'retirementIncomeLevel': 'Retirement Income Level',
+    'fullSalaryAmount': 'Full Salary Amount',
+    'partialRetirementDetails': 'Partial Retirement Details',
+    'otherPensionDetails': 'Other Pension Details',
+    'otherIncome': 'Other Income',
+    'adhocTransactions': 'Adhoc Transactions'
+  };
+
+  var match = field.match(/^\$.pensionInputData.clients\[(\d+)\]\.(.+)$/);
+  if (match) {
+    var clientIndex = parseInt(match[1]) + 1;
+    var fieldName = match[2];
+    var displayName = 'Client ' + clientIndex + ' ' + fieldNames[fieldName];
+    return displayName;
+  }
+
+  return null;
+}
+
 

@@ -2,7 +2,7 @@
 /*
 Plugin Name: Retirement Income Planner Plugin
 Description: Plugin for sending data to Retirement Income Planner API
-Version: 1.9
+Version: 2.4
 Author: Mike Dunn & Richard Scott
 */
 
@@ -176,7 +176,11 @@ function retirement_income_planner_form_shortcode()
 
       <button type="submit">Submit</button>
     </form>
+    
+    <!-- Add an error container element -->
+    <div id="error-container"></div>
 
+    <!-- Add a container for the result table -->
     <div id="retirement-income-planner-result"></div>
   </div>
 
