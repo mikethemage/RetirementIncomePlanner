@@ -12,12 +12,19 @@ clientToggle.addEventListener("change", function () {
   }
 });
 
-
 jQuery(document).ready(function ($) {
+
   $('#retirement-income-planner-form').submit(function (e) {
     e.preventDefault(); // Prevent form submission
+  });
 
-    // Get form field values
+  // Handle JSON data retrieval
+  $('#json-button').on('click', function (event) {
+    var api_url = external_api_params.api_url;
+    // Access the security nonce value from the localized object
+    var security = external_api_params.security_json;
+
+    // Gather input values
     var numberOfYears = $('#numberOfYears').val();
     var indexationPercentage = $('#indexation').val();
     var retirementPot = $('#retirementPot').val();
@@ -61,19 +68,20 @@ jQuery(document).ready(function ($) {
 
     // Check if otherIncome is filled:
     if ($('#client1OtherIncome').val()) {
-      client1.otherIncome = $('#client1OtherIncome').val()
+      client1.otherIncome = $('#client1OtherIncome').val();
     }
 
     // Check if adhocTransactions are filled:
     if ($('#client1AdhocTransactionAge').val() && $('#client1AdhocTransactionAmount').val()) {
-      client1.adhocTransactions = [
-        {
-          age: $('#client1AdhocTransactionAge').val(),
-          amount: $('#client1AdhocTransactionAmount').val()
-        }
-      ];
+      client1.adhocTransactions = [{
+        age: $('#client1AdhocTransactionAge').val(),
+        amount: $('#client1AdhocTransactionAmount').val()
+      }];
     }
 
+    var clients = [client1];
+
+    var clientToggle = document.getElementById('NumberOfClients');
     if (clientToggle.value == 2) {
       var client2 = {
         age: $('#client2Age').val(),
@@ -84,10 +92,10 @@ jQuery(document).ready(function ($) {
       };
 
       // Check if fullSalaryAmount is filled
-      var fullSalaryAmount = $('#client2FullSalaryAmount').val();
-      if (fullSalaryAmount) {
+      var fullSalaryAmountClient2 = $('#client2FullSalaryAmount').val();
+      if (fullSalaryAmountClient2) {
         client2.salaryDetails = {
-          fullSalaryAmount: fullSalaryAmount
+          fullSalaryAmount: fullSalaryAmountClient2
         };
 
         // Check if partial retirement details are filled
@@ -109,256 +117,373 @@ jQuery(document).ready(function ($) {
 
       // Check if otherIncome is filled:
       if ($('#client2OtherIncome').val()) {
-        client2.otherIncome = $('#client2OtherIncome').val()
+        client2.otherIncome = $('#client2OtherIncome').val();
       }
 
       // Check if adhocTransactions are filled:
       if ($('#client2AdhocTransactionAge').val() && $('#client2AdhocTransactionAmount').val()) {
-        client2.adhocTransactions = [
-          {
-            age: $('#client2AdhocTransactionAge').val(),
-            amount: $('#client2AdhocTransactionAmount').val()
-          }
-        ];
+        client2.adhocTransactions = [{
+          age: $('#client2AdhocTransactionAge').val(),
+          amount: $('#client2AdhocTransactionAmount').val()
+        }];
       }
 
-      // Prepare the data for the API request
-      var data = {
-        pensionInputData: {  // Enclosing the existing code in another object          
-          numberOfYears: numberOfYears,
-          indexation: indexation,
-          retirementPot: retirementPot,
-          investmentGrowth: investmentGrowth,
-          clients: [client1, client2]
-        }
-      };
-    }
-    else {
-      // Prepare the data for the API request
-      var data = {
-        pensionInputData: {  // Enclosing the existing code in another object          
-          numberOfYears: numberOfYears,
-          indexation: indexation,
-          retirementPot: retirementPot,
-          investmentGrowth: investmentGrowth,
-          clients: [client1]
-        }
-      };
+      clients.push(client2);
     }
 
-    // Make the AJAX request to the proxy PHP script
-    $.ajax({
-      url: retirementIncomePlannerAjax.ajaxurl, // Use the localized AJAX URL
-      type: 'POST',
-      dataType: 'json',
-      data: {
-        action: 'retirement_income_planner_proxy_request',
-        data: JSON.stringify(data)
-      },
-      success: function (response, textStatus, xhr) {        
-        console.log(response); // For debugging purposes        
-    
-        var responseData = JSON.parse(response);
 
-        if (responseData.status && responseData.status === 400) {
-          //var errorMessage = response.errors ? Object.values(response.errors).join('\n') : 'An error occurred.';
-          displayErrorMessage(responseData);
-        } else {  
+    // Prepare the data for the API request
+    var data = {
+      action: 'external_api_json_request',
+      security: security,
+      pensionInputData: {
+        numberOfYears: numberOfYears,
+        indexation: indexation,
+        retirementPot: retirementPot,
+        investmentGrowth: investmentGrowth,
+        clients: clients
+      }
+    }
 
-          var errorContainer = document.getElementById('error-container');
-          errorContainer.innerHTML="";
+    $.post(api_url, data, function (response) {
+      if (response.success) {
 
-        // Create the table header
-        var table = '<table>';
-        table += '<tr><th>Year</th>';
+        var json_data = JSON.parse(response.data.json_data);
 
-        table += '<th>Client 1 Age</th>'
-        table += '<th>Client 1 State Pension</th>'
-        table += '<th>Client 1 Other Pension</th>'
-        table += '<th>Client 1 Salary</th>'
-        table += '<th>Client 1 Other Income</th>'
-        table += '<th>Client 1 Contribution</th>'
+        var html_table = '<table><tbody>';
+        // Generate HTML table from the JSON data
+        // Modify this section according to your JSON structure
+        html_table += '<tr><th>Year</th>';
 
-        if (clientToggle.value == 2) {
-          table += '<th>Client 2 Age</th>'
-          table += '<th>Client 2 State Pension</th>'
-          table += '<th>Client 2 Other Pension</th>'
-          table += '<th>Client 2 Salary</th>'
-          table += '<th>Client 2 Other Income</th>'
-          table += '<th>Client 2 Contribution</th>'
-        }
+        for (var j = 0; j < json_data[0].clients.length; j++)
+          if (json_data[0].clients.length > 1) {
+            html_table += '<th>Client ' + (j + 1) + ' Age</th><th>Client ' + (j + 1) + ' State Pension</th><th>Client ' + (j + 1) + ' Other Pension</th><th>Client ' + (j + 1) + ' Salary</th><th>Client ' + (j + 1) + ' Other Income</th><th>Client ' + (j + 1) + ' Contribution</th>';
+          }
+        html_table += '<th>Total Required Drawdown</th><th>Fund Before Drawdown</th><th>Total Drawdown</th><th>Total Fund Value</th></tr>';
+        for (var i = 0; i < json_data.length; i++) {
+          html_table += '<tr>';
+          html_table += '<td>' + json_data[i].year + '</td>';
 
-        // Add table headers for additional fields
-        table += '<th>Total Required Drawdown</th>';
-        table += '<th>Fund Before Drawdown</th>';
-        table += '<th>Total Drawdown</th>';
-        table += '<th>Total Fund Value</th>';
-
-        table += '</tr>';
-
-        // Iterate over the response data and create table rows
-        for (var i = 0; i < responseData.length; i++) {
-          var row = responseData[i];
-
-          // Create table row
-          table += '<tr>';
-          table += '<td>' + row.year + '</td>';
-
-          // Find client 1 data
-          var client1 = row.clients.find(function (client) {
-            return client.clientNumber === 1;
-          });
-
-          if (client1) {
-            table += getClientDataHtml(client1);
-          } else {
-            table += '<td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td>';
+          for (var j = 0; j < json_data[i].clients.length; j++) {
+            html_table += '<td>' + json_data[i].clients[j].age + '</td>';
+            html_table += '<td>' + json_data[i].clients[j].statePension + '</td>';
+            html_table += '<td>' + json_data[i].clients[j].otherPension + '</td>';
+            html_table += '<td>' + json_data[i].clients[j].salary + '</td>';
+            html_table += '<td>' + json_data[i].clients[j].otherIncome + '</td>';
+            html_table += '<td>' + json_data[i].clients[j].contribution + '</td>';
           }
 
-          if (clientToggle.value == 2) {
-
-            // Find client 2 data
-            var client2 = row.clients.find(function (client) {
-              return client.clientNumber === 2;
-            });
-
-            if (client2) {
-              table += getClientDataHtml(client2);
-            } else {
-              table += '<td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td>';
-            }
-          }
-
-          // Add additional table cells
-          table += '<td>' + row.totalRequiredDrawdown.toFixed(2) + '</td>';
-          table += '<td>' + row.fundBeforeDrawdown.toFixed(2) + '</td>';
-          table += '<td>' + row.totalDrawdown.toFixed(2) + '</td>';
-          table += '<td>' + row.totalFundValue.toFixed(2) + '</td>';
-
-          table += '</tr>';
+          html_table += '<td>' + json_data[i].totalRequiredDrawdown + '</td>';
+          html_table += '<td>' + json_data[i].fundBeforeDrawdown + '</td>';
+          html_table += '<td>' + json_data[i].totalDrawdown + '</td>';
+          html_table += '<td>' + json_data[i].totalFundValue + '</td>';
+          html_table += '</tr>';
         }
+        html_table += '</tbody></table>';
+        $('#json-output').html(html_table);
+      } else {
+        var error_message = response.data.message;
+        $('#json-output').html('<p>' + error_message + '</p>');
+      }
+    });
 
-        // Close the table
-        table += '</table>';
 
-        // Display the table
-        $('#retirement-income-planner-result').html(table);
+  });
+
+
+  // Handle image retrieval
+  $('#image-button').on('click', function (event) {
+    var api_url = external_api_params.api_url;
+    // Access the security nonce value from the localized object
+    var security = external_api_params.security_image;
+
+
+    // Gather input values
+    var numberOfYears = $('#numberOfYears').val();
+    var indexationPercentage = $('#indexation').val();
+    var retirementPot = $('#retirementPot').val();
+    var investmentGrowthPercentage = $('#investmentGrowth').val();
+
+    // Convert percentage values to decimal format
+    var indexation = parseFloat(indexationPercentage) / 100;
+    var investmentGrowth = parseFloat(investmentGrowthPercentage) / 100;
+
+    var client1 = {
+      age: $('#client1Age').val(),
+      retirementAge: $('#client1RetirementAge').val(),
+      statePensionAmount: $('#client1StatePensionAmount').val(),
+      statePensionAge: $('#client1StatePensionAge').val(),
+      retirementIncomeLevel: $('#client1RetirementIncomeLevel').val()
+    };
+
+    // Check if fullSalaryAmount is filled
+    var fullSalaryAmount = $('#client1FullSalaryAmount').val();
+    if (fullSalaryAmount) {
+      client1.salaryDetails = {
+        fullSalaryAmount: fullSalaryAmount
+      };
+
+      // Check if partial retirement details are filled
+      if ($('#client1PartialRetirementAge').val() && $('#client1PartialRetirementAmount').val()) {
+        client1.salaryDetails.partialRetirementDetails = {
+          age: $('#client1PartialRetirementAge').val(),
+          amount: $('#client1PartialRetirementAmount').val()
+        };
+      }
+    }
+
+    // Check if otherPensionDetails are filled:
+    if ($('#client1OtherPensionAge').val() && $('#client1OtherPensionAmount').val()) {
+      client1.otherPensionDetails = {
+        age: $('#client1OtherPensionAge').val(),
+        amount: $('#client1OtherPensionAmount').val()
+      };
+    }
+
+    // Check if otherIncome is filled:
+    if ($('#client1OtherIncome').val()) {
+      client1.otherIncome = $('#client1OtherIncome').val();
+    }
+
+    // Check if adhocTransactions are filled:
+    if ($('#client1AdhocTransactionAge').val() && $('#client1AdhocTransactionAmount').val()) {
+      client1.adhocTransactions = [{
+        age: $('#client1AdhocTransactionAge').val(),
+        amount: $('#client1AdhocTransactionAmount').val()
+      }];
+    }
+
+    var clients = [client1];
+
+    var clientToggle = document.getElementById('NumberOfClients');
+    if (clientToggle.value == 2) {
+      var client2 = {
+        age: $('#client2Age').val(),
+        retirementAge: $('#client2RetirementAge').val(),
+        statePensionAmount: $('#client2StatePensionAmount').val(),
+        statePensionAge: $('#client2StatePensionAge').val(),
+        retirementIncomeLevel: $('#client2RetirementIncomeLevel').val()
+      };
+
+      // Check if fullSalaryAmount is filled
+      var fullSalaryAmountClient2 = $('#client2FullSalaryAmount').val();
+      if (fullSalaryAmountClient2) {
+        client2.salaryDetails = {
+          fullSalaryAmount: fullSalaryAmountClient2
+        };
+
+        // Check if partial retirement details are filled
+        if ($('#client2PartialRetirementAge').val() && $('#client2PartialRetirementAmount').val()) {
+          client2.salaryDetails.partialRetirementDetails = {
+            age: $('#client2PartialRetirementAge').val(),
+            amount: $('#client2PartialRetirementAmount').val()
+          };
         }
-      },
-      /*error: function (xhr, status, error) {
-        console.log(xhr.responseText); // For debugging purposes
-        $('#retirement-income-planner-result').text('Error: ' + error);
-      }*/
-      error: function (xhr, status, error) {
-        console.log(xhr);       
-        console.log(status);        
-        console.log(error);      
+      }
 
-        // Handle error response
-        var errorResponse = xhr.responseJSON;
+      // Check if otherPensionDetails are filled:
+      if ($('#client2OtherPensionAge').val() && $('#client2OtherPensionAmount').val()) {
+        client2.otherPensionDetails = {
+          age: $('#client2OtherPensionAge').val(),
+          amount: $('#client2OtherPensionAmount').val()
+        };
+      }
 
-        if (errorResponse && errorResponse.errors) {
-          // Display validation errors to the user
-          var errorMessages = errorResponse.errors;
+      // Check if otherIncome is filled:
+      if ($('#client2OtherIncome').val()) {
+        client2.otherIncome = $('#client2OtherIncome').val();
+      }
 
-          // Clear previous error messages
-          $('#error-container').empty();
+      // Check if adhocTransactions are filled:
+      if ($('#client2AdhocTransactionAge').val() && $('#client2AdhocTransactionAmount').val()) {
+        client2.adhocTransactions = [{
+          age: $('#client2AdhocTransactionAge').val(),
+          amount: $('#client2AdhocTransactionAmount').val()
+        }];
+      }
 
-          // Iterate over the error messages and display them
-          Object.keys(errorMessages).forEach(function (fieldName) {
-            var errorMessage = errorMessages[fieldName];
+      clients.push(client2);
+    }
 
-            // Create an error message element
-            var $errorMessage = $('<span class="error-message">' + errorMessage + '</span>');
 
-            // Insert the error message into the error container
-            $('#error-container').append($errorMessage);
-          });
+    // Prepare the data for the API request
+    var data = {
+      action: 'external_api_image_request',
+      security: security,
+      pensionInputData: {
+        numberOfYears: numberOfYears,
+        indexation: indexation,
+        retirementPot: retirementPot,
+        investmentGrowth: investmentGrowth,
+        clients: clients
+      }
+    }
 
-        } else {
-          // Handle other types of errors
-          console.log(xhr.responseText); // For debugging purposes
-          $('#error-container').text('Error: ' + error);
-        }
+    $.post(api_url, data, function (response) {
+      if (response.success) {
+        var image_data = response.data.image_data;
+        var image_url = 'data:image/png;base64,' + image_data;
+        $('#image-output').html('<img src="' + image_url + '" alt="External API Image">');
+      } else {
+        console.log(response.data.message);
       }
     });
   });
-});
 
-// Function to format client data as HTML
-function getClientDataHtml(client) {
-  var html = '';
-  html += '<td>' + client.age + '</td>';
-  html += '<td>' + client.statePension.toFixed(2) + '</td>';
-  html += '<td>' + client.otherPension.toFixed(2) + '</td>';
-  html += '<td>' + client.salary.toFixed(2) + '</td>';
-  html += '<td>' + client.otherIncome.toFixed(2) + '</td>';
-  html += '<td>' + client.contribution.toFixed(2) + '</td>';
-  return html;
-}
 
-function displayErrorMessage(response) {
-  try {
-    if (response.errors) {   
-      // Display the error message on the page
-      var errorContainer = document.getElementById('error-container');
-      errorContainer.innerHTML = 'Error: '; 
-      // Scroll to the error message for better visibility
-      errorContainer.scrollIntoView({ behavior: 'smooth' });
+  // Handle PDF retrieval
+  $('#pdf-button').on('click', function (event) {
+    //event.preventDefault();
 
-      // Process client field errors
-      Object.keys(response.errors).forEach(function (field) {
-        //var fieldErrors = response.errors[field];
-        var fieldName = getFieldDisplayName(field);
+    var api_url = external_api_params.api_url;
+    // Access the security nonce value from the localized object
+    var security = external_api_params.security_pdf;
 
-        if (fieldName) {
-          var errorMessage = 'Invalid ' + fieldName; + "<br>" // + ': ' + fieldErrors.join('<br>');          
-          errorContainer.innerHTML += errorMessage;
-        }
-      });
-    } else {
-      // If parsing fails or no error details are available, display a generic error message
-      var errorContainer = document.getElementById('error-container');
-      errorContainer.innerHTML = 'An error occurred.';
-      // Scroll to the error message for better visibility
-      errorContainer.scrollIntoView({ behavior: 'smooth' });
+
+    // Gather input values
+    var numberOfYears = $('#numberOfYears').val();
+    var indexationPercentage = $('#indexation').val();
+    var retirementPot = $('#retirementPot').val();
+    var investmentGrowthPercentage = $('#investmentGrowth').val();
+
+    // Convert percentage values to decimal format
+    var indexation = parseFloat(indexationPercentage) / 100;
+    var investmentGrowth = parseFloat(investmentGrowthPercentage) / 100;
+
+    var client1 = {
+      age: $('#client1Age').val(),
+      retirementAge: $('#client1RetirementAge').val(),
+      statePensionAmount: $('#client1StatePensionAmount').val(),
+      statePensionAge: $('#client1StatePensionAge').val(),
+      retirementIncomeLevel: $('#client1RetirementIncomeLevel').val()
+    };
+
+    // Check if fullSalaryAmount is filled
+    var fullSalaryAmount = $('#client1FullSalaryAmount').val();
+    if (fullSalaryAmount) {
+      client1.salaryDetails = {
+        fullSalaryAmount: fullSalaryAmount
+      };
+
+      // Check if partial retirement details are filled
+      if ($('#client1PartialRetirementAge').val() && $('#client1PartialRetirementAmount').val()) {
+        client1.salaryDetails.partialRetirementDetails = {
+          age: $('#client1PartialRetirementAge').val(),
+          amount: $('#client1PartialRetirementAmount').val()
+        };
+      }
     }
-  } catch (error) {
-    // If parsing the response JSON fails, display a generic error message
-    var errorContainer = document.getElementById('error-container');
-    errorContainer.innerHTML = 'An error occurred.';
-    // Scroll to the error message for better visibility
-    errorContainer.scrollIntoView({ behavior: 'smooth' });
-  }
-}
 
-function getFieldDisplayName(field) {
-  var fieldNames = {
-    'numberOfYears': 'Number of Years',
-    'indexation': 'Indexation Percentage',
-    'retirementPot': 'Retirement Pot',
-    'investmentGrowth': 'Investment Growth Percentage',
-    'age': 'Age',
-    'retirementAge': 'Retirement Age',
-    'statePensionAmount': 'State Pension Amount',
-    'statePensionAge': 'State Pension Age',
-    'retirementIncomeLevel': 'Retirement Income Level',
-    'fullSalaryAmount': 'Full Salary Amount',
-    'partialRetirementDetails': 'Partial Retirement Details',
-    'otherPensionDetails': 'Other Pension Details',
-    'otherIncome': 'Other Income',
-    'adhocTransactions': 'Adhoc Transactions'
-  };
+    // Check if otherPensionDetails are filled:
+    if ($('#client1OtherPensionAge').val() && $('#client1OtherPensionAmount').val()) {
+      client1.otherPensionDetails = {
+        age: $('#client1OtherPensionAge').val(),
+        amount: $('#client1OtherPensionAmount').val()
+      };
+    }
 
-  var match = field.match(/^\$.pensionInputData.clients\[(\d+)\]\.(.+)$/);
-  if (match) {
-    var clientIndex = parseInt(match[1]) + 1;
-    var fieldName = match[2];
-    var displayName = 'Client ' + clientIndex + ' ' + fieldNames[fieldName];
-    return displayName;
-  }
+    // Check if otherIncome is filled:
+    if ($('#client1OtherIncome').val()) {
+      client1.otherIncome = $('#client1OtherIncome').val();
+    }
 
-  return null;
-}
+    // Check if adhocTransactions are filled:
+    if ($('#client1AdhocTransactionAge').val() && $('#client1AdhocTransactionAmount').val()) {
+      client1.adhocTransactions = [{
+        age: $('#client1AdhocTransactionAge').val(),
+        amount: $('#client1AdhocTransactionAmount').val()
+      }];
+    }
+
+    var clients = [client1];
+
+    var clientToggle = document.getElementById('NumberOfClients');
+    if (clientToggle.value == 2) {
+      var client2 = {
+        age: $('#client2Age').val(),
+        retirementAge: $('#client2RetirementAge').val(),
+        statePensionAmount: $('#client2StatePensionAmount').val(),
+        statePensionAge: $('#client2StatePensionAge').val(),
+        retirementIncomeLevel: $('#client2RetirementIncomeLevel').val()
+      };
+
+      // Check if fullSalaryAmount is filled
+      var fullSalaryAmountClient2 = $('#client2FullSalaryAmount').val();
+      if (fullSalaryAmountClient2) {
+        client2.salaryDetails = {
+          fullSalaryAmount: fullSalaryAmountClient2
+        };
+
+        // Check if partial retirement details are filled
+        if ($('#client2PartialRetirementAge').val() && $('#client2PartialRetirementAmount').val()) {
+          client2.salaryDetails.partialRetirementDetails = {
+            age: $('#client2PartialRetirementAge').val(),
+            amount: $('#client2PartialRetirementAmount').val()
+          };
+        }
+      }
+
+      // Check if otherPensionDetails are filled:
+      if ($('#client2OtherPensionAge').val() && $('#client2OtherPensionAmount').val()) {
+        client2.otherPensionDetails = {
+          age: $('#client2OtherPensionAge').val(),
+          amount: $('#client2OtherPensionAmount').val()
+        };
+      }
+
+      // Check if otherIncome is filled:
+      if ($('#client2OtherIncome').val()) {
+        client2.otherIncome = $('#client2OtherIncome').val();
+      }
+
+      // Check if adhocTransactions are filled:
+      if ($('#client2AdhocTransactionAge').val() && $('#client2AdhocTransactionAmount').val()) {
+        client2.adhocTransactions = [{
+          age: $('#client2AdhocTransactionAge').val(),
+          amount: $('#client2AdhocTransactionAmount').val()
+        }];
+      }
+
+      clients.push(client2);
+    }
 
 
+    // Prepare the data for the API request
+    var data = {
+      action: 'external_api_pdf_request',
+      security: security,
+      pensionInputData: {
+        numberOfYears: numberOfYears,
+        indexation: indexation,
+        retirementPot: retirementPot,
+        investmentGrowth: investmentGrowth,
+        clients: clients
+      }
+    }
+
+
+    $.post(api_url, data, function (response) {
+      if (response.success) {
+
+        var pdf_data = response.data.pdf_data;
+        var pdf_url = 'data:application/pdf;base64,' + pdf_data;
+
+        //var blob = new Blob([pdf_data], { type: 'application/pdf' });
+        //var url = URL.createObjectURL(blob);
+
+        // Trigger the file download by creating a temporary link and clicking it
+        var link = document.createElement('a');
+        link.href = pdf_url;
+        link.download = 'Report.pdf';
+        link.click();
+
+        // Clean up the temporary URL
+        URL.revokeObjectURL(pdf_url);
+      } else {
+        console.log(response.data.message);
+      }
+    });
+    
+  });
+
+});
