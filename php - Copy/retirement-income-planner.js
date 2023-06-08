@@ -72,10 +72,10 @@ addButton.addEventListener('click', client2AddContribution);
 
 //Code to hide/display Client 2 based on drop-down:
 var numClientsDrop = document.getElementById("NumberOfClients");
-//var clientInfo = document.getElementById("client-info");
+var clientInfo = document.getElementById("client-info");
 
 numClientsDrop.addEventListener("change", function () {
-  var clientInputs2 = document.getElementById("client2input");
+  var clientInputs2 = document.querySelector(".client-inputs:nth-child(2)");
 
   if (numClientsDrop.value == 2) {
     clientInputs2.style.display = "block";
@@ -181,7 +181,7 @@ jQuery(document).ready(function ($) {
       if (response.success) {
         var image_data = response.data.image_data;
         var image_url = 'data:image/png;base64,' + image_data;
-        $('#image-output').html('<img width="100%" src="' + image_url + '" alt="Chart Preview">');
+        $('#image-output').html('<img src="' + image_url + '" alt="External API Image">');
         $('#json-output').html('');
       } else {
         var error_message = response.data.message;

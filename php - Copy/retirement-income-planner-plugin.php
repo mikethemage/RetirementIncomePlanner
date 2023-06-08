@@ -2,15 +2,12 @@
 /*
 Plugin Name: Retirement Income Planner Plugin
 Description: Plugin for sending data to Retirement Income Planner API
-Version: 3.1
+Version: 2.9
 Author: Mike Dunn & Richard Scott
 */
 
 // Register a shortcode to embed the buttons and output areas
-add_shortcode('retirement_income_planner1', 'retirement_income_planner_form_shortcode1');
-add_shortcode('retirement_income_planner2', 'retirement_income_planner_form_shortcode2');
-add_shortcode('retirement_income_planner3', 'retirement_income_planner_form_shortcode3');
-add_shortcode('retirement_income_planner4', 'retirement_income_planner_form_shortcode4');
+add_shortcode('retirement_income_planner', 'retirement_income_planner_form_shortcode');
 
 // Enqueue the retirement-income-planner.js file and pass API URL as a variable
 function retirement_income_planner_enqueue_scripts()
@@ -32,7 +29,7 @@ function retirement_income_planner_enqueue_scripts()
 add_action('wp_enqueue_scripts', 'retirement_income_planner_enqueue_scripts');
 
 
-function retirement_income_planner_form_shortcode1($atts)
+function retirement_income_planner_form_shortcode($atts)
 {
     ob_start(); // Start output buffering
 
@@ -80,18 +77,9 @@ function retirement_income_planner_form_shortcode1($atts)
             <input type="text" id="investmentGrowth" name="investmentGrowth" required><br>
 
 
-            <!--<div id="client-info">-->
-
-            <?php
-
-return ob_get_clean(); // Return the buffered output
-}
-
-function retirement_income_planner_form_shortcode2($atts)
-{
-    ob_start(); // Start output buffering
-    ?>
+            <div id="client-info">
                 <div class="client-inputs">
+
                     <h3>Client 1</h3>
                     <label for="client1Age">Age:<span class="saasify-required">*</span></label>
                     <input type="text" id="client1Age" name="client1Age" required><br>
@@ -144,16 +132,7 @@ function retirement_income_planner_form_shortcode2($atts)
                     <button type="button" id="client1AddContribution">Add Contribution</button>
                 </div>
 
-                <?php
-
-return ob_get_clean(); // Return the buffered output
-}
-
-function retirement_income_planner_form_shortcode3($atts)
-{
-    ob_start(); // Start output buffering
-    ?>
-                <div class="client-inputs" id="client2input" style="display: none;">
+                <div class="client-inputs" style="display: none;">
 
                     <h3>Client 2</h3>
                     <label for="client2Age">Age:<span class="saasify-required">*</span></label>
@@ -206,18 +185,7 @@ function retirement_income_planner_form_shortcode3($atts)
                     </div>
                     <button type="button" id="client2AddContribution">Add Contribution</button>
                 </div>
-
-
-                <?php
-
-return ob_get_clean(); // Return the buffered output
-}
-
-function retirement_income_planner_form_shortcode4($atts)
-{
-    ob_start(); // Start output buffering
-    ?>
-            <!--</div>-->
+            </div>
 
             <button type="submit" id="json-button">Show calculated data</button>
             <button type="submit" id="image-button">Preview Chart</button>
