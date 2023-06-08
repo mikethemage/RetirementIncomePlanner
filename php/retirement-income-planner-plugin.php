@@ -2,7 +2,7 @@
 /*
 Plugin Name: Retirement Income Planner Plugin
 Description: Plugin for sending data to Retirement Income Planner API
-Version: 2.6
+Version: 2.9
 Author: Mike Dunn & Richard Scott
 */
 
@@ -15,12 +15,15 @@ function retirement_income_planner_enqueue_scripts()
     wp_enqueue_script('external-api', plugin_dir_url(__FILE__) . 'retirement-income-planner.js', array('jquery'), '1.0', true);
 
     // Pass API URL as a variable to the retirement-income-planner.js file
-    wp_localize_script('external-api', 'external_api_params', array(
-        'api_url' => esc_js(admin_url('admin-ajax.php')),
-        'security_json' => esc_js(wp_create_nonce('external-api-json-nonce')),
-        'security_image' => esc_js(wp_create_nonce('external-api-image-nonce')),
-        'security_pdf' => esc_js(wp_create_nonce('external-api-pdf-nonce')),
-    )
+    wp_localize_script(
+        'external-api',
+        'external_api_params',
+        array(
+            'api_url' => esc_js(admin_url('admin-ajax.php')),
+            'security_json' => esc_js(wp_create_nonce('external-api-json-nonce')),
+            'security_image' => esc_js(wp_create_nonce('external-api-image-nonce')),
+            'security_pdf' => esc_js(wp_create_nonce('external-api-pdf-nonce')),
+        )
     );
 }
 add_action('wp_enqueue_scripts', 'retirement_income_planner_enqueue_scripts');
@@ -38,6 +41,17 @@ function retirement_income_planner_form_shortcode($atts)
 
     <div id="retirement-income-planner">
         <form id="retirement-income-planner-form">
+
+            <label for="numberOfYears">Number of Years:<span class="saasify-required">*</span></label>
+            <select id="numberOfYears" name="numberOfYears" required>
+                <?php
+                for ($i = 1; $i <= 35; $i++) {
+                    $selected = ($i == 35) ? 'selected' : ''; // Check if current year is 35
+                    echo "<option value='$i' $selected>$i</option>";
+                }
+                ?>
+            </select><br>
+
             <div class="client-toggle-wrap">
                 <label for="NumberOfClients">Number of Clients:<span class="saasify-required">*</span></label>
                 <div>
@@ -52,10 +66,6 @@ function retirement_income_planner_form_shortcode($atts)
 
                 </div>
             </div>
-
-
-            <label for="numberOfYears">Number of Years:<span class="saasify-required">*</span></label>
-            <input type="text" id="numberOfYears" name="numberOfYears" required><br>
 
             <label for="indexation">Indexation:<span class="saasify-required">*</span></label>
             <input type="text" id="indexation" name="indexation" required><br>
@@ -93,11 +103,11 @@ function retirement_income_planner_form_shortcode($atts)
                     <label for="client1StatePensionAge">State Pension Age:<span class="saasify-required">*</span></label>
                     <input type="text" id="client1StatePensionAge" name="client1StatePensionAge" required><br>
 
-                    <label for="client1OtherPensionAge">Other Pension Age:</label>
-                    <input type="text" id="client1OtherPensionAge" name="client1OtherPensionAge"><br>
-
                     <label for="client1OtherPensionAmount">Other Pension Amount:</label>
                     <input type="text" id="client1OtherPensionAmount" name="client1OtherPensionAmount"><br>
+
+                    <label for="client1OtherPensionAge">Other Pension Age:</label>
+                    <input type="text" id="client1OtherPensionAge" name="client1OtherPensionAge"><br>
 
                     <label for="client1OtherIncome">Other Income:</label>
                     <input type="text" id="client1OtherIncome" name="client1OtherIncome"><br>
@@ -106,12 +116,20 @@ function retirement_income_planner_form_shortcode($atts)
                             class="saasify-required">*</span></label>
                     <input type="text" id="client1RetirementIncomeLevel" name="client1RetirementIncomeLevel" required><br>
 
-                    <label for="client1AdhocTransactionAge">Adhoc Transaction Age:</label>
-                    <input type="text" id="client1AdhocTransactionAge" name="client1AdhocTransactionAge"><br>
-
-                    <label for="client1AdhocTransactionAmount">Adhoc Transaction Amount:</label>
-                    <input type="text" id="client1AdhocTransactionAmount" name="client1AdhocTransactionAmount"><br>
-
+                    <div id="client1ContributionsContainer">
+                        <div class="client1Contribution">
+                            <p class="form-field">
+                                <label for="client1AdhocTransactionAge">Adhoc Transaction Age:</label>
+                                <input type="text" name="client1AdhocTransactionAge[]" class="adhocTransactionAge">
+                            </p>
+                            <p class="form-field">
+                                <label for="client1AdhocTransactionAmount">Adhoc Transaction Amount:</label>
+                                <input type="text" name="client1AdhocTransactionAmount[]" class="adhocTransactionAmount">
+                            </p>
+                            <!--<button type="button" class="client1RemoveContribution">Remove</button>-->
+                        </div>
+                    </div>
+                    <button type="button" id="client1AddContribution">Add Contribution</button>
                 </div>
 
                 <div class="client-inputs" style="display: none;">
@@ -139,11 +157,11 @@ function retirement_income_planner_form_shortcode($atts)
                     <label for="client2StatePensionAge">State Pension Age:<span class="saasify-required">*</span></label>
                     <input type="text" id="client2StatePensionAge" name="client2StatePensionAge"><br>
 
-                    <label for="client2OtherPensionAge">Other Pension Age:</label>
-                    <input type="text" id="client2OtherPensionAge" name="client2OtherPensionAge"><br>
-
                     <label for="client2OtherPensionAmount">Other Pension Amount:</label>
                     <input type="text" id="client2OtherPensionAmount" name="client2OtherPensionAmount"><br>
+
+                    <label for="client2OtherPensionAge">Other Pension Age:</label>
+                    <input type="text" id="client2OtherPensionAge" name="client2OtherPensionAge"><br>
 
                     <label for="client2OtherIncome">Other Income:</label>
                     <input type="text" id="client2OtherIncome" name="client2OtherIncome"><br>
@@ -152,11 +170,20 @@ function retirement_income_planner_form_shortcode($atts)
                             class="saasify-required">*</span></label>
                     <input type="text" id="client2RetirementIncomeLevel" name="client2RetirementIncomeLevel"><br>
 
-                    <label for="client2AdhocTransactionAge">Adhoc Transaction Age:</label>
-                    <input type="text" id="client2AdhocTransactionAge" name="client2AdhocTransactionAge"><br>
-
-                    <label for="client2AdhocTransactionAmount">Adhoc Transaction Amount:</label>
-                    <input type="text" id="client2AdhocTransactionAmount" name="client2AdhocTransactionAmount"><br>
+                    <div id="client2ContributionsContainer">
+                        <div class="client2Contribution">
+                            <p class="form-field">
+                                <label for="client2AdhocTransactionAge">Adhoc Transaction Age:</label>
+                                <input type="text" name="client2AdhocTransactionAge[]" class="adhocTransactionAge">
+                            </p>
+                            <p class="form-field">
+                                <label for="client2AdhocTransactionAmount">Adhoc Transaction Amount:</label>
+                                <input type="text" name="client2AdhocTransactionAmount[]" class="adhocTransactionAmount">
+                            </p>
+                            <!--<button type="button" class="client2RemoveContribution">Remove</button>-->
+                        </div>
+                    </div>
+                    <button type="button" id="client2AddContribution">Add Contribution</button>
                 </div>
             </div>
 
@@ -165,13 +192,10 @@ function retirement_income_planner_form_shortcode($atts)
             <button type="submit" id="pdf-button">Download Report</button>
         </form>
 
-
         <div id="image-output"></div>
         <div id="json-output"></div>
-        
 
     </div>
-
 
     <?php
 
@@ -315,11 +339,9 @@ function handle_external_api_pdf_request()
     } else {
         $pdf_data = wp_remote_retrieve_body($response);
 
-        
         $encoded_pdf_data = base64_encode($pdf_data);
         wp_send_json_success(array('pdf_data' => $encoded_pdf_data));
 
-        
     }
 
     wp_die();
