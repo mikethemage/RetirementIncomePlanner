@@ -2,19 +2,22 @@
 /*
 Plugin Name: Retirement Income Planner Plugin
 Description: Plugin for sending data to Retirement Income Planner API
-Version: 2.9
+Version: 3.4
 Author: Mike Dunn & Richard Scott
 */
 
-// Register a shortcode to embed the buttons and output areas
-add_shortcode('retirement_income_planner', 'retirement_income_planner_form_shortcode');
+// Register shortcodes to embed the buttons and output areas:
+add_shortcode('income_planner_form_header', 'income_planner_form_header_shortcode');
+add_shortcode('income_planner_client_1_input', 'income_planner_client_1_input_shortcode');
+add_shortcode('income_planner_client_2_input', 'income_planner_client_2_input_shortcode');
+add_shortcode('income_planner_form_footer', 'income_planner_form_footer_shortcode');
 
-// Enqueue the retirement-income-planner.js file and pass API URL as a variable
-function retirement_income_planner_enqueue_scripts()
+// Enqueue the JavaScript file and pass API URL as a variable:
+function income_planner_enqueue_scripts()
 {
-    wp_enqueue_script('external-api', plugin_dir_url(__FILE__) . 'retirement-income-planner.js', array('jquery'), '1.0', true);
+    wp_enqueue_script('external-api', plugin_dir_url(__FILE__) . 'income-planner.js', array('jquery'), '1.0', true);
 
-    // Pass API URL as a variable to the retirement-income-planner.js file
+    // Pass API URL as a variable to the income-planner.js file
     wp_localize_script(
         'external-api',
         'external_api_params',
@@ -26,10 +29,9 @@ function retirement_income_planner_enqueue_scripts()
         )
     );
 }
-add_action('wp_enqueue_scripts', 'retirement_income_planner_enqueue_scripts');
+add_action('wp_enqueue_scripts', 'income_planner_enqueue_scripts');
 
-
-function retirement_income_planner_form_shortcode($atts)
+function income_planner_form_header_shortcode($atts)
 {
     ob_start(); // Start output buffering
 
@@ -39,8 +41,9 @@ function retirement_income_planner_form_shortcode($atts)
     // Display the buttons
     ?>
 
-    <div id="retirement-income-planner">
-        <form id="retirement-income-planner-form">
+        <form id="income-planner-form">
+
+            <div id="plannerMainFields">
 
             <label for="numberOfYears">Number of Years:<span class="saasify-required">*</span></label>
             <select id="numberOfYears" name="numberOfYears" required>
@@ -76,10 +79,18 @@ function retirement_income_planner_form_shortcode($atts)
             <label for="investmentGrowth">Investment Growth:<span class="saasify-required">*</span></label>
             <input type="text" id="investmentGrowth" name="investmentGrowth" required><br>
 
+            </div>
 
-            <div id="client-info">
+            <?php
+
+return ob_get_clean(); // Return the buffered output
+}
+
+function income_planner_client_1_input_shortcode($atts)
+{
+    ob_start(); // Start output buffering
+    ?>
                 <div class="client-inputs">
-
                     <h3>Client 1</h3>
                     <label for="client1Age">Age:<span class="saasify-required">*</span></label>
                     <input type="text" id="client1Age" name="client1Age" required><br>
@@ -132,7 +143,16 @@ function retirement_income_planner_form_shortcode($atts)
                     <button type="button" id="client1AddContribution">Add Contribution</button>
                 </div>
 
-                <div class="client-inputs" style="display: none;">
+                <?php
+
+return ob_get_clean(); // Return the buffered output
+}
+
+function income_planner_client_2_input_shortcode($atts)
+{
+    ob_start(); // Start output buffering
+    ?>
+                <div class="client-inputs" id="client2input" style="display: none;">
 
                     <h3>Client 2</h3>
                     <label for="client2Age">Age:<span class="saasify-required">*</span></label>
@@ -185,17 +205,30 @@ function retirement_income_planner_form_shortcode($atts)
                     </div>
                     <button type="button" id="client2AddContribution">Add Contribution</button>
                 </div>
-            </div>
+
+
+                <?php
+
+return ob_get_clean(); // Return the buffered output
+}
+
+function income_planner_form_footer_shortcode($atts)
+{
+    ob_start(); // Start output buffering
+    ?>
+            <div id="planenrSubmitButtons">
 
             <button type="submit" id="json-button">Show calculated data</button>
             <button type="submit" id="image-button">Preview Chart</button>
             <button type="submit" id="pdf-button">Download Report</button>
+
+            </div>
         </form>
 
-        <div id="image-output"></div>
-        <div id="json-output"></div>
-
-    </div>
+        <div id="plannerOutputArea">
+            <div id="image-output"></div>
+            <div id="json-output"></div>
+        </div>
 
     <?php
 
@@ -205,24 +238,23 @@ function retirement_income_planner_form_shortcode($atts)
 // AJAX handler for the JSON data request
 add_action('wp_ajax_external_api_json_request', 'handle_external_api_json_request');
 add_action('wp_ajax_nopriv_external_api_json_request', 'handle_external_api_json_request');
-function handle_external_api_json_request()
+
+// AJAX handler for the image request
+add_action('wp_ajax_external_api_image_request', 'handle_external_api_image_request');
+add_action('wp_ajax_nopriv_external_api_image_request', 'handle_external_api_image_request');
+
+// AJAX handler for the PDF request
+add_action('wp_ajax_external_api_pdf_request', 'handle_external_api_pdf_request');
+add_action('wp_ajax_nopriv_external_api_pdf_request', 'handle_external_api_pdf_request');
+
+function handle_external_api_request($api_endpoint, $data, $request_type)
 {
-    check_ajax_referer('external-api-json-nonce', 'security');
+    check_ajax_referer('external-api-' . $request_type . '-nonce', 'security');
 
-    // Get the pension input data from the AJAX request
-    $pension_input_data = $_POST['pensionInputData'];
-
-
-    // API endpoint URL
-    $api_url = 'http://localhost:5001/api/RetirementIncomePlanner/RequestOutputData';
-
-    // Prepare the data to be sent to the external API
-    $data = array(
-        'pensionInputData' => $pension_input_data
-    );
-
-    //wp_send_json_error(array('message' => json_encode($data)));
-
+    $api_url_prefix = 'http://localhost:5001/api/RetirementIncomePlanner/';
+    
+    $api_url = $api_url_prefix . $api_endpoint;
+    
     $response = wp_remote_post(
         $api_url,
         array(
@@ -230,119 +262,81 @@ function handle_external_api_json_request()
             'body' => json_encode($data),
             'timeout' => 30
         )
-    );
+    );   
 
     if (is_wp_error($response) || wp_remote_retrieve_response_code($response) !== 200) {
-        $error_message = 'Failed to fetch JSON data.';
+        $error_message = 'Failed to fetch data from API.';
         wp_send_json_error(array('message' => $error_message));
     } else {
-        $json_data = wp_remote_retrieve_body($response);
-        wp_send_json_success(array('json_data' => $json_data));
+        $body = wp_remote_retrieve_body($response);
+        
+        switch ($request_type) {
+            case 'json':
+                wp_send_json_success(array('json_data' => $body));
+                break;
+            case 'image':
+                $encoded_image_data = base64_encode($body);
+                wp_send_json_success(array('image_data' => $encoded_image_data));
+                break;
+            case 'pdf':
+                $encoded_pdf_data = base64_encode($body);
+                wp_send_json_success(array('pdf_data' => $encoded_pdf_data));
+                break;
+            default:
+                $error_message = 'Invalid request type: ' . $request_type . '.';
+                wp_send_json_error(array('message' => $error_message));
+                break;
+        }
     }
 
     wp_die();
 }
 
-// AJAX handler for the image request
-add_action('wp_ajax_external_api_image_request', 'handle_external_api_image_request');
-add_action('wp_ajax_nopriv_external_api_image_request', 'handle_external_api_image_request');
-function handle_external_api_image_request()
-{
-    check_ajax_referer('external-api-image-nonce', 'security');
-
-    // Get the pension input data from the AJAX request
-    $pension_input_data = $_POST['pensionInputData'];
-
-    // API endpoint URL and data
-    $api_url = 'http://localhost:5001/api/RetirementIncomePlanner/RequestChartImage';
+function handle_external_api_json_request()
+{    
+    $api_endpoint = 'RequestOutputData';
     $data = array(
-        'pensionInputData' => $pension_input_data,
-        'pensionChartColors' => array(
-            'totalDrawdownColor' => '#305d7a',
-            'statePensionPrimaryColor' => '#746aa3',
-            'statePensionSecondaryColor' => '#c9c0e7',
-            'otherPensionPrimaryColor' => '#ca6ca2',
-            'otherPensionSecondaryColor' => '#f2bbda',
-            'salaryPrimaryColor' => '#ff7d76',
-            'salarySecondaryColor' => '#ffc1b9',
-            'otherIncomePrimaryColor' => '#ffb13e',
-            'otherIncomeSecondaryColor' => '#ffd29f',
-            'totalFundValueColor' => '#000000'
-        ),
+        'pensionInputData' => $_POST['pensionInputData']
+    );
+    handle_external_api_request($api_endpoint, $data, 'json');
+}
+
+function handle_external_api_image_request()
+{    
+    $api_endpoint = 'RequestChartImage';
+    $data = array(
+        'pensionInputData' => $_POST['pensionInputData'],
+        'pensionChartColors' => getChartColors(),
         'imageSize' => array(
             'width' => 800,
             'height' => 600
         )
     );
-
-    $response = wp_remote_post(
-        $api_url,
-        array(
-            'headers' => array('Content-Type' => 'application/json'),
-            'body' => json_encode($data),
-            'timeout' => 30
-        )
-    );
-
-    if (is_wp_error($response) || wp_remote_retrieve_response_code($response) !== 200) {
-        $error_message = 'Failed to fetch image.';
-        wp_send_json_error(array('message' => $error_message));
-    } else {
-        $image_data = wp_remote_retrieve_body($response);
-        $encoded_image_data = base64_encode($image_data);
-        wp_send_json_success(array('image_data' => $encoded_image_data));
-    }
-
-    wp_die();
+    handle_external_api_request($api_endpoint, $data, 'image');
 }
 
-// AJAX handler for the PDF request
-add_action('wp_ajax_external_api_pdf_request', 'handle_external_api_pdf_request');
-add_action('wp_ajax_nopriv_external_api_pdf_request', 'handle_external_api_pdf_request');
 function handle_external_api_pdf_request()
-{
-    check_ajax_referer('external-api-pdf-nonce', 'security');
-
-    // Get the pension input data from the AJAX request
-    $pension_input_data = $_POST['pensionInputData'];
-
-    // API endpoint URL and data
-    $api_url = 'http://localhost:5001/api/RetirementIncomePlanner/RequestReportPDF';
+{    
+    $api_endpoint = 'RequestReportPDF';
     $data = array(
-        'pensionInputData' => $pension_input_data,
-        'pensionChartColors' => array(
-            'totalDrawdownColor' => '#305d7a',
-            'statePensionPrimaryColor' => '#746aa3',
-            'statePensionSecondaryColor' => '#c9c0e7',
-            'otherPensionPrimaryColor' => '#ca6ca2',
-            'otherPensionSecondaryColor' => '#f2bbda',
-            'salaryPrimaryColor' => '#ff7d76',
-            'salarySecondaryColor' => '#ffc1b9',
-            'otherIncomePrimaryColor' => '#ffb13e',
-            'otherIncomeSecondaryColor' => '#ffd29f',
-            'totalFundValueColor' => '#000000'
-        )
+        'pensionInputData' => $_POST['pensionInputData'],
+        'pensionChartColors' => getChartColors()
     );
+    handle_external_api_request($api_endpoint, $data, 'pdf');
+}
 
-    $response = wp_remote_post(
-        $api_url,
-        array(
-            'headers' => array('Content-Type' => 'application/json'),
-            'body' => json_encode($data),
-            'timeout' => 30
-        )
+function getChartColors()
+{
+    return array(
+        'totalDrawdownColor' => '#305d7a',
+        'statePensionPrimaryColor' => '#746aa3',
+        'statePensionSecondaryColor' => '#c9c0e7',
+        'otherPensionPrimaryColor' => '#ca6ca2',
+        'otherPensionSecondaryColor' => '#f2bbda',
+        'salaryPrimaryColor' => '#ff7d76',
+        'salarySecondaryColor' => '#ffc1b9',
+        'otherIncomePrimaryColor' => '#ffb13e',
+        'otherIncomeSecondaryColor' => '#ffd29f',
+        'totalFundValueColor' => '#000000'
     );
-
-    if (is_wp_error($response) || wp_remote_retrieve_response_code($response) !== 200) {
-        $error_message = 'Failed to fetch PDF document.';
-        wp_send_json_error(array('message' => $error_message));
-    } else {
-        $pdf_data = wp_remote_retrieve_body($response);
-
-        $encoded_pdf_data = base64_encode($pdf_data);
-        wp_send_json_success(array('pdf_data' => $encoded_pdf_data));
-
-    }
-
-    wp_die();
 }
