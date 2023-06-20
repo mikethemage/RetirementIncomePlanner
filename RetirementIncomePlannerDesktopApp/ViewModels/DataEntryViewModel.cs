@@ -149,7 +149,7 @@ namespace RetirementIncomePlannerDesktopApp
                     chart.BuildChart(outputModel);
                     try
                     {
-                        PensionCalcs.BuildReport(inputModel, chart, saveFileDialog1.FileName);
+                        PensionCalcs.BuildReportAndSaveToFile(inputModel, chart, saveFileDialog1.FileName);
                     }
                     catch
                     {

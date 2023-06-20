@@ -1,5 +1,4 @@
 ﻿using LiveChartsCore.Drawing;
-using CustomChartLegendSample;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using LiveChartsCore.SkiaSharpView.SKCharts;
@@ -28,7 +27,7 @@ namespace RetirementIncomePlannerLogic
             return result;
         }
 
-        public static void BuildReport(DataInputModel inputModel, ChartModel chartModel, string FileName)
+        public static void BuildReportAndSaveToFile(DataInputModel inputModel, ChartModel chartModel, string FileName)
         {
             // create the document
             using var stream = SKFileWStream.OpenStream(FileName);
@@ -101,8 +100,18 @@ namespace RetirementIncomePlannerLogic
         {
             const float defaulDPI = 72F;
 
-            const float width = 8.27F * defaulDPI; // A4 width in inches
-            const float height = 11.69F * defaulDPI; // A4 height in inches
+            const float pageWidthInInches = 8.27F;
+            const float pageHeightInInches = 11.69F;
+
+            const float chartHeightInInches = 4.54F;
+
+            const float pageWidthInPixels = pageWidthInInches * defaulDPI; // A4 width in inches
+            const float pageHeightInPixels = pageHeightInInches * defaulDPI; // A4 height in inches
+
+            const float sideMarginInInches = 1F;
+            const float topMarginInInches = 1F;
+
+            const float scaleFactor = 3F;
 
             var metadata = new SKDocumentPdfMetadata { RasterDpi = defaulDPI }; // change the DPI to 96
 
@@ -110,24 +119,26 @@ namespace RetirementIncomePlannerLogic
 
             // get the canvas from the page
             // begin a new page with the specified dimensions
-            var destCanvas = document.BeginPage(width, height);
+            var destCanvas = document.BeginPage(pageWidthInPixels, pageHeightInPixels);
 
             var boldFont = GetTypeface("OpenSans-Bold"); // SKTypeface.FromFamilyName("Arial", SKFontStyleWeight.Bold, SKFontStyleWidth.Normal, SKFontStyleSlant.Upright);
             var normalFont = GetTypeface("OpenSans-Regular");// SKTypeface.FromFamilyName("Arial", SKFontStyleWeight.Normal, SKFontStyleWidth.Normal, SKFontStyleSlant.Upright);
 
-            chartModel.XAxisCollection[0].LabelsPaint = new SolidColorPaint { Color = SKColors.Black, SKTypeface = normalFont };
-            chartModel.YAxisCollection[0].LabelsPaint = new SolidColorPaint { Color = SKColors.Black, SKTypeface = normalFont };
-            chartModel.YAxisCollection[1].LabelsPaint = new SolidColorPaint { Color = SKColors.Black, SKTypeface = normalFont };
+            SolidColorPaint labelsPaint = new SolidColorPaint { Color = SKColors.Black, SKTypeface = normalFont };
+
+            chartModel.XAxisCollection[0].LabelsPaint = labelsPaint;
+            chartModel.YAxisCollection[0].LabelsPaint = labelsPaint;
+            chartModel.YAxisCollection[1].LabelsPaint = labelsPaint;
 
             // draw on the canvas ...           
             var cartesianChart = new SKCartesianChart
             {
-                Width = (int)((8.27F - 2F) * defaulDPI * 3F),
-                Height = (int)(4.54F * defaulDPI * 3F) - 100,
+                Width = (int)((pageWidthInInches - (sideMarginInInches * 2F)) * defaulDPI * scaleFactor),
+                Height = (int)(chartHeightInInches * defaulDPI * scaleFactor) - 100,       //scale factor of 3
 
                 Series = chartModel.SeriesCollection,
 
-                LegendPosition = LiveChartsCore.Measure.LegendPosition.Hidden,
+                LegendPosition = LiveChartsCore.Measure.LegendPosition.Bottom,
 
                 Background = SKColors.White,
                 XAxes = chartModel.XAxisCollection,
@@ -138,51 +149,50 @@ namespace RetirementIncomePlannerLogic
             var recorder = new SKPictureRecorder();
 
             // Begin recording
-            var sourceCanvas = recorder.BeginRecording(new SKRect(0, 0, (int)((8.27F - 2F) * defaulDPI * 3F),
-                (int)(4.54F * defaulDPI * 3F)));
+            var sourceCanvas = recorder.BeginRecording(new SKRect(0, 0, (int)((pageWidthInInches - (sideMarginInInches * 2F)) * defaulDPI * scaleFactor),
+                (int)(chartHeightInInches * defaulDPI * scaleFactor)));                   //Source canvas has scale factor of 3
 
             // Draw something on the canvas
             sourceCanvas.Clear(SKColors.White);
 
-            cartesianChart.SaveImage(sourceCanvas);
-            CustomChartLegend.DrawLegend(sourceCanvas, cartesianChart);
+            cartesianChart.SaveImage(sourceCanvas);                 //Save chart to source canvas
 
             // End recording and get the SKPicture object
             var picture = recorder.EndRecording();
 
             //Draw the chart:
+            SKMatrix matrix = SKMatrix.CreateScaleTranslation(1F / scaleFactor, 1F / scaleFactor, sideMarginInInches * defaulDPI, (topMarginInInches * defaulDPI) + 20F);  //Create scale matrix to shrink by factor of 3,
+                                                                                                                          // Place chart at sidemargin from sides of page, topmargin + 20 pixels from top of page (20 points should be enough for Title to appear above)
 
-            SKMatrix matrix = SKMatrix.CreateScaleTranslation(1F / 3F, 1F / 3F, 1F * defaulDPI, (1F * defaulDPI) + 10F);
-
-            destCanvas.DrawPicture(picture, ref matrix);           
+            destCanvas.DrawPicture(picture, ref matrix);         //Draw source canvas to dest canvas, applying scale matrix  
 
             //then draw the title:
             SKPaint chartTitlePaint = new SKPaint
             {
                 Color = SKColors.Black,
-                Typeface = boldFont,  //GetTypeface("OpenSans-Bold"), //SKTypeface.FromFamilyName("Arial", SKFontStyleWeight.Bold, SKFontStyleWidth.Normal, SKFontStyleSlant.Upright),
+                Typeface = boldFont,  
                 TextAlign = SKTextAlign.Center,
-                TextSize = 8.0F
+                TextSize = 12.0F
             };
 
-            destCanvas.DrawText("Retirement Income Planner", width / 2, 1F * defaulDPI, chartTitlePaint);
+            destCanvas.DrawText("Retirement Income Planner", pageWidthInPixels / 2, topMarginInInches * defaulDPI, chartTitlePaint);  //Draw title above the chart, at 1 inch from top of page
 
             //Write inputModel here:
-            var nextPosition = ((4.54F + 1F) * defaulDPI) + 30F;
-            var leftTextPos = 1F * defaulDPI;
+            var nextPosition = ((chartHeightInInches + topMarginInInches) * defaulDPI) + 10F;  //Next position is chart height + topmargin + 10 pixels  (are we clippling into chart area by 10 pixels????)
+            var leftTextPos = sideMarginInInches * defaulDPI;
             var textLineHeight = 0.12F * defaulDPI;
 
             SKPaint paint = new SKPaint
             {
                 Color = SKColors.Black,
-                TextSize = 8.0f
+                TextSize = 8.0F
             };
            
             paint.Typeface = boldFont;
             destCanvas.DrawText("Client Data Entry", leftTextPos, nextPosition, paint);
             nextPosition += textLineHeight * 2;
 
-            paint.TextSize = 6.0f;
+            paint.TextSize = 6.0F;
 
             var intputDataDisplayWidth = 100F;
 
@@ -218,7 +228,7 @@ namespace RetirementIncomePlannerLogic
 
             nextPosition += 0.2F * defaulDPI;
 
-            var clientAreaWidth = (width - (leftTextPos * 2)) / inputModel.NumberOfClients;
+            var clientAreaWidth = (pageWidthInPixels - (leftTextPos * 2)) / inputModel.NumberOfClients;
 
             var clientAreaTop = nextPosition;
 
@@ -345,13 +355,12 @@ namespace RetirementIncomePlannerLogic
                         Age = i + clientViewModel.Age
                     };
 
-                    //if (clientViewModel.StatePensionAmount != null && clientViewModel.StatePensionAge != null)
-                    //{
+                    
                     if (clientRowToAdd.Age >= clientViewModel.StatePensionAge)
                     {
                         clientRowToAdd.StatePension = clientViewModel.StatePensionAmount * output[i].IndexationMultiplier;
                     }
-                    //}
+                    
 
                     if (clientViewModel.OtherPensionDetails != null)
                     {
