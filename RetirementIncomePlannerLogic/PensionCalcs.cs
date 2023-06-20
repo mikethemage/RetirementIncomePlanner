@@ -1,5 +1,4 @@
 ﻿using LiveChartsCore.Drawing;
-using CustomChartLegendSample;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using LiveChartsCore.SkiaSharpView.SKCharts;
@@ -144,8 +143,7 @@ namespace RetirementIncomePlannerLogic
             // Draw something on the canvas
             sourceCanvas.Clear(SKColors.White);
 
-            cartesianChart.SaveImage(sourceCanvas);
-            //CustomChartLegend.DrawLegend(sourceCanvas, cartesianChart);
+            cartesianChart.SaveImage(sourceCanvas);            
 
             // End recording and get the SKPicture object
             var picture = recorder.EndRecording();
