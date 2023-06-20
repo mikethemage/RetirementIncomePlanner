@@ -2,7 +2,7 @@
 /*
 Plugin Name: Retirement Income Planner Plugin
 Description: Plugin for sending data to Retirement Income Planner API
-Version: 3.9
+Version: 3.10
 Author: Mike Dunn & Richard Scott
 */
 
@@ -11,6 +11,9 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+// Define the API URL constant:
+define('API_URL', 'http://localhost:5001/api/RetirementIncomePlanner/');
+
 // Register shortcodes to embed the buttons and output areas:
 add_shortcode('income_planner_form_header', 'income_planner_form_header_shortcode');
 add_shortcode('income_planner_client_1_input', 'income_planner_client_1_input_shortcode');
@@ -18,34 +21,34 @@ add_shortcode('income_planner_client_2_input', 'income_planner_client_2_input_sh
 add_shortcode('income_planner_form_footer', 'income_planner_form_footer_shortcode');
 
 // Enqueue necessary scripts and styles for Colour picker and data:
-    function custom_user_meta_enqueue_scripts()
-    {
-        // Enqueue spectrum.js script
-        wp_enqueue_script('spectrum-script', plugin_dir_url(__FILE__) . 'spectrum.js', array('jquery'), '1.8.1', true);
-    
-        // Enqueue spectrum.css stylesheet
-        wp_enqueue_style('spectrum-style', plugin_dir_url(__FILE__) . 'spectrum.css', array(), '1.8.1');
-    }
-    add_action('wp_enqueue_scripts', 'custom_user_meta_enqueue_scripts');
+function custom_user_meta_enqueue_scripts()
+{
+    // Enqueue spectrum.js script
+    wp_enqueue_script('spectrum-script', plugin_dir_url(__FILE__) . 'spectrum.js', array('jquery'), '1.8.1', true);
+
+    // Enqueue spectrum.css stylesheet
+    wp_enqueue_style('spectrum-style', plugin_dir_url(__FILE__) . 'spectrum.css', array(), '1.8.1');
+}
+add_action('wp_enqueue_scripts', 'custom_user_meta_enqueue_scripts');
 
 
 // Enqueue the JavaScript file and pass API URL as a variable:
 function income_planner_enqueue_scripts()
-{    
-        wp_enqueue_script('external-api', plugin_dir_url(__FILE__) . 'income-planner.js', array('jquery'), '1.0', true);
+{
+    wp_enqueue_script('external-api', plugin_dir_url(__FILE__) . 'income-planner.js', array('jquery'), '1.0', true);
 
-        // Pass API URL as a variable to the income-planner.js file
-        wp_localize_script(
-            'external-api',
-            'external_api_params',
-            array(
-                'api_url' => esc_js(admin_url('admin-ajax.php')),
-                'security_json' => esc_js(wp_create_nonce('external-api-json-nonce')),
-                'security_image' => esc_js(wp_create_nonce('external-api-image-nonce')),
-                'security_pdf' => esc_js(wp_create_nonce('external-api-pdf-nonce')),
-            )
-        );
-    
+    // Pass API URL as a variable to the income-planner.js file
+    wp_localize_script(
+        'external-api',
+        'external_api_params',
+        array(
+            'api_url' => esc_js(admin_url('admin-ajax.php')),
+            'security_json' => esc_js(wp_create_nonce('external-api-json-nonce')),
+            'security_image' => esc_js(wp_create_nonce('external-api-image-nonce')),
+            'security_pdf' => esc_js(wp_create_nonce('external-api-pdf-nonce')),
+        )
+    );
+
 }
 add_action('wp_enqueue_scripts', 'income_planner_enqueue_scripts');
 
@@ -56,7 +59,7 @@ function income_planner_form_header_shortcode($atts)
 
     // Enqueue jQuery library
     wp_enqueue_script('jquery');
-    
+
 
     // Display the buttons
     ?>
@@ -267,26 +270,33 @@ function custom_user_meta_shortcode()
 
     <div class="custom-user-meta">
         <form id="custom-user-meta-form" action="<?php echo esc_url($_SERVER['REQUEST_URI']); ?>" method="post">
+            <div style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center">
+                <div>
+                    <?php
+                    echo get_meta_html($current_user_id, 'totalDrawdownColor', 'Total Drawdown Colour');
+                    echo get_meta_html($current_user_id, 'statePensionPrimaryColor', 'Client 1 State Pension Color');
+                    echo get_meta_html($current_user_id, 'otherPensionPrimaryColor', 'Client 1 Other Pensions Color');
+                    echo get_meta_html($current_user_id, 'salaryPrimaryColor', 'Client 1 Salary Color');
+                    echo get_meta_html($current_user_id, 'otherIncomePrimaryColor', 'Client 1 Other Income Color');
+                    ?>
+                </div>
 
-            <?php
-            echo get_meta_html($current_user_id, 'totalDrawdownColor', 'Total Drawdown Colour');
-            echo get_meta_html($current_user_id, 'statePensionPrimaryColor', 'Client 1 State Pension Color');
-            echo get_meta_html($current_user_id, 'statePensionSecondaryColor', 'Client 2 State Pension Color');
-            echo get_meta_html($current_user_id, 'otherPensionPrimaryColor', 'Client 1 Other Pensions Color');
-            echo get_meta_html($current_user_id, 'otherPensionSecondaryColor', 'Client 2 Other Pensions Color');
-            echo get_meta_html($current_user_id, 'salaryPrimaryColor', 'Client 1 Salary Color');
-            echo get_meta_html($current_user_id, 'salarySecondaryColor', 'Client 2 Salary Color');
-            echo get_meta_html($current_user_id, 'otherIncomePrimaryColor', 'Client 1 Other Income Color');
-            echo get_meta_html($current_user_id, 'otherIncomeSecondaryColor', 'Client 2 Other Income Color');
-            echo get_meta_html($current_user_id, 'totalFundValueColor', 'Total Fund Value Colour');
-            ?>
+                <div>
+                    <?php
+                    echo get_meta_html($current_user_id, 'totalFundValueColor', 'Total Fund Value Colour');
+                    echo get_meta_html($current_user_id, 'statePensionSecondaryColor', 'Client 2 State Pension Color');
+                    echo get_meta_html($current_user_id, 'otherPensionSecondaryColor', 'Client 2 Other Pensions Color');
+                    echo get_meta_html($current_user_id, 'salarySecondaryColor', 'Client 2 Salary Color');
+                    echo get_meta_html($current_user_id, 'otherIncomeSecondaryColor', 'Client 2 Other Income Color');
+                    ?>
+                </div>
+            </div>
 
-            <input type="submit" name="save_custom_user_meta" value="Save Colours">
-            <input type="button" name="cancel_custom_user_meta" value="Cancel">
-            <input type="button" name="reset_custom_user_meta" value="Reset to Defaults">
-
-
-
+            <div style="margin: 50px auto 5px;display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 10px;">
+                <input type="submit" name="save_custom_user_meta" value="Save Colours">
+                <input type="button" name="cancel_custom_user_meta" value="Cancel">
+                <input type="button" name="reset_custom_user_meta" value="Reset to Defaults">
+            </div>
         </form>
     </div>
 
@@ -373,12 +383,12 @@ function getChartColorsFromMeta()
 }
 
 
+
+
 function getChartColors()
 {
-    $api_url = 'http://localhost:5001/api/RetirementIncomePlanner/GetDefaultColorScheme';
-
     // Make the API request using wp_remote_get()
-    $response = wp_remote_get($api_url);
+    $response = wp_remote_get(API_URL . 'GetDefaultColorScheme');
 
     if (!is_wp_error($response) && $response['response']['code'] === 200) {
         $body = wp_remote_retrieve_body($response);
@@ -447,9 +457,7 @@ function handle_external_api_request($api_endpoint, $data, $request_type)
 {
     check_ajax_referer('external-api-' . $request_type . '-nonce', 'security');
 
-    $api_url_prefix = 'http://localhost:5001/api/RetirementIncomePlanner/';
-
-    $api_url = $api_url_prefix . $api_endpoint;
+    $api_url = API_URL . $api_endpoint;
 
     $response = wp_remote_post(
         $api_url,
