@@ -127,7 +127,7 @@ namespace RetirementIncomePlannerLogic
 
                 Series = chartModel.SeriesCollection,
 
-                LegendPosition = LiveChartsCore.Measure.LegendPosition.Hidden,
+                LegendPosition = LiveChartsCore.Measure.LegendPosition.Bottom,
 
                 Background = SKColors.White,
                 XAxes = chartModel.XAxisCollection,
@@ -145,7 +145,7 @@ namespace RetirementIncomePlannerLogic
             sourceCanvas.Clear(SKColors.White);
 
             cartesianChart.SaveImage(sourceCanvas);
-            CustomChartLegend.DrawLegend(sourceCanvas, cartesianChart);
+            //CustomChartLegend.DrawLegend(sourceCanvas, cartesianChart);
 
             // End recording and get the SKPicture object
             var picture = recorder.EndRecording();
