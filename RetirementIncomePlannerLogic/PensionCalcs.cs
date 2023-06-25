@@ -10,6 +10,7 @@ using System.Text;
 using LiveChartsCore;
 using System.Globalization;
 using RetirementIncomePlannerLogic.InputModels;
+using CustomChartLegendSample;
 
 namespace RetirementIncomePlannerLogic
 {
@@ -103,7 +104,7 @@ namespace RetirementIncomePlannerLogic
             const float pageWidthInInches = 8.27F;
             const float pageHeightInInches = 11.69F;
 
-            const float chartHeightInInches = 4.54F;
+            const float chartHeightInInches = 5.00F;
 
             const float pageWidthInPixels = pageWidthInInches * defaulDPI; // A4 width in inches
             const float pageHeightInPixels = pageHeightInInches * defaulDPI; // A4 height in inches
@@ -124,11 +125,11 @@ namespace RetirementIncomePlannerLogic
             var boldFont = GetTypeface("OpenSans-Bold"); // SKTypeface.FromFamilyName("Arial", SKFontStyleWeight.Bold, SKFontStyleWidth.Normal, SKFontStyleSlant.Upright);
             var normalFont = GetTypeface("OpenSans-Regular");// SKTypeface.FromFamilyName("Arial", SKFontStyleWeight.Normal, SKFontStyleWidth.Normal, SKFontStyleSlant.Upright);
 
-            SolidColorPaint labelsPaint = new SolidColorPaint { Color = SKColors.Black, SKTypeface = normalFont };
+            SolidColorPaint labelsPaint = new SolidColorPaint { Color = SKColors.Black, SKTypeface = normalFont };	
 
-            chartModel.XAxisCollection[0].LabelsPaint = labelsPaint;
+			chartModel.XAxisCollection[0].LabelsPaint = labelsPaint;
             chartModel.YAxisCollection[0].LabelsPaint = labelsPaint;
-            chartModel.YAxisCollection[1].LabelsPaint = labelsPaint;
+            chartModel.YAxisCollection[1].LabelsPaint = labelsPaint;            
 
             // draw on the canvas ...           
             var cartesianChart = new SKCartesianChart
@@ -137,28 +138,32 @@ namespace RetirementIncomePlannerLogic
                 Height = (int)(chartHeightInInches * defaulDPI * scaleFactor) - 100,       //scale factor of 3
 
                 Series = chartModel.SeriesCollection,
+				LegendPosition = LiveChartsCore.Measure.LegendPosition.Hidden,				
 
-                LegendPosition = LiveChartsCore.Measure.LegendPosition.Bottom,
-
-                Background = SKColors.White,
+				Background = SKColors.White,
                 XAxes = chartModel.XAxisCollection,
                 YAxes = chartModel.YAxisCollection
-            };         
+            };
 
-            // Create an SKPictureRecorder object
-            var recorder = new SKPictureRecorder();
+
+			// Create an SKPictureRecorder object
+			var recorder = new SKPictureRecorder();
 
             // Begin recording
             var sourceCanvas = recorder.BeginRecording(new SKRect(0, 0, (int)((pageWidthInInches - (sideMarginInInches * 2F)) * defaulDPI * scaleFactor),
                 (int)(chartHeightInInches * defaulDPI * scaleFactor)));                   //Source canvas has scale factor of 3
 
             // Draw something on the canvas
-            sourceCanvas.Clear(SKColors.White);
+            sourceCanvas.Clear(SKColors.White);      
+            
+            CustomChartLegend.DrawLegend(sourceCanvas, cartesianChart);  //Draw custom legend
 
             cartesianChart.SaveImage(sourceCanvas);                 //Save chart to source canvas
 
-            // End recording and get the SKPicture object
-            var picture = recorder.EndRecording();
+			
+
+			// End recording and get the SKPicture object
+			var picture = recorder.EndRecording();
 
             //Draw the chart:
             SKMatrix matrix = SKMatrix.CreateScaleTranslation(1F / scaleFactor, 1F / scaleFactor, sideMarginInInches * defaulDPI, (topMarginInInches * defaulDPI) + 20F);  //Create scale matrix to shrink by factor of 3,
