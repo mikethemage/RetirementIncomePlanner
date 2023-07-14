@@ -2,7 +2,7 @@
 /*
 Plugin Name: Retirement Income Planner Plugin
 Description: Plugin for sending data to Retirement Income Planner API
-Version: 3.10
+Version: 3.14
 Author: Mike Dunn & Richard Scott
 */
 
@@ -28,8 +28,12 @@ function custom_user_meta_enqueue_scripts()
 
     // Enqueue spectrum.css stylesheet
     wp_enqueue_style('spectrum-style', plugin_dir_url(__FILE__) . 'spectrum.css', array(), '1.8.1');
+
+    //enqure stylesheet:
+    wp_enqueue_style( 'plugin-custom-styles', plugin_dir_url( __FILE__ ) . 'adhoc-style.css' );
 }
 add_action('wp_enqueue_scripts', 'custom_user_meta_enqueue_scripts');
+
 
 
 // Enqueue the JavaScript file and pass API URL as a variable:
@@ -149,20 +153,28 @@ function income_planner_client_1_input_shortcode($atts)
                     class="saasify-required">*</span></label>
             <input type="text" id="client1RetirementIncomeLevel" name="client1RetirementIncomeLevel" required><br>
 
-            <div id="client1ContributionsContainer">
-                <div class="client1Contribution">
-                    <p class="form-field">
-                        <label for="client1AdhocTransactionAge">Adhoc Transaction Age:</label>
+
+            <label for="client1ContributionsContainer">Adhoc Transactions:</label>
+            <table id="client1ContributionsContainer">
+                <tr>
+                    <th><label for="client1AdhocTransactionAge">Age</label></th>
+                    <th><label for="client1AdhocTransactionAmount">Amount</label></th>
+                    <th class="remove-column"><label for="client1RemoveContribution">Delete?</label></th>
+                </tr>
+
+                <tr class="client1Contribution">
+                    <td class="form-field">
                         <input type="text" name="client1AdhocTransactionAge[]" class="adhocTransactionAge">
-                    </p>
-                    <p class="form-field">
-                        <label for="client1AdhocTransactionAmount">Adhoc Transaction Amount:</label>
+                    </td>
+                    <td class="form-field">
                         <input type="text" name="client1AdhocTransactionAmount[]" class="adhocTransactionAmount">
-                    </p>
-                    <!--<button type="button" class="client1RemoveContribution">Remove</button>-->
-                </div>
-            </div>
-            <button type="button" id="client1AddContribution">Add Contribution</button>
+                    </td>
+                    <td class="remove-button-column">
+                        <!--<button type="button" class="client1RemoveContribution">Remove</button>-->
+                    </td>
+                </tr>
+            </table>
+        <button type="button" id="client1AddContribution">Add Contribution</button>
         </div>
 
         <?php
@@ -211,19 +223,28 @@ function income_planner_client_2_input_shortcode($atts)
                     class="saasify-required">*</span></label>
             <input type="text" id="client2RetirementIncomeLevel" name="client2RetirementIncomeLevel"><br>
 
-            <div id="client2ContributionsContainer">
-                <div class="client2Contribution">
-                    <p class="form-field">
-                        <label for="client2AdhocTransactionAge">Adhoc Transaction Age:</label>
+
+            <label for="client2ContributionsContainer">Adhoc Transactions:</label>
+            <table id="client2ContributionsContainer">
+                <tr>
+                    <th><label for="client2AdhocTransactionAge">Age</label></th>
+                    <th><label for="client2AdhocTransactionAmount">Amount</label></th>
+                    <th class="remove-column"><label for="client2RemoveContribution">Delete?</label></th>
+                </tr>
+
+                <tr class="client2Contribution">
+                    <td class="form-field">
                         <input type="text" name="client2AdhocTransactionAge[]" class="adhocTransactionAge">
-                    </p>
-                    <p class="form-field">
-                        <label for="client2AdhocTransactionAmount">Adhoc Transaction Amount:</label>
+                    </td>
+                    <td class="form-field">
                         <input type="text" name="client2AdhocTransactionAmount[]" class="adhocTransactionAmount">
-                    </p>
-                    <!--<button type="button" class="client2RemoveContribution">Remove</button>-->
-                </div>
-            </div>
+                    </td>
+                    <td class="remove-button-column">
+                        <!--<button type="button" class="client2RemoveContribution">Remove</button>-->
+                    </td>
+                </tr>
+            </table>
+
             <button type="button" id="client2AddContribution">Add Contribution</button>
         </div>
 
@@ -237,12 +258,10 @@ function income_planner_form_footer_shortcode($atts)
 {
     ob_start(); // Start output buffering
     ?>
-        <div id="planenrSubmitButtons">
-
+        <div id="plannerSubmitButtons">
             <button type="submit" id="json-button">Show calculated data</button>
             <button type="submit" id="image-button">Preview Chart</button>
             <button type="submit" id="pdf-button">Download Report</button>
-
         </div>
     </form>
 
@@ -274,25 +293,26 @@ function custom_user_meta_shortcode()
                 <div>
                     <?php
                     echo get_meta_html($current_user_id, 'totalDrawdownColor', 'Total Drawdown Colour');
-                    echo get_meta_html($current_user_id, 'statePensionPrimaryColor', 'Client 1 State Pension Color');
-                    echo get_meta_html($current_user_id, 'otherPensionPrimaryColor', 'Client 1 Other Pensions Color');
-                    echo get_meta_html($current_user_id, 'salaryPrimaryColor', 'Client 1 Salary Color');
-                    echo get_meta_html($current_user_id, 'otherIncomePrimaryColor', 'Client 1 Other Income Color');
+                    echo get_meta_html($current_user_id, 'statePensionPrimaryColor', 'Client 1 State Pension Colour');
+                    echo get_meta_html($current_user_id, 'otherPensionPrimaryColor', 'Client 1 Other Pensions Colour');
+                    echo get_meta_html($current_user_id, 'salaryPrimaryColor', 'Client 1 Salary Colour');
+                    echo get_meta_html($current_user_id, 'otherIncomePrimaryColor', 'Client 1 Other Income Colour');
                     ?>
                 </div>
 
                 <div>
                     <?php
                     echo get_meta_html($current_user_id, 'totalFundValueColor', 'Total Fund Value Colour');
-                    echo get_meta_html($current_user_id, 'statePensionSecondaryColor', 'Client 2 State Pension Color');
-                    echo get_meta_html($current_user_id, 'otherPensionSecondaryColor', 'Client 2 Other Pensions Color');
-                    echo get_meta_html($current_user_id, 'salarySecondaryColor', 'Client 2 Salary Color');
-                    echo get_meta_html($current_user_id, 'otherIncomeSecondaryColor', 'Client 2 Other Income Color');
+                    echo get_meta_html($current_user_id, 'statePensionSecondaryColor', 'Client 2 State Pension Colour');
+                    echo get_meta_html($current_user_id, 'otherPensionSecondaryColor', 'Client 2 Other Pensions Colour');
+                    echo get_meta_html($current_user_id, 'salarySecondaryColor', 'Client 2 Salary Colour');
+                    echo get_meta_html($current_user_id, 'otherIncomeSecondaryColor', 'Client 2 Other Income Colour');
                     ?>
                 </div>
             </div>
 
-            <div style="margin: 50px auto 5px;display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 10px;">
+            <div
+                style="margin: 1em auto 5px;display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 10px;">
                 <input type="submit" name="save_custom_user_meta" value="Save Colours">
                 <input type="button" name="cancel_custom_user_meta" value="Cancel">
                 <input type="button" name="reset_custom_user_meta" value="Reset to Defaults">

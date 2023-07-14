@@ -21,21 +21,21 @@ function addContribution(prefix) {
   var removeButtonClassName = prefix + 'RemoveContribution';
   var contributionsContainer = document.getElementById(prefix + 'ContributionsContainer');
 
-  // Create a new contribution div
-  var newContribution = document.createElement('div');
+  // Create a new contribution tr
+  var newContribution = document.createElement('tr');
   newContribution.className = prefix + 'Contribution';
 
   // Add the HTML for the contribution fields
   newContribution.innerHTML = `
-  <p class="form-field">
-  <label for="${prefix}AdhocTransactionAge">Adhoc Transaction Age:</label>
+  <td class="form-field">
   <input type="text" name="${prefix}AdhocTransactionAge[]" class="adhocTransactionAge">
-  </p>
-  <p class="form-field">
-  <label for="${prefix}AdhocTransactionAmount">Adhoc Transaction Amount:</label>
+  </td>
+  <td class="form-field">
   <input type="text" name="${prefix}AdhocTransactionAmount[]" class="adhocTransactionAmount">
-  </p>
-  <button type="button" class="${removeButtonClassName}">Remove</button>
+  </td>
+  <td class="remove-button-column">
+  <button type="button" class="${removeButtonClassName}">X</button>
+  </td>
   `;
 
   // Append the new contribution to the container
@@ -50,7 +50,7 @@ function addContribution(prefix) {
 
 // Function to remove a contribution
 function removeContribution(event) {
-  var contribution = event.target.parentNode;
+  var contribution = event.target.parentNode.parentNode;
   contribution.parentNode.removeChild(contribution);
 }
 
@@ -114,7 +114,9 @@ jQuery(document).ready(function ($) {
     showPalette: true,
     palette: [
       ['#000000', '#ffffff', '#ff0000', '#00ff00', '#0000ff'],
-      ['#ffff00', '#ff00ff', '#00ffff', '#ff9900', '#9900ff']
+      ['#ffff00', '#ff00ff', '#00ffff', '#ff9900', '#9900ff'],
+      ['#305d7a','#746aa3','#c9c0e7','#ca6ca2', '#f2bbda'],
+      ['#ff7d76','#ffc1b9','#ffb13e', '#ffd29f']
     ]
   });
 

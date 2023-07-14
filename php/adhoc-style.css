@@ -1,0 +1,65 @@
+#client1ContributionsContainer,
+#client2ContributionsContainer {
+  margin-bottom: 0.5em;
+}
+
+#client1ContributionsContainer th,
+#client2ContributionsContainer th {
+  padding: 1em 0.5em;
+}
+
+#client1ContributionsContainer td,
+#client2ContributionsContainer td {
+  padding: 1em 0.25em;
+}
+
+input:not([type="checkbox"],[type="submit"],[type="button"],[type="radio"]).adhocTransactionAge,
+input:not([type="checkbox"],[type="submit"],[type="button"],[type="radio"]).adhocTransactionAmount,
+.client1RemoveContribution,
+.client2RemoveContribution
+{
+  margin: 0.25em;
+}
+
+.adhocTransactionAge,
+.adhocTransactionAmount {
+  width: 100%;
+}
+
+.remove-column {
+  min-width: 90px;
+}
+
+#plannerSubmitButtons {
+  margin-top: 1.5em;
+  display: flex;
+  justify-content: center;
+}
+
+#plannerSubmitButtons button {
+  margin: 0 0.25em;
+}
+
+.remove-button-column {
+  display: grid;
+  place-items: center;
+}
+
+.sp-container {
+  border-radius: 2em;
+  background-color: #FFFFFF;
+  border: solid 1px #888888;
+  padding: 1em;
+}
+
+.sp-container {
+  padding-bottom: 1em;
+}
+
+.sp-replacer {
+  border-radius: 0.5em;
+  background-color: #FFFFFF;
+  border: solid 1px #888888;
+  padding: 0.25em;
+  margin-bottom: 1em;
+}
