@@ -7,6 +7,8 @@ namespace RetirementIncomePlannerLogic
         [DefaultValue(1)]
         public int ClientNumber { get; set; } = 1;
 
+        public string? ClientName { get; set; } = null;
+
         public required int Age { get; set; }
 
         public SalaryInputModel? SalaryDetails { get; set; } = null;

@@ -10,9 +10,9 @@ namespace RetirementIncomePlannerBlazorWebApp
 {
     public class ReportViewModel : ViewModelBase
     {
-        private YearRowModel[] outputData;
+        private YearRowModel[] outputData=null!;
 
-        public DataInputModel InputData { get; set; }
+        public DataInputModel InputData { get; set; } = null!;
         public YearRowModel[] OutputData
         {
             get

@@ -246,7 +246,16 @@ namespace RetirementIncomePlannerLogic
 
                 paint.TextSize = 8.0f;
                 paint.Typeface = boldFont;
-                destCanvas.DrawText($"Client {inputModel.Clients[i].ClientNumber}", leftClientTextPos, nextPosition, paint);
+
+                string clientName = $"Client {inputModel.Clients[i].ClientNumber}";
+
+                if (!string.IsNullOrWhiteSpace(inputModel.Clients[i].ClientName))
+                {
+                    clientName = inputModel.Clients[i].ClientName!;
+                }
+
+                destCanvas.DrawText(clientName, leftClientTextPos, nextPosition, paint);
+                
                 nextPosition += textLineHeight * 2;
                 paint.TextSize = 6.0f;
                 paint.Typeface = normalFont;

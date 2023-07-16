@@ -10,7 +10,7 @@ namespace RetirementIncomePlannerDesktopApp
 {
     public class ReportViewModel : ViewModelBase
     {
-        private YearRowModel[] outputData;
+        private YearRowModel[] outputData = null!;
 
         public required DataInputModel InputData { get; set; }
         public required YearRowModel[] OutputData
