@@ -329,6 +329,7 @@ jQuery(document).ready(function ($) {
 
   function gatherClientInputData(clientNumber) {
     var client = {
+      clientName: $(`#client${clientNumber}Name`).val(),
       age: $(`#client${clientNumber}Age`).val(),
       retirementAge: $(`#client${clientNumber}RetirementAge`).val(),
       statePensionAmount: $(`#client${clientNumber}StatePensionAmount`).val(),

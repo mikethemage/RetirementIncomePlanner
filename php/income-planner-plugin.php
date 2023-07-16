@@ -2,7 +2,7 @@
 /*
 Plugin Name: Retirement Income Planner Plugin
 Description: Plugin for sending data to Retirement Income Planner API
-Version: 3.14
+Version: 3.15
 Author: Mike Dunn & Richard Scott
 */
 
@@ -119,6 +119,9 @@ function income_planner_client_1_input_shortcode($atts)
     ?>
         <div class="client-inputs">
             <h3>Client 1</h3>
+            <label for="client1Name">Name:</label>
+            <input type="text" id="client1Name" name="client1Name"><br>
+
             <label for="client1Age">Age:<span class="saasify-required">*</span></label>
             <input type="text" id="client1Age" name="client1Age" required><br>
 
@@ -189,6 +192,9 @@ function income_planner_client_2_input_shortcode($atts)
         <div class="client-inputs" id="client2input" style="display: none;">
 
             <h3>Client 2</h3>
+            <label for="client2Name">Name:</label>
+            <input type="text" id="client2Name" name="client2Name"><br>
+
             <label for="client2Age">Age:<span class="saasify-required">*</span></label>
             <input type="text" id="client2Age" name="client2Age"><br>
 
@@ -259,7 +265,7 @@ function income_planner_form_footer_shortcode($atts)
     ob_start(); // Start output buffering
     ?>
         <div id="plannerSubmitButtons">
-            <button type="submit" id="json-button">Show calculated data</button>
+            <!--<button type="submit" id="json-button">Show calculated data</button>-->
             <button type="submit" id="image-button">Preview Chart</button>
             <button type="submit" id="pdf-button">Download Report</button>
         </div>
