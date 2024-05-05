@@ -1,7 +1,8 @@
-**Retirement Income Planner**
+# Retirement Income Planner
 
 Tool to calculate retirement income.
 
-Currently built using WPF (Windows only) + Blazor Server (Windows & Linux).
-
-Now adapted into WebAPI project using JSON data as input.
+Built as a class library and into the following formats:
+- Desktop WPF Application (Windows only) 
+- Blazor Server with basic UI (Cross-platform)
+- WebAPI project using JSON data as input (Cross-platform)
