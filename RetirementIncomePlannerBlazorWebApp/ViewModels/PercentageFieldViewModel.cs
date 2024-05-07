@@ -11,36 +11,36 @@ namespace RetirementIncomePlannerBlazorWebApp
 {
     public class PercentageFieldViewModel : ViewModelBase
     {
-        private readonly CultureInfo culture = CultureInfo.CreateSpecificCulture("en-GB");
-        private readonly NumberStyles numberStyle = NumberStyles.Number;
+        private readonly CultureInfo _culture = CultureInfo.CreateSpecificCulture("en-GB");
+        private readonly NumberStyles _numberStyle = NumberStyles.Number;
 
-        private bool isRequired=false;
+        private bool _isRequired=false;
 
         public bool IsRequired
         {
             get
             {
-                return isRequired;
+                return _isRequired;
             }
             set
             {
-                isRequired = value;
+                _isRequired = value;
                 OnPropertyChanged(nameof(IsRequired));
             }
         }
 
 
-        private decimal percentageValue = 0M;
+        private decimal _percentageValue = 0M;
 
         public decimal PercentageValue
         {
             get
             {
-                return percentageValue;
+                return _percentageValue;
             }
             set
             {
-                percentageValue = value;
+                _percentageValue = value;
                 IsBlank = false;
                 IsValid = true;
                 OnPropertyChanged(nameof(PercentageText));
@@ -57,7 +57,7 @@ namespace RetirementIncomePlannerBlazorWebApp
                 }
                 else
                 {
-                    return percentageValue.ToString("P", culture);
+                    return _percentageValue.ToString("P", _culture);
                 }
             }
             set
@@ -66,14 +66,14 @@ namespace RetirementIncomePlannerBlazorWebApp
                 {
                     IsBlank = true;
                     IsValid = true;
-                    percentageValue = 0M;
+                    _percentageValue = 0M;
                 }
                 else
                 {
-                    IsValid = decimal.TryParse(value.Replace(culture.NumberFormat.PercentSymbol, ""), numberStyle, culture, out percentageValue);
+                    IsValid = decimal.TryParse(value.Replace(_culture.NumberFormat.PercentSymbol, ""), _numberStyle, _culture, out _percentageValue);
                     if (IsValid)
                     {
-                        percentageValue /= 100;
+                        _percentageValue /= 100;
                         IsBlank = false;
                         OnPropertyChanged(nameof(PercentageText));
                     }
@@ -85,26 +85,26 @@ namespace RetirementIncomePlannerBlazorWebApp
             }
         }
 
-        private bool isValid = true;
+        private bool _isValid = true;
 
         public bool IsValid
         {
-            get { return isValid; }
+            get { return _isValid; }
             private set
             {
-                isValid = value;
+                _isValid = value;
                 OnPropertyChanged(nameof(IsValid));
             }
         }
 
-        private bool isBlank = true;
+        private bool _isBlank = true;
 
         public bool IsBlank
         {
-            get { return isBlank; }
+            get { return _isBlank; }
             private set
             {
-                isBlank = value;
+                _isBlank = value;
                 OnPropertyChanged(nameof(IsBlank));
             }
         }

@@ -17,7 +17,7 @@ namespace RetirementIncomePlannerDesktopApp
     
     public class DataEntryViewModel : ViewModelBase
     {
-        public string getRunningVersion
+        public static string GetRunningVersion
         {
             get
             {
@@ -26,7 +26,7 @@ namespace RetirementIncomePlannerDesktopApp
 
         }
 
-        private int numberOfYears = 35;
+        private int _numberOfYears = 35;
 
         public int NumberOfClients
         {
@@ -79,11 +79,11 @@ namespace RetirementIncomePlannerDesktopApp
         {
             get
             {
-                return numberOfYears;
+                return _numberOfYears;
             }
             set
             {
-                numberOfYears = value;
+                _numberOfYears = value;
                 OnPropertyChanged(nameof(NumberOfYears));
 
             }

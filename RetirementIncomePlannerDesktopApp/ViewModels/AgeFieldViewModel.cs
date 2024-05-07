@@ -10,32 +10,32 @@ namespace RetirementIncomePlannerDesktopApp
 {
     public class AgeFieldViewModel : ViewModelBase
     {
-        private bool isRequired=false;
+        private bool _isRequired=false;
 
         public bool IsRequired
         {
             get
             {
-                return isRequired;
+                return _isRequired;
             }
             set
             {
-                isRequired = value;
+                _isRequired = value;
                 OnPropertyChanged(nameof(IsRequired));
             }
         }
 
-        private int ageValue = 0;
+        private int _ageValue = 0;
 
         public int AgeValue
         {
             get
             {
-                return ageValue;
+                return _ageValue;
             }
             set
             {
-                ageValue = value;
+                _ageValue = value;
                 IsBlank = false;
                 IsValid = true;
                 OnPropertyChanged(nameof(AgeText));
@@ -52,7 +52,7 @@ namespace RetirementIncomePlannerDesktopApp
                 }
                 else
                 {
-                    return ageValue.ToString();
+                    return _ageValue.ToString();
                 }
             }
             set
@@ -61,11 +61,11 @@ namespace RetirementIncomePlannerDesktopApp
                 {
                     IsBlank = true;
                     IsValid = true;
-                    ageValue = 0;
+                    _ageValue = 0;
                 }
                 else
                 {
-                    IsValid = int.TryParse(value, out ageValue);
+                    IsValid = int.TryParse(value, out _ageValue);
                     if (IsValid)
                     {                       
                         IsBlank = false;
@@ -79,26 +79,26 @@ namespace RetirementIncomePlannerDesktopApp
             }
         }
 
-        private bool isValid = true;
+        private bool _isValid = true;
 
         public bool IsValid
         {
-            get { return isValid; }
+            get { return _isValid; }
             private set
             {
-                isValid = value;
+                _isValid = value;
                 OnPropertyChanged(nameof(IsValid));
             }
         }
 
-        private bool isBlank = true;
+        private bool _isBlank = true;
 
         public bool IsBlank
         {
-            get { return isBlank; }
+            get { return _isBlank; }
             private set
             {
-                isBlank = value;
+                _isBlank = value;
                 OnPropertyChanged(nameof(IsBlank));
             }
         }        

@@ -16,7 +16,7 @@ namespace RetirementIncomePlannerBlazorWebApp
     public class DataEntryViewModel : ViewModelBase
     {
         public bool ImageGenerated { get; set; } = false;
-        public string getRunningVersion
+        public string GetRunningVersion
         {
             get
             {
@@ -24,7 +24,7 @@ namespace RetirementIncomePlannerBlazorWebApp
             }
         }
 
-        private int numberOfYears = 35;
+        private int _numberOfYears = 35;
 
         public int NumberOfClients
         {
@@ -80,11 +80,11 @@ namespace RetirementIncomePlannerBlazorWebApp
         {
             get
             {
-                return numberOfYears;
+                return _numberOfYears;
             }
             set
             {
-                numberOfYears = value;
+                _numberOfYears = value;
                 OnPropertyChanged(nameof(NumberOfYears));
 
             }

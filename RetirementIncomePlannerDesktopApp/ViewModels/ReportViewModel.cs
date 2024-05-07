@@ -10,20 +10,20 @@ namespace RetirementIncomePlannerDesktopApp
 {
     public class ReportViewModel : ViewModelBase
     {
-        private YearRowModel[] outputData = null!;
+        private YearRowModel[] _outputData = null!;
 
         public required DataInputModel InputData { get; set; }
         public required YearRowModel[] OutputData
         {
             get
             {
-                return outputData;
+                return _outputData;
             }
 
             set
             {
-                outputData = value;
-                Chart.BuildChart(outputData);                                             
+                _outputData = value;
+                Chart.BuildChart(_outputData);                                             
             }
         }
 

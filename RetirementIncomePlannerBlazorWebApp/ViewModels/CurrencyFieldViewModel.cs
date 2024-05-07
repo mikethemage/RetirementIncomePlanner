@@ -11,21 +11,21 @@ namespace RetirementIncomePlannerBlazorWebApp
 {
     public class CurrencyFieldViewModel : ViewModelBase
     {
-        private readonly CultureInfo culture = CultureInfo.CreateSpecificCulture("en-GB");
-        private readonly NumberStyles numberStyle = NumberStyles.Number | NumberStyles.AllowCurrencySymbol;
+        private readonly CultureInfo _culture = CultureInfo.CreateSpecificCulture("en-GB");
+        private readonly NumberStyles _numberStyle = NumberStyles.Number | NumberStyles.AllowCurrencySymbol;
 
-        private decimal currencyValue = 0M;
-        private bool isRequired=false;
+        private decimal _currencyValue = 0M;
+        private bool _isRequired=false;
 
         public bool IsRequired
         {
             get
             {
-                return isRequired;
+                return _isRequired;
             }
             set
             {
-                isRequired = value;
+                _isRequired = value;
                 OnPropertyChanged(nameof(IsRequired));
             }
         }
@@ -33,11 +33,11 @@ namespace RetirementIncomePlannerBlazorWebApp
         {
             get
             {
-                return currencyValue;
+                return _currencyValue;
             }
             set
             {
-                currencyValue = value;
+                _currencyValue = value;
                 IsBlank = false;
                 IsValid = true;
                 OnPropertyChanged(nameof(CurrencyText));
@@ -54,7 +54,7 @@ namespace RetirementIncomePlannerBlazorWebApp
                 }
                 else
                 {
-                    return currencyValue.ToString("C", culture);
+                    return _currencyValue.ToString("C", _culture);
                 }
             }
             set
@@ -63,14 +63,14 @@ namespace RetirementIncomePlannerBlazorWebApp
                 {
                     IsBlank = true;
                     IsValid = true;
-                    currencyValue = 0M;
+                    _currencyValue = 0M;
                 }
                 else
                 {
-                    IsValid = decimal.TryParse(value, numberStyle, culture, out currencyValue);
+                    IsValid = decimal.TryParse(value, _numberStyle, _culture, out _currencyValue);
                     if (IsValid)
                     {
-                        currencyValue = Math.Round(currencyValue, 2, MidpointRounding.ToZero);
+                        _currencyValue = Math.Round(_currencyValue, 2, MidpointRounding.ToZero);
                         IsBlank = false;
                         OnPropertyChanged(nameof(CurrencyText));
                     }
@@ -82,26 +82,26 @@ namespace RetirementIncomePlannerBlazorWebApp
             }
         }
 
-        private bool isValid = true;
+        private bool _isValid = true;
 
         public bool IsValid
         {
-            get { return isValid; }
+            get { return _isValid; }
             private set
             {
-                isValid = value;
+                _isValid = value;
                 OnPropertyChanged(nameof(IsValid));
             }
         }
 
-        private bool isBlank = true;
+        private bool _isBlank = true;
 
         public bool IsBlank
         {
-            get { return isBlank; }
+            get { return _isBlank; }
             private set
             {
-                isBlank = value;
+                _isBlank = value;
                 OnPropertyChanged(nameof(IsBlank));
             }
         }       

@@ -71,18 +71,18 @@ namespace RetirementIncomePlannerDesktopApp
 
         //private readonly CultureInfo culture = CultureInfo.CreateSpecificCulture("en-GB");
 
-        private int clientNumber = 1;
+        private int _clientNumber = 1;
 
         public int ClientNumber
         {
             get
             {
-                return clientNumber;
+                return _clientNumber;
             }
 
             set
             {
-                clientNumber = value;
+                _clientNumber = value;
                 OnPropertyChanged(nameof(ClientNumber));
                 OnPropertyChanged(nameof(ClientNumberText));
             }

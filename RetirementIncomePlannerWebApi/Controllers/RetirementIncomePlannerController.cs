@@ -53,11 +53,10 @@ public class RetirementIncomePlannerController : ControllerBase
         {
             return BadRequest(errorCheck);
         }
-
-        ImageSizeModel imageSizeModel = requestModel.ImageSize!;
-        if (imageSizeModel == null)
+                
+        if (requestModel.ImageSize == null)
         {
-            imageSizeModel = new ImageSizeModel { Height = 0, Width = 0 };
+            requestModel.ImageSize = new ImageSizeModel { Height = 0, Width = 0 };
         }
 
         PensionChartColorModel pensionChartColorModel = requestModel.PensionChartColors!;
@@ -119,7 +118,7 @@ public class RetirementIncomePlannerController : ControllerBase
         return File(stream, "application/pdf", "Retirement Income Report.pdf");
     }
 
-    private string? CheckInputForErrorsAndFixClientNumbers(DataInputModel? inputModel)
+    private static string? CheckInputForErrorsAndFixClientNumbers(DataInputModel? inputModel)
     {
         if (inputModel == null)
         {

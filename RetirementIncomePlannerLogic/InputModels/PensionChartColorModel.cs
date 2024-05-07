@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace RetirementIncomePlannerLogic
 {
-    public class PensionChartColorModel
+    public partial class PensionChartColorModel
     {
         //DefaultValue attributes needed for Swagger:
         [DefaultValue("#305d7a")]
@@ -44,23 +44,26 @@ namespace RetirementIncomePlannerLogic
 
         public bool ValidateColors()
         {
-            if (!test(TotalFundValueColor)) return false;
-            if (!test(StatePensionPrimaryColor)) return false;
-            if (!test(StatePensionSecondaryColor)) return false;
-            if (!test(OtherPensionPrimaryColor)) return false;
-            if (!test(OtherPensionSecondaryColor)) return false;
-            if (!test(SalaryPrimaryColor)) return false;
-            if (!test(SalarySecondaryColor)) return false;
-            if (!test(OtherIncomePrimaryColor)) return false;
-            if (!test(OtherIncomeSecondaryColor)) return false;
-            if (!test(TotalFundValueColor)) return false;
+            if (!Test(TotalFundValueColor)) return false;
+            if (!Test(StatePensionPrimaryColor)) return false;
+            if (!Test(StatePensionSecondaryColor)) return false;
+            if (!Test(OtherPensionPrimaryColor)) return false;
+            if (!Test(OtherPensionSecondaryColor)) return false;
+            if (!Test(SalaryPrimaryColor)) return false;
+            if (!Test(SalarySecondaryColor)) return false;
+            if (!Test(OtherIncomePrimaryColor)) return false;
+            if (!Test(OtherIncomeSecondaryColor)) return false;
+            if (!Test(TotalFundValueColor)) return false;
 
             return true;
         }
 
-        private static bool test(string hc)
+        private static bool Test(string hc)
         {
-            return Regex.IsMatch(hc, @"[#][0-9A-Fa-f]{6}\b");
+            return MyRegex().IsMatch(hc);
         }
+
+        [GeneratedRegex("[#][0-9A-Fa-f]{6}\\b")]
+        private static partial Regex MyRegex();
     }
 }

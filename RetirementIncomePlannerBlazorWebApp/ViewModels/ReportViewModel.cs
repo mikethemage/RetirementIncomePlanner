@@ -10,20 +10,20 @@ namespace RetirementIncomePlannerBlazorWebApp
 {
     public class ReportViewModel : ViewModelBase
     {
-        private YearRowModel[] outputData=null!;
+        private YearRowModel[] _outputData=null!;
 
         public DataInputModel InputData { get; set; } = null!;
         public YearRowModel[] OutputData
         {
             get
             {
-                return outputData;
+                return _outputData;
             }
 
             set
             {
-                outputData = value;
-                Chart.BuildChart(outputData);                                             
+                _outputData = value;
+                Chart.BuildChart(_outputData);                                             
             }
         }
 

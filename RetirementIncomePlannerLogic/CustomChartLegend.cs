@@ -26,7 +26,7 @@ namespace CustomChartLegendSample
 
 			var _labels = chart.Series.Select(x => x.Name).ToArray();
 
-			var legendMargin = (72 * 3) / 2; //40;
+			var legendMargin = 72 * 3 / 2; //40;
 
 			int circlePadding = 16;
 
@@ -34,7 +34,7 @@ namespace CustomChartLegendSample
 			int currentRowWidth = 0;
 			for (var i = 0; i < _labels.Length; i++)
 			{
-				int nextWidth = (int)legendPaint.MeasureText(_labels[i]) + legendPadding * 4 + circlePadding;
+				int nextWidth = (int)legendPaint.MeasureText(_labels[i]) + (legendPadding * 4) + circlePadding;
 				if (currentRowWidth + nextWidth > chart.Width - (2 * legendMargin))
 				{
 					rowWidths.Add(currentRowWidth);
@@ -48,7 +48,7 @@ namespace CustomChartLegendSample
 			rowWidths.Add(currentRowWidth);
 
 
-			var legendHeight = (rowWidths.Count * legendPadding * 3) + legendPadding * 3;			
+			var legendHeight = (rowWidths.Count * legendPadding * 3) + (legendPadding * 3);			
 
 			chart.Height -= legendHeight;
 
@@ -73,7 +73,7 @@ namespace CustomChartLegendSample
 			{
 				var labelX = legendX;
 
-				legendX += (int)legendPaint.MeasureText(_labels[i]) + legendPadding * 4 + circlePadding;
+				legendX += (int)legendPaint.MeasureText(_labels[i]) + (legendPadding * 4) + circlePadding;
 
 				if (legendX > (chart.Width - legendMargin))
 				{
@@ -89,12 +89,12 @@ namespace CustomChartLegendSample
 						labelX += ((chart.Width - rowWidths[currentRow]) / 2);
 					}
 
-					legendX = labelX + (int)legendPaint.MeasureText(_labels[i]) + legendPadding * 4 + circlePadding;
+					legendX = labelX + (int)legendPaint.MeasureText(_labels[i]) + (legendPadding * 4) + circlePadding;
 
 					legendY += legendPadding * 3;
 				}
 
-				var labelY = legendY + legendPadding * 3;
+				var labelY = legendY + (legendPadding * 3);
 
 				SKColor sKColor;
 				if (chart.Series.Where(x => x.Name == _labels[i]).First() is StackedColumnSeries<decimal> lineSeries && lineSeries.Fill != null)

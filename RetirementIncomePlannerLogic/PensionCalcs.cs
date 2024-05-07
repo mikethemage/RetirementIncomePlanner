@@ -16,7 +16,7 @@ namespace RetirementIncomePlannerLogic
 {
     public class PensionCalcs
     {
-        private static readonly CultureInfo culture = CultureInfo.CreateSpecificCulture("en-GB");
+        private static readonly CultureInfo _culture = CultureInfo.CreateSpecificCulture("en-GB");
         //private static readonly NumberStyles numberStyle = NumberStyles.Number | NumberStyles.AllowCurrencySymbol;        
 
         public static SKTypeface GetTypeface(string fullFontName)
@@ -187,13 +187,13 @@ namespace RetirementIncomePlannerLogic
             var leftTextPos = sideMarginInInches * defaulDPI;
             var textLineHeight = 0.12F * defaulDPI;
 
-            SKPaint paint = new SKPaint
+            SKPaint paint = new()
             {
                 Color = SKColors.Black,
-                TextSize = 8.0F
+                TextSize = 8.0F,
+                Typeface = boldFont
             };
-           
-            paint.Typeface = boldFont;
+
             destCanvas.DrawText("Client Data Entry", leftTextPos, nextPosition, paint);
             nextPosition += textLineHeight * 2;
 
@@ -204,7 +204,7 @@ namespace RetirementIncomePlannerLogic
             paint.Typeface = normalFont;
             destCanvas.DrawText("Number of years for projection:", leftTextPos, nextPosition, paint);
 
-            destCanvas.DrawText(string.Create(culture, $"{inputModel.NumberOfYears}"), leftTextPos + intputDataDisplayWidth, nextPosition, paint);
+            destCanvas.DrawText(string.Create(_culture, $"{inputModel.NumberOfYears}"), leftTextPos + intputDataDisplayWidth, nextPosition, paint);
 
             nextPosition += textLineHeight;
 
@@ -222,7 +222,7 @@ namespace RetirementIncomePlannerLogic
 
             destCanvas.DrawText("Retirement Pot:", leftTextPos, nextPosition, paint);
 
-            destCanvas.DrawText(string.Create(culture, $"{inputModel.RetirementPot:C}"), leftTextPos + intputDataDisplayWidth, nextPosition, paint);
+            destCanvas.DrawText(string.Create(_culture, $"{inputModel.RetirementPot:C}"), leftTextPos + intputDataDisplayWidth, nextPosition, paint);
 
             nextPosition += textLineHeight;
 
@@ -267,7 +267,7 @@ namespace RetirementIncomePlannerLogic
                 if (inputModel.Clients[i].SalaryDetails != null)
                 {
                     destCanvas.DrawText("Salary: ", leftClientTextPos, nextPosition, paint);
-                    destCanvas.DrawText(string.Create(culture, $"{inputModel.Clients[i].SalaryDetails!.FullSalaryAmount:C}"), leftClientTextPos + intputDataDisplayWidth, nextPosition, paint);
+                    destCanvas.DrawText(string.Create(_culture, $"{inputModel.Clients[i].SalaryDetails!.FullSalaryAmount:C}"), leftClientTextPos + intputDataDisplayWidth, nextPosition, paint);
                     nextPosition += textLineHeight;
 
                     if (inputModel.Clients[i].SalaryDetails!.PartialRetirementDetails != null)
@@ -277,7 +277,7 @@ namespace RetirementIncomePlannerLogic
                         nextPosition += textLineHeight;
 
                         destCanvas.DrawText("Partial Retirement Salary: ", leftClientTextPos, nextPosition, paint);
-                        destCanvas.DrawText(string.Create(culture, $"{inputModel.Clients[i].SalaryDetails!.PartialRetirementDetails!.Amount:C}"), leftClientTextPos + intputDataDisplayWidth, nextPosition, paint);
+                        destCanvas.DrawText(string.Create(_culture, $"{inputModel.Clients[i].SalaryDetails!.PartialRetirementDetails!.Amount:C}"), leftClientTextPos + intputDataDisplayWidth, nextPosition, paint);
                         nextPosition += textLineHeight;
                     }
                 }                
@@ -287,7 +287,7 @@ namespace RetirementIncomePlannerLogic
                 nextPosition += textLineHeight;
 
                 destCanvas.DrawText("State Pension Amount: ", leftClientTextPos, nextPosition, paint);
-                destCanvas.DrawText(string.Create(culture, $"{inputModel.Clients[i].StatePensionAmount:C}"), leftClientTextPos + intputDataDisplayWidth, nextPosition, paint);
+                destCanvas.DrawText(string.Create(_culture, $"{inputModel.Clients[i].StatePensionAmount:C}"), leftClientTextPos + intputDataDisplayWidth, nextPosition, paint);
                 nextPosition += textLineHeight;
 
                 destCanvas.DrawText("State Pension Age: ", leftClientTextPos, nextPosition, paint);
@@ -297,7 +297,7 @@ namespace RetirementIncomePlannerLogic
                 if(inputModel.Clients[i].OtherPensionDetails!=null)
                 {
                     destCanvas.DrawText("Other Pensions: ", leftClientTextPos, nextPosition, paint);
-                    destCanvas.DrawText(string.Create(culture, $"{inputModel.Clients[i].OtherPensionDetails!.Amount:C}"), leftClientTextPos + intputDataDisplayWidth, nextPosition, paint);
+                    destCanvas.DrawText(string.Create(_culture, $"{inputModel.Clients[i].OtherPensionDetails!.Amount:C}"), leftClientTextPos + intputDataDisplayWidth, nextPosition, paint);
                     nextPosition += textLineHeight;
 
                     destCanvas.DrawText("Other Pension Age: ", leftClientTextPos, nextPosition, paint);
@@ -308,12 +308,12 @@ namespace RetirementIncomePlannerLogic
                 if (inputModel.Clients[i].OtherIncome != null)
                 {
                     destCanvas.DrawText("Other Income: ", leftClientTextPos, nextPosition, paint);
-                    destCanvas.DrawText(string.Create(culture, $"{inputModel.Clients[i].OtherIncome:C}"), leftClientTextPos + intputDataDisplayWidth, nextPosition, paint);
+                    destCanvas.DrawText(string.Create(_culture, $"{inputModel.Clients[i].OtherIncome:C}"), leftClientTextPos + intputDataDisplayWidth, nextPosition, paint);
                     nextPosition += textLineHeight;
                 }
 
                 destCanvas.DrawText("Retirement Income Level: ", leftClientTextPos, nextPosition, paint);
-                destCanvas.DrawText(string.Create(culture, $"{inputModel.Clients[i].RetirementIncomeLevel:C}"), leftClientTextPos + intputDataDisplayWidth, nextPosition, paint);
+                destCanvas.DrawText(string.Create(_culture, $"{inputModel.Clients[i].RetirementIncomeLevel:C}"), leftClientTextPos + intputDataDisplayWidth, nextPosition, paint);
                 nextPosition += textLineHeight * 2;
 
 
@@ -331,7 +331,7 @@ namespace RetirementIncomePlannerLogic
                     {
                         destCanvas.DrawText($"{adhocItem.Age}", leftAdhocTextPos, nextPosition, paint);
 
-                        destCanvas.DrawText(string.Create(culture, $"{adhocItem.Amount:C2}"), leftAdhocTextPos+25F, nextPosition, paint);
+                        destCanvas.DrawText(string.Create(_culture, $"{adhocItem.Amount:C2}"), leftAdhocTextPos+25F, nextPosition, paint);
                         nextPosition += textLineHeight;
                     }
                 }               
