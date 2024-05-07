@@ -198,15 +198,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Retirement Income Planner"
-        "ProductCode" = "8:{03F0F7AF-4F00-4E46-9F1E-F2BFD796F97A}"
-        "PackageCode" = "8:{FCFEAC06-A9B2-45E0-968F-BD0A3426BF79}"
+        "ProductCode" = "8:{7B695B3A-2836-41BB-B3C0-7F96CFAD79C1}"
+        "PackageCode" = "8:{E754977A-A70D-46EA-B3EB-1FAD6FBB4E84}"
         "UpgradeCode" = "8:{2A8587CD-4547-48FC-AF62-D57A216B0DF5}"
         "AspNetVersion" = "8:"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:1.0.3"
+        "ProductVersion" = "8:1.1.0"
         "Manufacturer" = "8:Mike the Mage"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -734,7 +734,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_201E22A1C62346269B8F93C387372DF3"
             {
-            "SourcePath" = "8:..\\RetirementIncomePlannerDesktopApp\\obj\\x64\\Debug\\net7.0-windows\\win-x64\\apphost.exe"
+            "SourcePath" = "8:..\\RetirementIncomePlannerDesktopApp\\obj\\x64\\Release\\net8.0-windows\\win-x64\\apphost.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_636975A7835E452E8B2E1B266DC8F7BC"
